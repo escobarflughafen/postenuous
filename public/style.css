@@ -1,0 +1,155 @@
+body {
+    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    overflow-y: scroll;
+}
+
+.nav-link{
+    padding: 8px;
+}
+
+code, pre{
+    font: Menlo, Consolas, monospace;
+}
+
+h1, h2, h3 {
+    font-weight: 500;
+    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    letter-spacing: -1px;
+}
+
+h5 {
+    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    letter-spacing: -0.5px;
+    font-weight: 400;
+}
+
+h1 a, h2 a, a:hover {
+    text-decoration: none;
+}
+
+article, figure, footer, header, main, nav, section {
+    display: block;
+}
+
+body { color: black; }
+a { color: #2CB1E1; }
+blockquote { border-left: 4px solid #efeffa; }
+code, pre {
+    background: #f3f8fd;
+    color: #036ad3;
+}
+
+topbanner{
+    width: 100%;
+    position: fixed;
+    background: #000000;
+    color: #ffffff;
+    margin-top: -8px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    
+}
+
+.heading{
+    font-size: 32px;
+    letter-spacing: -1px;
+    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-weight: 500;
+    user-select: none;
+}
+
+.hrnoir{
+    background: #000000;
+    border: #000000;
+    height: 2px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    
+}
+
+.leftmost {
+    padding-left: 0;
+}
+
+.no-padding{
+    padding: 0;
+}
+
+.thin-padding {
+    padding: 2px;
+}
+
+.medium-padding {
+    padding: 4px;
+}
+.borderless{
+    border-width: 0;
+}
+
+.white {
+    background-attachment: white;
+    color: #000000;
+    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+}
+
+.holo-blue-bg-light {
+    background-color: #33B5E5;
+}
+
+.holo-blue-bg-dark {
+    background-color: #0099CC;
+}
+
+.holo-blue-light {
+    color: #33B5E5;
+}
+
+.holo-blue-dark {
+    color: #0099CC;
+}
+
+.holo-red-light {
+    color: #FF4444;
+}
+
+.holo-red-dark {
+    color: #CC0000
+}
+
+.holo-purple-light{
+    color: #AA66CC;
+}
+
+.holo-purple-dark {
+    color: #9933CC;
+}
+
+.holo-green-light{
+    color: #99CC00;
+}
+
+.holo-green-dark {
+    color: #669900;
+}
+
+.holo-orange-light{
+    color: #FFBB33;
+}
+
+.holo-orange-dark {
+    color: #FF8800;
+}
+
+.nav-link {
+    letter-spacing: -0.5px;
+    padding: 0;
+    margin-bottom: 8px;
+    margin-right: 8px;
+}
+
+.post-title{
+    font-weight: 600;
+    font-family: 'Helvetica Neue', Helvetica, Arial, 'Toppan Bunkyu Gothic', 'YuGothic', 'Hiragino Sans', 'Noto Sans', sans-serif;
+}
