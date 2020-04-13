@@ -27,24 +27,18 @@ var postSchema = new mongoose.Schema({
 var Post = mongoose.model('post', postSchema);
 
 // Routes
-app.get("/", (req, res) => {
+app.get(["/", "/posts"], (req, res) => {
     Post.find({}, (err, posts) => {
         res.render('index', { posts: posts })
     });
 });
-/*
-app.get('/addPost', (req, res) => {
-    Post.find({}, (err, posts) => {
-        res.render('index', { posts: posts })
-    });
-});
-*/
+
 app.post('/addPost', (req, res) => {
     console.log(req);
     var postData = new Post({
         title: req.body.title,
         author: req.body.author,
-        modified: Date.now,
+        modified: Date.now(),
         tag: [],
         body: req.body.body,
         abstract: req.body.body.slice(0, 50)

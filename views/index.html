@@ -14,20 +14,20 @@
 </head>
 
 <body>
-    <div class="container" style="padding: 16px">
+    <div class="container" style="margin-bottom: 32px;">
         <h1>postenuous</h1>
         <h5>compilers, principles, & tools</h5>
         <ul class="nav font-weight-bold h5">
             <li class="nav-item">
-                <a class="nav-link holo-blue-dark" href="#">posts</a>
+                <a class="nav-link holo-blue-dark" href="posts">posts</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link holo-blue-light" href="#">archives</a>
+                <a class="nav-link holo-blue-light" href="archives">archives</a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link holo-blue-light" href="#">about</a>
+                <a class="nav-link holo-blue-light" href="about">about</a>
             </li>
 
             <li class="nav-item">
@@ -51,11 +51,9 @@
                             <div class="input-group-prepend">
                                 <div class="input-group-text">✒️</div>
                             </div>
-                            <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="author">
+                            <input name="author" type="text" class="form-control" id="authorfield" placeholder="author">
                         </div>
-    
                     </div>
-                 
                     <div class="form-group">
                         <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
                             rows="0"></textarea>
@@ -68,37 +66,42 @@
 
 
         <div id="posts">
-            <div class="accordion" id="accordionExample">
-                <% for(let i = 0; i < posts.length; i++) { %>
-                <div class="card">
-                    <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0;">
-                        <button class="btn btn-link post-title" type="button" data-toggle="collapse"
-                            data-target="#post_<%=i%>" aria-expanded="true" aria-controls="collapse_<%=i%>">
-                            <%= posts[i].title %>
-                        </button>
-                    </div>
-
-                    <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>"
-                        data-parent="#accordionExample">
-                        <div class="card-body">
-                            <div>
-                                <a href="#" class="nav-link" style="margin-bottom: 0; font-weight: 600;">
-                                    <%= posts[i].author %>
-                                </a>
-                                <span style="font-weight: 400; color: gray">
-                                    <%= posts[i].created %>
-                                </span>
-                            </div>
-                            <br>
-                            <p>
-                                <%= posts[i].abstract %>
-                                <a href="#">...</a>
-                            </p>
+            <div class="accordion" id="postAccordion">
+            <% for(let i = 0; i < posts.length; i++) { %>
+            <div class="card post-caption">
+                <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border-width: 0;">
+                    <div class="row align-items-center">
+                        <div class="col col-12">
+                            <!--a href="#" class="btn btn-link post-title"></a-->
+                            <button class="btn btn-link post-title" type="button" data-toggle="collapse"
+                                data-target="#post_<%=i%>" aria-expanded="true" aria-controls="collapse_<%=i%>">
+                                <%= posts[i].title %>
+                            </button>
+                        </div>
+                        <div class="col col-12">
+                            <span style="font-weight: 400; color: gray;">
+                                <%= new Date(posts[i].created).toLocaleString() %>
+                            </span>
                         </div>
                     </div>
                 </div>
 
-                <% } %>
+                <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="#postAccordion">
+                    <div class="card-body" style="padding: 0; margin-top: 8px; margin-bottom: 8px;">
+                        <div>
+                            <a href="#" class="nav-link" style="margin-bottom: 0; font-weight: 600;">
+                                <%= posts[i].author %>
+                            </a>
+                        </div>
+                        <br>
+                        <span>
+                            <%= posts[i].abstract %>
+                            <a href="#">...繼續閱讀</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <% } %>
             </div>
 
         </div>

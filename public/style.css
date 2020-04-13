@@ -149,7 +149,14 @@ topbanner{
     margin-right: 8px;
 }
 
-.post-title{
+.post-title {
     font-weight: 600;
+    padding: 0;
+    border: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, 'Toppan Bunkyu Gothic', 'YuGothic', 'Hiragino Sans', 'Noto Sans', sans-serif;
+}
+
+.post-caption {
+    border-width: 0;
+    margin-bottom: 8px;
 }
