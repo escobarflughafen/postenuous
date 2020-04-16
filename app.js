@@ -1,11 +1,13 @@
-// Setup
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose')
 var path = require('path');
-mongoose.connect("mongodb://localhost:27017/aoiblog")
+mongoose.connect("mongodb://localhost:27017/aoiblog").then(
+    () => console.log('connected to MongoDB.')).catch(
+        err => console.error('failed to connect to MongoDB', err));
 var bodyParser = require('body-parser')
 app.use(express.static(path.join(__dirname, 'public')));
+app.use("/public", express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.engine('html', require('ejs').renderFile);
@@ -26,11 +28,12 @@ var postSchema = new mongoose.Schema({
 
 var Post = mongoose.model('post', postSchema);
 
-// Routes
-app.get(["/", "/posts"], (req, res) => {
+
+app.get(["/", "/post"], (req, res) => {
     Post.find({}, (err, posts) => {
         res.render('index', { posts: posts })
     });
+
 });
 
 app.post('/addPost', (req, res) => {
@@ -41,7 +44,7 @@ app.post('/addPost', (req, res) => {
         modified: Date.now(),
         tag: [],
         body: req.body.body,
-        abstract: req.body.body.slice(0, 50)
+        abstract: (req.body.brief == "") ? req.body.body.slice(0, 280) : req.body.brief
     });
     console.log(postData);
     postData.save().then(result => {
@@ -51,9 +54,13 @@ app.post('/addPost', (req, res) => {
     });
 });
 
+app.get('/post/:id', async (req, res) => {
+    await Post.findById(req.params.id, (err, post) => {
+        console.log(post);
+        res.render('post', { post });
+    });
+});
 
-
-// Listen
 app.listen(3000, () => {
     console.log('Server listing on 3000');
 })

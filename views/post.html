@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<head>
+    <html lang="en-US">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- BootstrapのCSS読み込み -->
+    <link href="/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery読み込み -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- BootstrapのJS読み込み -->
+    <script src="/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <link href="/public/style.css" rel="stylesheet">
+</head>
+
+<body style="padding: 16px">
+    <div class="container">
+        <h1>postenuous</h1>
+        <h5>compilers, principles, & tools</h5>
+        <ul class="nav font-weight-bold h5">
+            <li class="nav-item">
+                <a class="nav-link holo-blue-dark" href="/post">posts</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link holo-blue-light" href="/archive">archives</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link holo-blue-light" href="/about">about</a>
+            </li>
+
+        </ul>
+        <br>
+    </div>
+
+    <div class="container">
+        <p>
+            <%= post.body %>
+        </p>
+    </div>
+</body>

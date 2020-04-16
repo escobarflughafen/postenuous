@@ -79,6 +79,7 @@
 
 
         <div id="posts">
+            <div class="accordion" id="postAccordion">
                 <% for(let i = 0; i < posts.length; i++) { %>
                 <div class="card post-caption">
                     <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden">
@@ -90,7 +91,7 @@
                         </div>
                     </div>
 
-                    <div id="post_<%=i%>" class="collapse show" aria-labelledby="heading_<%=i%>">
+                    <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="#postAccordion">
                         
                         <div class="card-body" style="padding: 0;">
                             <!--hr class="hr-compact"-->
@@ -112,6 +113,7 @@
                     </div>
                 </div>
                 <% } %>
+            </div>
         </div>
     </div>
 

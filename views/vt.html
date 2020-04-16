@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<style type="text/css">
+	    .ctn{
+	    	max-width: 800px;
+            margin: 0 auto;	            
+	     }
+		#main{	
+			overflow: hidden;
+		}
+		#main p{
+			text-indent: 2em;
+		}
+		#read{
+			text-decoration:none; 
+			display: block;
+			text-indent: 0;
+			float: right;
+		}
+	</style>
+</head>
+<body>
+<div class="ctn">
+<div id="main">
+<p>
+	RIO DE JANEIRO -- After swimming arguably the greatest race of her young career, Katie Ledecky waited, waited and then waited some more. For more than 11 seconds, she placed her right hand on the wall and bobbed in the water, waiting for the others to arrive.
+
+She knew she had finished her 2016 season reaching the last goal she had set for herself -- a world record in the 800-meter freestyle. It was the 13th world record of her young career and shattered her 8-month-old mark in the event by nearly two seconds. But for the time being, there was no one to celebrate with. Ledecky was simply too good, too dominant. The rest of the field had been left behind. When she touched the wall, nobody else was even in the frame on television.
+
+EDITOR'S PICKS
+
+Phelps says he's not competing in 2020 Olympics
+Michael Phelps confirmed Rio will be his last Olympics, dismissing Ryan Lochte's comments about Phelps coming back for the 2020 Games in Tokyo.
+
+Phelps gets 3-way tie for silver in 100m butterfly
+Singapore's Joseph Schooling beat Michael Phelps for the gold in the 100-meter butterfly. Phelps ended up in a 3-way tie for silver with South Africa's Chad le Clos and Hungary's Laszlo Cseh.
+
+Ledecky shatters world mark for 800 free gold
+Katie Ledecky broke the world record in the 800-meter freestyle Friday by nearly 2 seconds, becoming just the second swimmer ever to win the 200-, 400- and 800-meter freestyle in one Olympics.
+It took 11.38 seconds before the next swimmer arrived -- in this case, Great Britain's Jazmin Carlin. The gold was Ledecky's fourth in Rio, completing her sweep of the 200, 400 and 800 freestyle races, capping off one of the greatest performances in Olympic swimming history. At 19 years old.
+
+Some fifteen minutes earlier, another story had unfolded -- with an ending altogether different. In the final individual race of his decorated career, 31-year-old Michael Phelps touched the wall in an unprecedented three-way tie for second in the 100-meter butterfly. And yet in a way, the outcome made perfect sense -- and dovetailed beautifully with Ledecky's blindingly bright future.
+
+It was 2002 or 2003 -- Ledecky can't remember -- when she first met Phelps at a swim meet in Maryland. He was the next big thing back then, yet to erupt into the global icon he has become today. Ledecky got Phelps' autograph that day -- an autograph she says she still has. And here they were on this night, one career coming to an end, another blowing up in the most positive sense of the word.
+
+You would think then that the tears on Friday night would have come from Phelps. Losing the last individual race of his career. Reflecting on all that he's put into the sport. And yet the exact opposite was true. Following his 100 fly loss, Phelps was noticeably content -- perhaps even cheerful in a strange way.
+</p>
+</div>
+</div>
+
+<!--data-parent="#postAccordion">
+	<script type="text/javascript">
+		window.onload=function(){
+              var main=document.getElementById("main");
+              readMore(main,10);//传入文本内容的父元素.以及起始保留多少字
+		}
+		function readMore(texts,num){
+			var btn=document.createElement("a");
+			var parent=texts.parentNode;
+			parent.appendChild(btn);
+			btn.setAttribute("href","javasceipt:;");
+			btn.innerHTML="阅读全文";
+			btn.style.float="right";
+			btn.style.textDecoration="none";
+			var mainText=texts.innerHTML;
+			var mainStartText=mainText.substring(0,num);
+			texts.innerHTML=mainStartText;
+            var flag=0;
+			btn.onclick=function(){
+				if(flag==0){
+					texts.innerHTML=mainText;
+					btn.innerHTML="收起";
+					flag=1;					
+				}
+				else{
+					texts.innerHTML=mainStartText;
+					btn.innerHTML="阅读全文";
+					flag=0;					
+				}
+
+			} 
+		}
+	</script>
+</body>
+</html>

@@ -142,6 +142,34 @@ topbanner{
     color: #FF8800;
 }
 
+.kuro {
+    color: #2b2b2b;
+}
+
+.konjou {
+    color: #192f60;
+}
+
+.nyuhakushoku {
+    color: #f3f3f3;
+}
+
+.gunjou {
+    color: #4c6cb3;
+}
+
+.asagi {
+    color: #00a3af
+}
+
+.geppaku {
+    color: #eaf4fc
+}
+
+.konnezu {
+    color: #44617b;
+}
+
 .nav-link {
     letter-spacing: -0.5px;
     padding: 0;
@@ -150,13 +178,34 @@ topbanner{
 }
 
 .post-title {
+    font-size: 1rem;
     font-weight: 600;
     padding: 0;
     border: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, 'Toppan Bunkyu Gothic', 'YuGothic', 'Hiragino Sans', 'Noto Sans', sans-serif;
+    transition: color 0.5s;
+}
+.post-title:hover {
+    color: #4c6cb3;
+    text-decoration-line: none;
+}
+
+@keyframes enlarge-title{
+    0% {font-size: 1rem;}
+    50% {font-size: 1.25rem;}
+    100% {font-size: 1.5rem;}
 }
 
 .post-caption {
     border-width: 0;
     margin-bottom: 8px;
+}
+
+.post-abstract {
+    color: black;
+}
+
+.hr-compact {
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
