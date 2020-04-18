@@ -1,24 +1,21 @@
 body {
-    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
     overflow-y: scroll;
 }
 
-.nav-link{
-    padding: 8px;
-}
 
-code, pre{
+code, pre {
     font: Menlo, Consolas, monospace;
 }
 
 h1, h2, h3 {
     font-weight: 500;
-    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
     letter-spacing: -1px;
 }
 
 h5 {
-    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
     letter-spacing: -0.5px;
     font-weight: 400;
 }
@@ -31,15 +28,24 @@ article, figure, footer, header, main, nav, section {
     display: block;
 }
 
-body { color: black; }
-a { color: #2CB1E1; }
-blockquote { border-left: 4px solid #efeffa; }
+body {
+    color: black;
+}
+
+a {
+    color: #2CB1E1;
+}
+
+blockquote {
+    border-left: 4px solid #efeffa;
+}
+
 code, pre {
     background: #f3f8fd;
     color: #036ad3;
 }
 
-topbanner{
+topbanner {
     width: 100%;
     position: fixed;
     background: #000000;
@@ -49,31 +55,29 @@ topbanner{
     margin-right: 0px;
     margin-bottom: 8px;
     overflow: hidden;
-    
 }
 
-.heading{
+.heading {
     font-size: 32px;
     letter-spacing: -1px;
-    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
     font-weight: 500;
     user-select: none;
 }
 
-.hrnoir{
+.hrnoir {
     background: #000000;
     border: #000000;
     height: 2px;
     margin-top: 8px;
     margin-bottom: 8px;
-    
 }
 
 .leftmost {
     padding-left: 0;
 }
 
-.no-padding{
+.no-padding {
     padding: 0;
 }
 
@@ -84,14 +88,15 @@ topbanner{
 .medium-padding {
     padding: 4px;
 }
-.borderless{
+
+.borderless {
     border-width: 0;
 }
 
 .white {
     background-attachment: white;
     color: #000000;
-    font-family:  "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
 }
 
 .holo-blue-bg-light {
@@ -118,7 +123,7 @@ topbanner{
     color: #CC0000
 }
 
-.holo-purple-light{
+.holo-purple-light {
     color: #AA66CC;
 }
 
@@ -126,7 +131,7 @@ topbanner{
     color: #9933CC;
 }
 
-.holo-green-light{
+.holo-green-light {
     color: #99CC00;
 }
 
@@ -134,7 +139,7 @@ topbanner{
     color: #669900;
 }
 
-.holo-orange-light{
+.holo-orange-light {
     color: #FFBB33;
 }
 
@@ -158,6 +163,46 @@ topbanner{
     color: #4c6cb3;
 }
 
+.gunjou-0 {
+    color: #000000
+}
+
+.gunjou-1 {
+    color: #151f33
+}
+
+.gunjou-2 {
+    color: #202e4d
+}
+
+.gunjou-3 {
+    color: #2b3e66
+}
+
+.gunjou-4 {
+    color: #364d80
+}
+
+.gunjou-5 {
+    color: #405c99
+}
+
+.gunjou-6 {
+    color: #4b6cb3
+}
+
+.gunjou-7 {
+    color: #567bcc
+}
+
+.gunjou-8 {
+    color: #608be6
+}
+
+.gunjou-9 {
+    color: #6b9aff
+}
+
 .asagi {
     color: #00a3af
 }
@@ -170,11 +215,16 @@ topbanner{
     color: #44617b;
 }
 
+.tetsukon {
+    color: #17184b;
+}
+
 .nav-link {
     letter-spacing: -0.5px;
     padding: 0;
     margin-bottom: 8px;
     margin-right: 8px;
+    transition: color 0.5s;
 }
 
 .post-title {
@@ -185,15 +235,22 @@ topbanner{
     font-family: 'Helvetica Neue', Helvetica, Arial, 'Toppan Bunkyu Gothic', 'YuGothic', 'Hiragino Sans', 'Noto Sans', sans-serif;
     transition: color 0.5s;
 }
+
 .post-title:hover {
     color: #4c6cb3;
     text-decoration-line: none;
 }
 
-@keyframes enlarge-title{
-    0% {font-size: 1rem;}
-    50% {font-size: 1.25rem;}
-    100% {font-size: 1.5rem;}
+@keyframes enlarge-title {
+    0% {
+        font-size: 1rem;
+    }
+    50% {
+        font-size: 1.25rem;
+    }
+    100% {
+        font-size: 1.5rem;
+    }
 }
 
 .post-caption {
@@ -201,11 +258,19 @@ topbanner{
     margin-bottom: 8px;
 }
 
-.post-abstract {
-    color: black;
+.hr-compact {
+    margin-top: 8px;
+    margin-bottom: 8px;
 }
 
-.hr-compact {
-    margin-top: 4px;
-    margin-bottom: 4px;
+.no-border {
+    border-width: 0;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.nav-link:hover {
+    color: #33B5E5;
 }
