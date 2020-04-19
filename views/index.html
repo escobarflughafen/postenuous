@@ -5,20 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- BootstrapのCSS読み込み -->
-    <link href="bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- jQuery読み込み -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- BootstrapのJS読み込み -->
-    <script src="bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <script src="/public/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/public/style.css">
 </head>
 
 <body style="padding: 16px">
     <div class="container">
         <div class="row">
             <div class="col">
+                <h5 class="no-border no-margin no-padding" style="font-weight: 600;">postenuous</h5>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col">
                 <ul class="nav h5">
-                    <h5 class="no-border no-margin no-padding" style="font-weight: 600;">postenuous</h5>
+
                     <li class="nav-item">
                         <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
                     </li>
@@ -41,8 +47,8 @@
 
             </div>
         </div>
+        <hr>
     </div>
-    <hr>
     <div class="container">
         <div>
             <div class="collapse" id="addpostform" style="padding: 8px;">
@@ -82,45 +88,80 @@
 
 
         <div id="posts">
+
             <div class="accordion" id="postAccordion">
                 <% for(let i = 0; i < posts.length; i++) { %>
                 <div class="card post-caption">
                     <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden">
                         <div class="align-items-center">
-                            <button class="btn btn-link post-title kuro" type="button" data-toggle="collapse"
-                                data-target="#post_<%=i%>" aria-expanded="true" aria-controls="collapse_<%=i%>">
+                            <a href="/post/<%=posts[i].id%>" class="post-title kuro">
                                 <%= posts[i].title %>
+                            </a>
+                            <button id="arrow-<%=i%>" class="btn btn-link symbol-monospace post-title" type="button"
+                                data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
+                                aria-controls="collapse_<%=i%>">
+                                ↓
                             </button>
                         </div>
                     </div>
 
                     <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="">
-
                         <div class="card-body" style="padding: 0;">
-                            <!--hr class="hr-compact"-->
                             <div>
-                                <a href="#" class="">
+                                <a href="#" class="sub-title">
                                     <%= posts[i].author %>
                                 </a>
-                                <span style="color: gray;">
+                                <code style="color: gray;">
                                     <%= new Date(posts[i].created).toLocaleString() %>
+                                </code>
+                            </div>
+                            <div>
+                                <%= posts[i].abstract %>
+
+                                <span>
+                                    <a href="/post/<%=posts[i].id%>" class="symbol-monospace">
+                                        →
+                                    </a>
                                 </span>
                             </div>
-                            <span>
-                                <a href="post/<%=posts[i].id%>" class="kuro">
-                                    <%= posts[i].abstract %>
-                                    <span class="holo-blue-dark">...</span>
-                                </a>
-                            </span>
+
                         </div>
                     </div>
                 </div>
                 <% } %>
             </div>
+
+            <br>
+            <div class="letter-space-neg05">
+                <% if (pageno != 1) { %>
+                <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
+                <span>
+                    &nbsp; ← <% } %>page
+                    <select id="pagination-selector" onchange="window.location=this.value">
+                        <% for (let i = 1; i <= pageCount; i++) { %>
+                        <% if (pageno != i) { %>
+                        <option value="/post/page/<%=i%>"><%=i%></option>
+                        <% } else { %>
+                        <option selected value="/post/page/<%=i%>"><%=i%></option>
+                        <% } %>
+                        <% } %>
+                    </select>
+                    of <%=pageCount%><% if (pageno != pageCount) { %> →&nbsp;
+                </span>
+                <a class="page-navigator" href="/post/page/<%=pageno+1%>">older posts</a> <% } %>
+
+            </div>
+            <br>
         </div>
 
         <div class="container">
 
         </div>
 
+        <script>
+            $("button[id^='arrow']").click(function () {
+                $(this).text(($(this).text() == "↑") ? "↓" : "↑");
+            });
+
+        </script>
 </body>

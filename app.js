@@ -30,10 +30,16 @@ var Post = mongoose.model('post', postSchema);
 
 
 app.get(["/", "/post"], (req, res) => {
-    Post.find({}, (err, posts) => {
-        res.render('index', { posts: posts })
+    Post.countDocuments({}, (err, postCount) => {
+        var query = Post.find({}).sort({ modified: -1 }).limit(10);
+        query.exec((err, posts) => {
+            res.render('index', {
+                posts: posts,
+                pageno: 1,
+                pageCount: Math.ceil(postCount / 10)
+            });
+        });
     });
-
 });
 
 app.post('/addPost', (req, res) => {
@@ -56,8 +62,22 @@ app.post('/addPost', (req, res) => {
 
 app.get('/post/:id', async (req, res) => {
     await Post.findById(req.params.id, (err, post) => {
-        console.log(post);
         res.render('post', { post });
+    });
+});
+
+app.get('/post/page/:pageno', (req, res) => {
+    Post.countDocuments({}, (err, postCount) => {
+        console.log(postCount);
+        console.log(req.params.pageno);
+        var query = Post.find({}).sort({ modified: -1 }).skip((parseInt(req.params.pageno) - 1) * 10).limit(10);
+        query.exec((err, posts) => {
+            res.render('index', {
+                posts: posts,
+                pageno: parseInt(req.params.pageno),
+                pageCount: Math.ceil(postCount / 10)
+            });
+        });
     });
 });
 
