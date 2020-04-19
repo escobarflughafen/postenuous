@@ -13,155 +13,160 @@
     <link rel="stylesheet" href="/public/style.css">
 </head>
 
-<body style="padding: 16px">
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <h5 class="no-border no-margin no-padding" style="font-weight: 600;">postenuous</h5>
-            </div>
-        </div>
-        <div class="row">
-
-            <div class="col">
-                <ul class="nav h5">
-
-                    <li class="nav-item">
-                        <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archives">archives</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link gunjou-8 no-margin no-padding no-border" data-toggle="collapse"
-                            data-target="#addpostform" aria-controls="addpostform" href="#">
-                            toggler
-                        </a>
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-        <hr>
-    </div>
-    <div class="container">
-        <div>
-            <div class="collapse" id="addpostform" style="padding: 8px;">
-                <form action="addPost" method="POST" style="padding: 16px; padding-top: 0;">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">📰</div>
-                            </div>
-                            <input name="title" type="text" class="form-control" id="titlefield" placeholder="title...">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">✒️</div>
-                            </div>
-                            <input name="author" type="text" class="form-control" id="authorfield" placeholder="author">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">ℹ️</div>
-                            </div>
-                            <input name="brief" type="text" class="form-control" id="brieffield" placeholder="brief...">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
-                            rows="0"></textarea>
-                    </div>
-                    <input class="btn btn-primary mb-2" type="submit" value="Add Post" />
-                </form>
-            </div>
-        </div>
-
-
-        <div id="posts">
-
-            <div class="accordion" id="postAccordion">
-                <% for(let i = 0; i < posts.length; i++) { %>
-                <div class="card post-caption">
-                    <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden">
-                        <div class="align-items-center">
-                            <a href="/post/<%=posts[i].id%>" class="post-title kuro">
-                                <%= posts[i].title %>
-                            </a>
-                            <button id="arrow-<%=i%>" class="btn btn-link symbol-monospace post-title" type="button"
-                                data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
-                                aria-controls="collapse_<%=i%>">
-                                ↓
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="">
-                        <div class="card-body" style="padding: 0;">
-                            <div>
-                                <a href="#" class="sub-title">
-                                    <%= posts[i].author %>
-                                </a>
-                                <code style="color: gray;">
-                                    <%= new Date(posts[i].created).toLocaleString() %>
-                                </code>
-                            </div>
-                            <div>
-                                <%= posts[i].abstract %>
-
-                                <span>
-                                    <a href="/post/<%=posts[i].id%>" class="symbol-monospace">
-                                        →
-                                    </a>
-                                </span>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <% } %>
-            </div>
-
-            <br>
-            <div class="letter-space-neg05">
-                <% if (pageno != 1) { %>
-                <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
-                <span>
-                    &nbsp; ← <% } %>page
-                    <select id="pagination-selector" onchange="window.location=this.value">
-                        <% for (let i = 1; i <= pageCount; i++) { %>
-                        <% if (pageno != i) { %>
-                        <option value="/post/page/<%=i%>"><%=i%></option>
-                        <% } else { %>
-                        <option selected value="/post/page/<%=i%>"><%=i%></option>
-                        <% } %>
-                        <% } %>
-                    </select>
-                    of <%=pageCount%><% if (pageno != pageCount) { %> →&nbsp;
-                </span>
-                <a class="page-navigator" href="/post/page/<%=pageno+1%>">older posts</a> <% } %>
-
-            </div>
-            <br>
-        </div>
+<body style="font-feature-settings: 'trad';">
+    <div style="padding: 16px">
 
         <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h5 class="no-border no-margin no-padding" style="font-weight: 600;">postenuous</h5>
+                </div>
+            </div>
+            <div class="row">
 
+                <div class="col">
+                    <ul class="nav h5">
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archives">archives</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-8 no-margin no-padding no-border" data-toggle="collapse"
+                                data-target="#addpostform" aria-controls="addpostform" href="#">
+                                toggler
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <hr>
         </div>
+        <div class="container">
+            <div>
+                <div class="collapse" id="addpostform" style="padding: 8px;">
+                    <form action="addPost" method="POST" style="padding: 16px; padding-top: 0;">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">📰</div>
+                                </div>
+                                <input name="title" type="text" class="form-control" id="titlefield"
+                                    placeholder="title...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">✒️</div>
+                                </div>
+                                <input name="author" type="text" class="form-control" id="authorfield"
+                                    placeholder="author">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">ℹ️</div>
+                                </div>
+                                <input name="brief" type="text" class="form-control" id="brieffield"
+                                    placeholder="brief...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
+                                rows="0"></textarea>
+                        </div>
+                        <input class="btn btn-primary mb-2" type="submit" value="Add Post" />
+                    </form>
+                </div>
+            </div>
 
-        <script>
-            $("button[id^='arrow']").click(function () {
-                $(this).text(($(this).text() == "↑") ? "↓" : "↑");
-            });
 
-        </script>
+            <div id="posts">
+
+                <div class="accordion" id="postAccordion">
+                    <% for(let i = 0; i < posts.length; i++) { %>
+                    <div class="card post-caption">
+                        <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden">
+                            <div class="align-items-center">
+                                <a href="/post/<%=posts[i].id%>" class="post-title kuro">
+                                    <%= posts[i].title %>
+                                </a>
+                                <button id="arrow-<%=i%>" class="btn btn-link symbol-monospace post-title" type="button"
+                                    data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
+                                    aria-controls="collapse_<%=i%>">
+                                    ↓
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="">
+                            <div class="card-body" style="padding: 0;">
+                                <div>
+                                    <a href="#" class="sub-title">
+                                        <%= posts[i].author %>
+                                    </a>
+                                    &emsp;
+                                    <code style="color: gray;">
+                                    <%= new Date(posts[i].created).toLocaleString() %>
+                                </code>
+                                </div>
+                                <div class="post-text">
+                                    <%= posts[i].abstract %>
+
+                                    <span>
+                                        <a href="/post/<%=posts[i].id%>" class="symbol-monospace">
+                                            →
+                                        </a>
+                                    </span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+
+                <br>
+                <div class="letter-space-neg05">
+                    <% if (pageno != 1) { %>
+                    <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
+                    <span>
+                        &nbsp; ← <% } %>page
+                        <select id="pagination-selector" onchange="window.location=this.value">
+                            <% for (let i = 1; i <= pageCount; i++) { %>
+                            <% if (pageno != i) { %>
+                            <option value="/post/page/<%=i%>"><%=i%></option>
+                            <% } else { %>
+                            <option selected value="/post/page/<%=i%>"><%=i%></option>
+                            <% } %>
+                            <% } %>
+                        </select>
+                        of <%=pageCount%><% if (pageno != pageCount) { %> →&nbsp;
+                    </span>
+                    <a class="page-navigator" href="/post/page/<%=pageno+1%>">older posts</a> <% } %>
+                </div>
+                <hr>
+                <code class="gunjou">available by CC BY-NC-SA 4.0</code>
+                <br>
+            </div>
+            <script>
+                $("button[id^='arrow']").click(function () {
+                    $(this).text(($(this).text() == "↑") ? "↓" : "↑");
+                });
+
+            </script>
+        </div>
+    </div>
+
 </body>

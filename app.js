@@ -42,7 +42,7 @@ app.get(["/", "/post"], (req, res) => {
     });
 });
 
-app.post('/addPost', (req, res) => {
+app.post('*/addPost', (req, res) => {
     console.log(req);
     var postData = new Post({
         title: req.body.title,
