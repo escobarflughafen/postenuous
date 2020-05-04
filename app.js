@@ -28,7 +28,6 @@ var postSchema = new mongoose.Schema({
 
 var Post = mongoose.model('post', postSchema);
 
-
 app.get(["/", "/post"], (req, res) => {
     Post.countDocuments({}, (err, postCount) => {
         var query = Post.find({}).sort({ modified: -1 }).limit(10);
@@ -43,10 +42,10 @@ app.get(["/", "/post"], (req, res) => {
 });
 
 app.post('*/addPost', (req, res) => {
-    console.log(req);
+    var author = (req.body.author == '') ? 'admin' : req.body.author; 
     var postData = new Post({
         title: req.body.title,
-        author: req.body.author,
+        author: author,
         modified: Date.now(),
         tag: [],
         body: req.body.body,
@@ -60,9 +59,20 @@ app.post('*/addPost', (req, res) => {
     });
 });
 
+
 app.get('/post/:id', async (req, res) => {
     await Post.findById(req.params.id, (err, post) => {
-        res.render('post', { post });
+        var queryOlder = Post.find({'created': {$lt: post.created}}).sort({'created': -1}).limit(1);
+        var queryNewer = Post.find({'created': {$gt: post.created}}).limit(1);
+        queryOlder.exec((err, olderPost) => {
+            queryNewer.exec((err, newerPost) => {
+                res.render('post', {
+                    post: post,
+                    newerPost: newerPost,
+                    olderPost: olderPost
+                });
+            })
+        })
     });
 });
 

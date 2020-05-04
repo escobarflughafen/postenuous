@@ -4,18 +4,15 @@
     <html lang="en-US">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- BootstrapのCSS読み込み -->
     <link href="/public/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery読み込み -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- BootstrapのJS読み込み -->
+    <script src="/jquery.min.js"></script>
     <script src="/public/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script src="/marked.min.js"></script>
     <link rel="stylesheet" href="/public/style.css">
 </head>
 
-<body style="font-feature-settings: 'trad';">
+<body style="font-feature-settings: 'trad'; font-size: 100%;">
     <div style="padding: 16px">
-
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -23,7 +20,6 @@
                 </div>
             </div>
             <div class="row">
-
                 <div class="col">
                     <ul class="nav h5">
 
@@ -46,7 +42,6 @@
                             </a>
                         </li>
                     </ul>
-
                 </div>
             </div>
             <hr>
@@ -118,12 +113,13 @@
                                     </a>
                                     &emsp;
                                     <code style="color: gray;">
-                                    <%= new Date(posts[i].created).toLocaleString() %>
+                                    <%= posts[i].created.toLocaleString() %>
                                 </code>
                                 </div>
                                 <div class="post-text">
-                                    <%= posts[i].abstract %>
-
+                                    <span id="abstract_<%=i%>">
+                                        <%= posts[i].abstract %>
+                                    </span>
                                     <span>
                                         <a href="/post/<%=posts[i].id%>" class="symbol-monospace">
                                             →
@@ -136,8 +132,6 @@
                     </div>
                     <% } %>
                 </div>
-
-                <br>
                 <div class="letter-space-neg05">
                     <% if (pageno != 1) { %>
                     <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
@@ -161,6 +155,13 @@
                 <br>
             </div>
             <script>
+                /*
+                var abstracts = $("span[id^='abstract'");
+                for (let i=0; i<abstracts.length; i++) {
+                    markedText = marked($(abstracts[i]).text());
+                    $(abstracts[i]).html(markedText);
+                }
+                */
                 $("button[id^='arrow']").click(function () {
                     $(this).text(($(this).text() == "↑") ? "↓" : "↑");
                 });

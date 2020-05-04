@@ -5,7 +5,6 @@ body {
 
 .post-text {
     font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Mincho", "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
-    overflow-y: scroll;
 }
 
 code, pre {
@@ -65,7 +64,6 @@ topbanner {
 }
 
 .heading {
-    font-size: 32px;
     letter-spacing: -1px;
     font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
     font-weight: 500;
@@ -235,7 +233,6 @@ topbanner {
 }
 
 .post-title {
-    font-size: 1rem;
     font-weight: 600;
     letter-spacing: -0.5px;
     padding: 0;

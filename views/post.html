@@ -4,39 +4,74 @@
     <html lang="en-US">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- BootstrapのCSS読み込み -->
     <link href="/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- jQuery読み込み -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <!-- BootstrapのJS読み込み -->
+    <script src="/jquery.min.js"></script>
     <script src="/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script src="/marked.min.js"></script>
     <link href="/public/style.css" rel="stylesheet">
 </head>
 
-<body style="padding: 16px">
-    <div class="container">
-        <h1>postenuous</h1>
-        <h5>compilers, principles, & tools</h5>
-        <ul class="nav font-weight-bold h5">
-            <li class="nav-item">
-                <a class="nav-link gunjou-2" href="/post">posts</a>
-            </li>
+<body style="font-feature-settings: 'trad';">
+    <div style="padding: 16px">
 
-            <li class="nav-item">
-                <a class="nav-link gunjou-5" href="/archive">archives</a>
-            </li>
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h5 class="no-border no-margin no-padding" style="font-weight: 600;">postenuous</h5>
+                </div>
+            </div>
+            <div class="row">
 
-            <li class="nav-item">
-                <a class="nav-link gunjou-8" href="/about">about</a>
-            </li>
+                <div class="col">
+                    <ul class="nav h5">
 
-        </ul>
-        <br>
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archives">archives</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-8 no-margin no-padding no-border" data-toggle="collapse"
+                                data-target="#addpostform" aria-controls="addpostform" href="#">
+                                toggler
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <div class="container">
+            <div id="content">
+<%= post.body %>
+            </div>
+            <br>
+            
+            <div id="navigation" class="letter-space-neg05">
+                <% if (newerPost.length != 0) {%>
+                newer post: <a href="/post/<%=newerPost[0].id%>"><%=newerPost[0].title%></a>
+                <% if (olderPost.length != 0) {%>
+                <br>
+                <% } %>
+                <% } %>
+                <% if (olderPost.length != 0) {%>
+                older post: <a href="/post/<%=olderPost[0].id%>"><%=olderPost[0].title%></a>
+                <% } %>
+            </div>
+            <script>
+                marked_passage = marked($('#content').text())
+                $('#content').html(marked_passage);
+            </script>
+        </div>
     </div>
 
-    <div class="container">
-        <p>
-            <%= post.body %>
-        </p>
-    </div>
 </body>
