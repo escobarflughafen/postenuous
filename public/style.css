@@ -1,10 +1,16 @@
 body {
     font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    /*
     overflow-y: scroll;
+    */
 }
 
 .post-text {
     font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Mincho", "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    /*
+    text-orientation: initial;
+    writing-mode: vertical-rl;
+    */
 }
 
 code, pre {
@@ -15,10 +21,16 @@ code, pre {
     font-family: Menlo, Consolas, monospace;
 }
 
+blockquote {
+    border-left: 4px solid #efeffa;
+    margin-left: 0;
+    padding-left: 1.2em;
+}
+
 h1, h2, h3 {
     font-weight: 500;
     font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
 }
 
 h5 {
@@ -41,10 +53,6 @@ body {
 
 a {
     color: #0099CC;
-}
-
-blockquote {
-    border-left: 4px solid #efeffa;
 }
 
 code, pre {
@@ -255,7 +263,7 @@ topbanner {
     }
 }
 
-.sub-title{
+.sub-title {
     font-weight: 400;
     letter-spacing: -0.5px;
 }
@@ -297,4 +305,16 @@ topbanner {
 
 .letter-space-neg10 {
     letter-spacing: -1px;
+}
+
+.font-weight-500 {
+    font-weight: 500;
+}
+
+.font-weight-600 {
+    font-weight: 600;
+}
+
+.font-weight-400 {
+    font-weight: 400;
 }

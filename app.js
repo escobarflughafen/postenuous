@@ -59,6 +59,35 @@ app.post('*/addPost', (req, res) => {
     });
 });
 
+app.post('*/:id/deletePost', (req, res) => {
+    console.log(req);
+
+    if(req.body.passwd == undefined) {
+        res.redirect('/post/' + req.params.id);
+    } else if(req.body.passwd == 'admin') {
+        Post.findById(req.params.id, (err, post) => {
+            post.remove();
+            res.redirect('/post')
+        });
+    } else {
+        res.redirect('/post/' + req.params.id);
+    }
+});
+
+app.post('*/:id/modifyPost', (req, res) => {
+    console.log(req);
+    Post.findById(req.params.id, (err, post) => {
+        post.update({
+            title: req.body.title,
+            author: req.body.author,
+            abstract: req.body.brief,
+            body: req.body.body,
+            modified: Date.now()
+        }, (err, raw) => {
+            res.redirect('/post/' + req.params.id);
+        })
+    })
+})
 
 app.get('/post/:id', async (req, res) => {
     await Post.findById(req.params.id, (err, post) => {
