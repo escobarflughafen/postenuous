@@ -23,7 +23,15 @@ var postSchema = new mongoose.Schema({
     modified: Date,
     tag: [String],
     body: String,
-    abstract: String
+    abstract: String,
+    viewCount: {
+        type: Number,
+        default: 0
+    },
+    likeCount: {
+        type: Number,
+        default: 0
+    }
 });
 
 var Post = mongoose.model('post', postSchema);
@@ -42,7 +50,7 @@ app.get(["/", "/post"], (req, res) => {
 });
 
 app.post('*/addPost', (req, res) => {
-    var author = (req.body.author == '') ? 'admin' : req.body.author; 
+    var author = (req.body.author == '') ? 'admin' : req.body.author;
     var postData = new Post({
         title: req.body.title,
         author: author,
@@ -62,9 +70,9 @@ app.post('*/addPost', (req, res) => {
 app.post('*/:id/deletePost', (req, res) => {
     console.log(req);
 
-    if(req.body.passwd == undefined) {
+    if (req.body.passwd == undefined) {
         res.redirect('/post/' + req.params.id);
-    } else if(req.body.passwd == 'admin') {
+    } else if (req.body.passwd == 'admin') {
         Post.findById(req.params.id, (err, post) => {
             post.remove();
             res.redirect('/post')
@@ -89,10 +97,11 @@ app.post('*/:id/modifyPost', (req, res) => {
     })
 })
 
-app.get('/post/:id', async (req, res) => {
-    await Post.findById(req.params.id, (err, post) => {
-        var queryOlder = Post.find({'created': {$lt: post.created}}).sort({'created': -1}).limit(1);
-        var queryNewer = Post.find({'created': {$gt: post.created}}).limit(1);
+app.get('/post/:id', (req, res) => {
+    Post.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } }).exec();
+    Post.findById(req.params.id, (err, post) => {
+        var queryOlder = Post.find({ 'created': { $lt: post.created } }).sort({ 'created': -1 }).limit(1);
+        var queryNewer = Post.find({ 'created': { $gt: post.created } }).limit(1);
         queryOlder.exec((err, olderPost) => {
             queryNewer.exec((err, newerPost) => {
                 res.render('post', {
@@ -100,6 +109,7 @@ app.get('/post/:id', async (req, res) => {
                     newerPost: newerPost,
                     olderPost: olderPost
                 });
+
             })
         })
     });
@@ -116,6 +126,16 @@ app.get('/post/page/:pageno', (req, res) => {
                 pageno: parseInt(req.params.pageno),
                 pageCount: Math.ceil(postCount / 10)
             });
+        });
+    });
+});
+
+app.get('/author/:author', (req, res) => {
+    Post.find({ author: req.params.author }).sort({ created: -1 }).exec((err, posts) => {
+        console.log(posts.length);
+        res.render('author', {
+            author: req.params.author,
+            posts: posts
         });
     });
 });

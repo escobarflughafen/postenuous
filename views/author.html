@@ -48,55 +48,19 @@
             </div>
             <hr>
         </div>
-
         <div class="container">
             <div>
-                <div class="collapse" id="addpostform" style="padding: 8px;">
-                    <form action="addPost" method="POST" style="padding: 16px; padding-top: 0;">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">📰</div>
-                                </div>
-                                <input name="title" type="text" class="form-control" id="titlefield"
-                                    placeholder="title...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">✒️</div>
-                                </div>
-                                <input name="author" type="text" class="form-control" id="authorfield"
-                                    placeholder="author">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">ℹ️</div>
-                                </div>
-                                <input name="brief" type="text" class="form-control" id="brieffield"
-                                    placeholder="brief...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
-                                rows="0"></textarea>
-                        </div>
-                        <input class="btn btn-primary mb-2" type="submit" value="Add Post" />
-                    </form>
-                </div>
+                <h5 class="letter-space-neg05 no-margin">author archive: <a href="/author/<%=author%>" class="font-weight-500"><%=author%></span></h5>
+                <div class="post-data letter-space-neg05"><%=posts.length%> posts in total</div>
             </div>
-
-
+            <br>
             <div id="posts">
-
                 <div class="accordion" id="postAccordion">
                     <% for(let i = 0; i < posts.length; i++) { %>
                     <div class="card post-caption">
                         <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden">
                             <div class="align-items-center">
+                                
                                 <a href="/post/<%=posts[i].id%>" class="post-title kuro">
                                     <%= posts[i].title %>
                                 </a>
@@ -105,20 +69,15 @@
                                     aria-controls="collapse_<%=i%>">
                                     ↓
                                 </button>
+                                <code style="color: gray; float: right;">
+                                    <%= posts[i].created.toLocaleString() %>
+                                </code> 
+                                
                             </div>
                         </div>
 
                         <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="">
                             <div class="card-body" style="padding: 0;">
-                                <div>
-                                    <a href="/author/<%= posts[i].author %>" class="sub-title">
-                                        <%= posts[i].author %>
-                                    </a>
-                                    &emsp;
-                                    <code style="color: gray;">
-                                    <%= posts[i].created.toLocaleString() %>
-                                </code>
-                                </div>
                                 <div class="post-text">
                                     <span id="abstract_<%=i%>"><%= posts[i].abstract %></span>
                                     <span>
@@ -133,24 +92,7 @@
                     </div>
                     <% } %>
                 </div>
-                <div class="letter-space-neg05">
-                    <% if (pageno != 1) { %>
-                    <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
-                    <span>
-                        &nbsp; ← <% } %>page
-                        <select id="pagination-selector" onchange="window.location=this.value">
-                            <% for (let i = 1; i <= pageCount; i++) { %>
-                            <% if (pageno != i) { %>
-                            <option value="/post/page/<%=i%>"><%=i%></option>
-                            <% } else { %>
-                            <option selected value="/post/page/<%=i%>"><%=i%></option>
-                            <% } %>
-                            <% } %>
-                        </select>
-                        of <%=pageCount%><% if (pageno != pageCount) { %> →&nbsp;
-                    </span>
-                    <a class="page-navigator" href="/post/page/<%=pageno+1%>">older posts</a> <% } %>
-                </div>
+
                 <hr>
                 <code class="gunjou">available by CC BY-NC-SA 4.0</code>
                 <br>

@@ -39,7 +39,7 @@ h5 {
     font-weight: 400;
 }
 
-h1, h2 a, a:hover {
+h1, h2, a:hover {
     text-decoration: none;
 }
 
@@ -307,6 +307,14 @@ topbanner {
     letter-spacing: -1px;
 }
 
+.letter-space-1px {
+    letter-spacing: 1px;
+}
+
+.letter-space-1pt {
+    letter-spacing: 1pt;
+}
+
 .font-weight-500 {
     font-weight: 500;
 }
@@ -317,4 +325,21 @@ topbanner {
 
 .font-weight-400 {
     font-weight: 400;
+}
+
+.font-weight-300 {
+    font-weight: 300;
+}
+
+.post-data {
+    color: grey;
+    font-feature-settings: 'smcp';
+}
+
+.font-size-80p{
+    font-size: 80%;
+}
+
+.font-size-90p{
+    font-size: 90%;
 }

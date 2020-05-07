@@ -51,82 +51,83 @@
         </div>
 
         <div class="container">
-            <div id="headers">
-                <h5 class="font-weight-600">
+            <div id="headers" style="margin-bottom: 1rem;">
+                <h5 class="font-weight-600 no-margin">
                     <%= post.title%>
-                </h5>
-                <div class="h6 font-weight-400">
-                    <a href="#">
-                        <%= post.author %>
+                    <a class="font-weight-400" data-toggle="collapse" href="#page_console" aria-expanded="false"
+                        aria-controls="collapseExample">
+                        [edit]
                     </a>
-                    &emsp;
-                    <code style="color: gray;">
-                        <%= post.created.toLocaleString() %>
-                    </code>
-                    &emsp;
-                    <button class="no-border btn-danger" stype="button" data-toggle="collapse"
-                        data-target="#page_console" aria-expanded="false" aria-controls="collapseExample">
-                        Edit
-                    </button>
+                </h5>
+                <div class="collapse" style="margin-top: 0.5rem; margin-bottom: 0.5rem;" id="page_console">
+                    <div class="card card-body">
+                        <form method="POST">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">🔑</div>
+                                    </div>
+                                    <input name="passwd" type="password" class="form-control" id="passwdfield"
+                                        placeholder="">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">📰</div>
+                                    </div>
+                                    <input name="title" type="text" class="form-control" id="titlefield"
+                                        value="<%=post.title%>" placeholder="title...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">✒️</div>
+                                    </div>
+                                    <input name="author" type="text" class="form-control" id="authorfield"
+                                        value="<%=post.author%>" placeholder="author">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">ℹ️</div>
+                                    </div>
+                                    <input name="brief" type="text" class="form-control" id="brieffield"
+                                        value="<%=post.abstract%>" placeholder="brief...">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
+                                    rows="0"></textarea>
+                            </div>
+                            <input class="btn btn-primary mb-2" type="submit" value="Modify this Post"
+                                formaction="<%= post.id%>/modifyPost" />
+                            <input class="btn btn-danger mb-2" type="submit" value="Delete this Post"
+                                formaction="<%= post.id%>/deletePost" />
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="collapse" id="page_console">
-                <div class="card card-body">
 
-                    <form method="POST">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">🔑</div>
-                                </div>
-                                <input name="passwd" type="password" class="form-control" id="passwdfield"
-                                    placeholder="">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">📰</div>
-                                </div>
-                                <input name="title" type="text" class="form-control" id="titlefield"
-                                    value="<%=post.title%>" placeholder="title...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">✒️</div>
-                                </div>
-                                <input name="author" type="text" class="form-control" id="authorfield"
-                                    value="<%=post.author%>" placeholder="author">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">ℹ️</div>
-                                </div>
-                                <input name="brief" type="text" class="form-control" id="brieffield"
-                                    value="<%=post.abstract%>" placeholder="brief...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
-                                rows="0"></textarea>
-                        </div>
-                        <input class="btn btn-primary mb-2" type="submit" value="Modify this Post"
-                            formaction="<%= post.id%>/modifyPost" />
-                        <input class="btn btn-danger mb-2" type="submit" value="Delete this Post"
-                            formaction="<%= post.id%>/deletePost" />
-                    </form>
-
+                <div>
+                    <div class="post-data font-weight-400">
+                        posted on
+                        <span class="holo-green-dark">
+                            <%= post.created.toDateString() %>
+                        </span>
+                        by
+                        <a href="/author/<%=post.author%>" class="font-weight-500">
+                            <%= post.author %>
+                        </a>
+                    </div>
+    
                 </div>
-                <br>
             </div>
             <div id="content" class="post-text"><%= post.body %></div>
-            <br>
-
+            <div id="postdata" class="post-data letter-space-neg05 font-weight-400">viewed <%=post.viewCount%> times |
+                <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a></div>
             <div id="navigation" class="letter-space-neg05 font-weight-500">
                 <% if (newerPost.length != 0) {%>
                 newer post: <a href="/post/<%=newerPost[0].id%>"><%=newerPost[0].title%></a>
