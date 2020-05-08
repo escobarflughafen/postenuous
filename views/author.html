@@ -30,7 +30,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archives">archives</a>
+                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archive">archives</a>
                         </li>
 
                         <li class="nav-item">
@@ -50,32 +50,24 @@
         </div>
         <div class="container">
             <div>
-                <h5 class="letter-space-neg05 no-margin">author archive: <a href="/author/<%=author%>" class="font-weight-500"><%=author%></span></h5>
+                <h5 class="letter-space-neg05 no-margin">author archive: <a href="/author/<%=author%>" class="font-weight-500"><%=author%></a></h5>
                 <div class="post-data letter-space-neg05"><%=posts.length%> posts in total</div>
             </div>
             <br>
             <div id="posts">
                 <div class="accordion" id="postAccordion">
                     <% for(let i = 0; i < posts.length; i++) { %>
-                    <div class="card post-caption">
-                        <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden">
-                            <div class="align-items-center">
-                                
+                    <div class="card post-caption justify-content-center">
+                        <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden" data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
+                            aria-controls="collapse_<%=i%>">
                                 <a href="/post/<%=posts[i].id%>" class="post-title kuro">
                                     <%= posts[i].title %>
                                 </a>
-                                <button id="arrow-<%=i%>" class="btn btn-link symbol-monospace post-title" type="button"
-                                    data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
-                                    aria-controls="collapse_<%=i%>">
-                                    ↓
-                                </button>
+                                <span id="arrow_<%=i%>" class="symbol-monospace">↓</span>
                                 <code style="color: gray; float: right;">
                                     <%= posts[i].created.toLocaleString() %>
-                                </code> 
-                                
-                            </div>
+                                </code>
                         </div>
-
                         <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="">
                             <div class="card-body" style="padding: 0;">
                                 <div class="post-text">
@@ -98,15 +90,10 @@
                 <br>
             </div>
             <script>
-                /*
-                var abstracts = $("span[id^='abstract_']")
-                abstracts.toArray().forEach(element => {
-                    $(element).html(marked($(element).text()));
-                });
-                */
-                $("button[id^='arrow']").click(function () {
-                    $(this).text(($(this).text() == "↑") ? "↓" : "↑");
-                });
+                $("div[id^='heading']").click(function() {
+                    let arrowsign = $(this).children()[1].innerText;
+                    $(this).children()[1].innerText = (arrowsign == "↑") ? "↓" : "↑";
+                })
             </script>
         </div>
     </div>

@@ -13,6 +13,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
 
+function handleNotFound(req, res, view) {
+    res.status(404).render(view, {
+        req: req
+    });
+}
+
 var postSchema = new mongoose.Schema({
     title: String,
     author: String,
@@ -63,19 +69,23 @@ app.post('*/addPost', (req, res) => {
     postData.save().then(result => {
         res.redirect('/');
     }).catch(err => {
+        console.log(err);
         res.status(400).send("Unable to save data");
     });
 });
 
 app.post('*/:id/deletePost', (req, res) => {
     console.log(req);
-
     if (req.body.passwd == undefined) {
         res.redirect('/post/' + req.params.id);
     } else if (req.body.passwd == 'admin') {
         Post.findById(req.params.id, (err, post) => {
-            post.remove();
-            res.redirect('/post')
+            if (err) {
+
+            } else {
+                post.remove();
+                res.redirect('/post');
+            }
         });
     } else {
         res.redirect('/post/' + req.params.id);
@@ -98,20 +108,28 @@ app.post('*/:id/modifyPost', (req, res) => {
 })
 
 app.get('/post/:id', (req, res) => {
-    Post.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } }).exec();
-    Post.findById(req.params.id, (err, post) => {
-        var queryOlder = Post.find({ 'created': { $lt: post.created } }).sort({ 'created': -1 }).limit(1);
-        var queryNewer = Post.find({ 'created': { $gt: post.created } }).limit(1);
-        queryOlder.exec((err, olderPost) => {
-            queryNewer.exec((err, newerPost) => {
-                res.render('post', {
-                    post: post,
-                    newerPost: newerPost,
-                    olderPost: olderPost
-                });
-
-            })
-        })
+    Post.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } }).exec((err, post) => {
+        if (err) {
+            handleNotFound(req, res, 'notfound');
+        } else {
+            Post.findById(req.params.id, (err, post) => {
+                if (err) {
+                    handleNotFound(req, res, 'notfound');
+                } else {
+                    var queryOlder = Post.find({ 'created': { $lt: post.created } }).sort({ 'created': -1 }).limit(1);
+                    var queryNewer = Post.find({ 'created': { $gt: post.created } }).limit(1);
+                    queryOlder.exec((err, olderPost) => {
+                        queryNewer.exec((err, newerPost) => {
+                            res.render('post', {
+                                post: post,
+                                newerPost: newerPost,
+                                olderPost: olderPost
+                            });
+                        });
+                    });
+                }
+            });
+        }
     });
 });
 
@@ -132,12 +150,41 @@ app.get('/post/page/:pageno', (req, res) => {
 
 app.get('/author/:author', (req, res) => {
     Post.find({ author: req.params.author }).sort({ created: -1 }).exec((err, posts) => {
-        console.log(posts.length);
-        res.render('author', {
-            author: req.params.author,
-            posts: posts
+        if (err) {
+            handleNotFound(req, res, 'notfound');
+        } else {
+            console.log(posts.length);
+            res.render('author', {
+                author: req.params.author,
+                posts: posts
+            });
+        }
+    });
+});
+
+//bad implementation
+app.get('/archive', (req, res) => {
+    Post.distinct('author', (err, authors) => {
+        Post.find({}, (err, posts) => {
+            var postCount = {};
+            for (let i = 0; i < authors.length; i++) {
+                postCount[authors[i]] = 0;
+            }
+            for (let i = 0; i < posts.length; i++) {
+                let author = posts[i].author;
+                postCount[author] += 1;
+            }
+            console.log(postCount);
+            res.render('archive', {
+                authors: authors,
+                postCount: postCount
+            });
         });
     });
+});
+
+app.get('/*', (req, res) => {
+    handleNotFound(req, res, 'notfound');
 });
 
 app.listen(3000, () => {

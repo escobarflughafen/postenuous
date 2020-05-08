@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+
+<head>
+    <html lang="en-US">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/jquery.min.js"></script>
+    <script src="/public/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script src="/marked.min.js"></script>
+    <link rel="stylesheet" href="/public/style.css">
+</head>
+
+<body style="font-feature-settings: 'trad'; font-size: 100%;">
+    <div style="padding: 16px">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h5 class="no-border no-margin no-padding" style="font-weight: 600;" >
+                        postenuous
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <ul class="nav h5">
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archive">archives</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-8 no-margin no-padding no-border" data-toggle="collapse"
+                                data-target="#addpostform" aria-controls="addpostform" href="#">
+                                toggler
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="container">
+            <div id="authors">
+                <h5 class="font-weight-500"></h5>
+                <code>HTTP 404</code> - your request <code><%=req.url%></code> was not found.
+                <br>
+                <a href="/post">← back to posts</a>
+                <hr>
+                <code class="gunjou">available by CC BY-NC-SA 4.0</code>
+                <br>
+            </div>
+            <script>
+                /*
+                var abstracts = $("span[id^='abstract_']")
+                abstracts.toArray().forEach(element => {
+                    $(element).html(marked($(element).text()));
+                });
+                */
+                $("button[id^='arrow']").click(function () {
+                    $(this).text(($(this).text() == "↑") ? "↓" : "↑");
+                });
+            </script>
+        </div>
+    </div>
+
+</body>

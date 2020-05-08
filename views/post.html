@@ -13,7 +13,6 @@
 
 <body style="font-feature-settings: 'trad';">
     <div style="padding: 16px">
-
         <div class="container">
             <div class="row">
                 <div class="col">
@@ -21,7 +20,6 @@
                 </div>
             </div>
             <div class="row">
-
                 <div class="col">
                     <ul class="nav h5">
 
@@ -30,7 +28,7 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archives">archives</a>
+                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archive">archives</a>
                         </li>
 
                         <li class="nav-item">
@@ -48,6 +46,7 @@
                 </div>
             </div>
             <hr>
+            
         </div>
 
         <div class="container">
@@ -122,29 +121,44 @@
                             <%= post.author %>
                         </a>
                     </div>
-    
+
                 </div>
             </div>
             <div id="content" class="post-text"><%= post.body %></div>
+            <br>
             <div id="postdata" class="post-data letter-space-neg05 font-weight-400">viewed <%=post.viewCount%> times |
-                <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a></div>
-            <div id="navigation" class="letter-space-neg05 font-weight-500">
-                <% if (newerPost.length != 0) {%>
-                newer post: <a href="/post/<%=newerPost[0].id%>"><%=newerPost[0].title%></a>
-                <% if (olderPost.length != 0) {%>
-                <br>
-                <% } %>
-                <% } %>
-                <% if (olderPost.length != 0) {%>
-                older post: <a href="/post/<%=olderPost[0].id%>"><%=olderPost[0].title%></a>
-                <% } %>
+                <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a>
             </div>
+            <hr style="margin-bottom: 4px">
+            <div id="navigation" class="letter-space-neg05 font-weight-500">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="width: 50%; text-align: left;">
+                                <% if (newerPost.length != 0) {%>
+                                <a href="/post/<%=newerPost[0].id%>">←<%=newerPost[0].title%></a>
+                                <% } %>
+                            </td>
+                            <td style="width: 50%; text-align: right;">
+                                <% if (olderPost.length != 0) {%>
+                                <a href="/post/<%=olderPost[0].id%>"><%=olderPost[0].title%>→</a>
+                                <% } %>
+                            </td>
+                            <td><div></div></td> 
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr style="margin-top: 4px">
             <script>
                 marked_passage = marked($('#content').text())
                 $('#posteditfield').text($('#content').text());
                 $('#content').html(marked_passage);
             </script>
         </div>
+        <div class="container">
+            <code class="gunjou">available by CC BY-NC-SA 4.0</code>
+            <br>
+        </div>
     </div>
-
 </body>
