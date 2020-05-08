@@ -5,9 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <script src="/marked.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/tomorrow-night.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
     <link href="/public/style.css" rel="stylesheet">
 </head>
 
@@ -46,20 +49,26 @@
                 </div>
             </div>
             <hr>
-            
+
         </div>
 
         <div class="container">
             <div id="headers" style="margin-bottom: 1rem;">
                 <h5 class="font-weight-600 no-margin">
                     <%= post.title%>
-                    <a class="font-weight-400" data-toggle="collapse" href="#page_console" aria-expanded="false"
+                    <a class="font-weight-400" data-toggle="collapse" href="#page-console" aria-expanded="false"
                         aria-controls="collapseExample">
                         [edit]
                     </a>
                 </h5>
-                <div class="collapse" style="margin-top: 0.5rem; margin-bottom: 0.5rem;" id="page_console">
+                <div class="collapse" style="margin-top: 0.5rem; margin-bottom: 0.5rem;" id="page-console">
                     <div class="card card-body">
+                        <script>
+                            function autoGrow(element) {
+                                element.style.height = "5rem";
+                                element.style.height = ((element.scrollHeight >= 480) ? 480 : element.scrollHeight) + "px";
+                            }
+                        </script>
                         <form method="POST">
                             <div class="form-group">
                                 <div class="input-group">
@@ -100,13 +109,45 @@
                             </div>
                             <div class="form-group">
                                 <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
-                                    rows="0"></textarea>
+                                    rows="0" onclick="autoGrow(this)" oninput="autoGrow(this)"></textarea>
                             </div>
+
                             <input class="btn btn-primary mb-2" type="submit" value="Modify this Post"
                                 formaction="<%= post.id%>/modifyPost" />
                             <input class="btn btn-danger mb-2" type="submit" value="Delete this Post"
                                 formaction="<%= post.id%>/deletePost" />
                         </form>
+                        <hr>
+                        <button id="preview-btn" class="btn btn-info mb-2" >Preview</button>
+                        <div id="previewfield"></div>
+                        <script>
+                            $(function () {
+                                var originalContent = $('#content').html();
+                                var isPreviewed = false;
+                                $("#preview-btn").click(function () {
+                                    if (isPreviewed) {
+                                        isPreviewed = false;
+                                        $(this).text('Preview');
+                                        $('#content').html(originalContent)
+                                    } else {
+                                        isPreviewed = true;
+                                        $('#page-console').collapse('hide');
+                                        $(this).text('Show Original Content');
+                                        $('#content').html(marked($('#posteditfield').val()));
+                                        let previewButtonClone = $('#preview-btn').clone();
+                                        previewButtonClone.click(function () {
+                                            isPreviewed = false;
+                                            $('#content').html(originalContent)
+                                            $('#page-console').collapse('show');
+                                            $('#preview-btn').text('Preview');
+                                            $(this).remove();
+                                        })
+                                        $('#content').append(previewButtonClone);
+                                        hljs.initHighlightingOnLoad();
+                                    }
+                                });
+                            });
+                        </script>
                     </div>
                 </div>
 
@@ -144,7 +185,9 @@
                                 <a href="/post/<%=olderPost[0].id%>"><%=olderPost[0].title%>→</a>
                                 <% } %>
                             </td>
-                            <td><div></div></td> 
+                            <td>
+                                <div></div>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -152,7 +195,7 @@
             <hr style="margin-top: 4px">
             <script>
                 marked_passage = marked($('#content').text())
-                $('#posteditfield').text($('#content').text());
+                $('#posteditfield').val($('#content').text());
                 $('#content').html(marked_passage);
             </script>
         </div>
