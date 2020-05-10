@@ -65,8 +65,10 @@
                     <div class="card card-body">
                         <script>
                             function autoGrow(element) {
-                                element.style.height = "5rem";
-                                element.style.height = ((element.scrollHeight >= 480) ? 480 : element.scrollHeight) + "px";
+                                if (element) {
+                                    element.style.height = "5rem";
+                                    element.style.height = ((element.scrollHeight >= 480) ? 480 : element.scrollHeight) + "px";
+                                }
                             }
                         </script>
                         <form method="POST">
@@ -109,7 +111,7 @@
                             </div>
                             <div class="form-group">
                                 <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
-                                    rows="0" onclick="autoGrow(this)" oninput="autoGrow(this)"></textarea>
+                                    onclick="autoGrow(this)" oninput="autoGrow(this)"></textarea>
                             </div>
 
                             <input class="btn btn-primary mb-2" type="submit" value="Modify this Post"
@@ -125,26 +127,27 @@
                                 var originalContent = $('#content').html();
                                 var isPreviewed = false;
                                 $("#preview-btn").click(function () {
-                                    if (isPreviewed) {
+                                    /*if (isPreviewed) {
                                         isPreviewed = false;
                                         $(this).text('Preview');
                                         $('#content').html(originalContent)
-                                    } else {
-                                        isPreviewed = true;
-                                        $('#page-console').collapse('hide');
-                                        $(this).text('Show Original Content');
-                                        $('#content').html(marked($('#posteditfield').val()));
+                                    } else {*/
+
+                                    $('#page-console').collapse('hide');
+                                    $('#content').html(marked($('#posteditfield').val()));
+                                    if (!isPreviewed) {
                                         let previewButtonClone = $('#preview-btn').clone();
+                                        previewButtonClone.text("Show Original Content");
                                         previewButtonClone.click(function () {
-                                            isPreviewed = false;
                                             $('#content').html(originalContent)
                                             $('#page-console').collapse('show');
                                             $('#preview-btn').text('Preview');
                                             $(this).remove();
+                                            isPreviewed = false;
                                         })
-                                        $('#content').append(previewButtonClone);
-                                        hljs.initHighlightingOnLoad();
+                                        $('#content-display').append(previewButtonClone);
                                     }
+                                    isPreviewed = true;
                                 });
                             });
                         </script>
@@ -165,7 +168,9 @@
 
                 </div>
             </div>
-            <div id="content" class="post-text"><%= post.body %></div>
+            <div id="content-display">
+                <div id="content" class="post-text"><%= post.body %></div>
+            </div>
             <br>
             <div id="postdata" class="post-data letter-space-neg05 font-weight-400">viewed <%=post.viewCount%> times |
                 <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a>
