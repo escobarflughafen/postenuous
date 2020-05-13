@@ -4,8 +4,12 @@
     <html lang="en-US">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title%></title>
     <link href="/public/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
     <script src="/public/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <script src="/marked.min.js"></script>
     <link rel="stylesheet" href="/public/style.css">
@@ -19,34 +23,60 @@
         <div class="container">
             <div class="row">
                 <div class="col">
-                    <h5 class="no-border no-margin no-padding" style="font-weight: 600;" >
-                        postenuous
-                    </h5>
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="no-border no-margin no-padding" style="font-weight: 600;" >
+                                postenuous
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <ul class="nav h5">
+                                <li class="nav-item">
+                                    <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link gunjou-4 no-margin no-padding no-border"
+                                        href="/archive">archives</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
-            <div class="row">
-                <div class="col">
-                    <ul class="nav h5">
-
-                        <li class="nav-item">
-                            <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archive">archives</a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
-                        </li>
-                    </ul>
+                <div class="col-auto" style="text-align: right;">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info dropdown-toggle btn-sm" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" style="margin-top: 8px">
+                            <%=loginAs.name%>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/newpost">New Post</a>
+                            <a class="dropdown-item" href="/draft">Drafts</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/user">Profile</a>
+                            <a class="dropdown-item" href="/author/<%=loginAs.username%>">Posts</a>
+                            <a class="dropdown-item" href="/dashboard">Dashboard</a>
+                            <a class="dropdown-item" href="/random">Random Content</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Log out</a>
+                        </div>
+                    </div>
                 </div>
             </div>
             <hr>
         </div>
-        <div class="container">
+
+       <div class="container">
             <div>
-                <h5 class="letter-space-neg05 no-margin">author archive: <a href="/author/<%=author%>" class="font-weight-500"><%=author%></a></h5>
+                <h5 class="letter-space-neg05 no-margin">author archive: <a href="/user/<%=author.username%>"
+                        class="font-weight-500"><%=author.name%></a></h5>
                 <div class="post-data letter-space-neg05"><%=posts.length%> posts in total</div>
             </div>
             <br>
@@ -54,13 +84,14 @@
                 <div class="accordion" id="postAccordion">
                     <% for(let i = 0; i < posts.length; i++) { %>
                     <div class="card post-caption justify-content-center">
-                        <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden" data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
+                        <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden"
+                            data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
                             aria-controls="collapse_<%=i%>">
-                                <a href="/post/<%=posts[i].id%>" class="post-title kuro">
-                                    <%= posts[i].title %>
-                                </a>
-                                <a href="#" id="arrow_<%=i%>" class="symbol-monospace">↓</a>
-                                <code style="color: gray; float: right;">
+                            <a href="/post/<%=posts[i].id%>" class="post-title kuro">
+                                <%= posts[i].title %>
+                            </a>
+                            <a href="#" id="arrow_<%=i%>" class="symbol-monospace">↓</a>
+                            <code style="color: gray; float: right;">
                                     <%= posts[i].created.toLocaleString() %>
                                 </code>
                         </div>
@@ -82,11 +113,15 @@
                 </div>
 
                 <hr>
-                <code class="gunjou">available by CC BY-NC-SA 4.0</code>
+                <div id="licenses">
+                    <span>
+                        <code class="gunjou">available by <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"><ins>CC BY-NC-SA 4.0</ins></a></code>
+                    </span>
+                </div>
                 <br>
             </div>
             <script>
-                $("div[id^='heading']").click(function() {
+                $("div[id^='heading']").click(function () {
                     let arrowsign = $(this).children()[1].innerText;
                     $(this).children()[1].innerText = (arrowsign == "↑") ? "↓" : "↑";
                 })

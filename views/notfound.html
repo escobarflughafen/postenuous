@@ -3,9 +3,13 @@
 <head>
     <html lang="en-US">
     <meta charset="UTF-8">
+    <title><%= title%></title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/public/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
     <script src="/public/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
     <script src="/marked.min.js"></script>
     <link rel="stylesheet" href="/public/style.css">
@@ -40,12 +44,6 @@
                             <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
                         </li>
 
-                        <li class="nav-item">
-                            <a class="nav-link gunjou-8 no-margin no-padding no-border" data-toggle="collapse"
-                                data-target="#addpostform" aria-controls="addpostform" href="#">
-                                toggler
-                            </a>
-                        </li>
                     </ul>
                 </div>
             </div>
@@ -58,7 +56,11 @@
                 <br>
                 <a href="/post">← back to posts</a>
                 <hr>
-                <code class="gunjou">available by CC BY-NC-SA 4.0</code>
+                <div id="licenses">
+                    <span>
+                        <code class="gunjou">available by <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"><ins>CC BY-NC-SA 4.0</ins></a></code>
+                    </span>
+                </div>
                 <br>
             </div>
             <script>

@@ -6,7 +6,7 @@ body {
 }
 
 .post-text {
-    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Mincho", "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
     /*
     text-orientation: initial;
     writing-mode: vertical-rl;
@@ -17,7 +17,7 @@ code, pre {
     font-family: Menlo, Consolas, monospace;
 }
 
-pre {
+code {
     overflow-x: hidden;
 }
 
@@ -43,7 +43,7 @@ h5 {
     font-weight: 400;
 }
 
-h1, h2, a:hover {
+h1, h2 {
     text-decoration: none;
 }
 

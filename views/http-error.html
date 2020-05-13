@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+
+<head>
+    <html lang="en-US">
+    <meta charset="UTF-8">
+    <title><%= title%></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/public/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="/public/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script src="/marked.min.js"></script>
+    <link rel="stylesheet" href="/public/style.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/tomorrow-night.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body style="font-feature-settings: 'trad'; font-size: 100%;">
+    <div style="padding: 16px">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h5 class="no-border no-margin no-padding" style="font-weight: 600;" >
+                        postenuous
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <ul class="nav h5">
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archive">archives</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="container">
+            <div>
+                <% if (code == 400) { %>
+                    <code>HTTP 400</code> - your request <code><%=req.url%></code> will not process due to client error.
+                <% } %>
+                <% if (code == 403) { %>
+                    <code>HTTP 403</code> - your have no permission to view <code><%=req.url%></code>.
+                <% } %>
+                <% if (code == 404) { %>
+                    <code>HTTP 404</code> - your request <code><%=req.url%></code> was not found.
+                <% } %>
+                <br>
+                <a href="/post">← back to posts</a>
+                <hr>
+               <div id="licenses">
+                    <span>
+                        <code class="gunjou">available by <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"><ins>CC BY-NC-SA 4.0</ins></a></code>
+                    </span>
+                </div>
+                <br>
+            </div>
+            <script>
+                /*
+                var abstracts = $("span[id^='abstract_']")
+                abstracts.toArray().forEach(element => {
+                    $(element).html(marked($(element).text()));
+                });
+                */
+                $("button[id^='arrow']").click(function () {
+                    $(this).text(($(this).text() == "↑") ? "↓" : "↑");
+                });
+            </script>
+        </div>
+    </div>
+
+</body>

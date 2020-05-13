@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+
+<head>
+    <html lang="en-US">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title%></title>
+    <link href="/bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="/public/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+    <script src="/marked.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/styles/tomorrow-night.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/10.0.2/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <link href="/public/style.css" rel="stylesheet">
+</head>
+
+<body style="font-feature-settings: 'trad';">
+    <div style="padding: 16px">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="no-border no-margin no-padding" style="font-weight: 600;" >
+                                postenuous
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <ul class="nav h5">
+                                <li class="nav-item">
+                                    <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link gunjou-4 no-margin no-padding no-border"
+                                        href="/archive">archives</a>
+                                </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-auto" style="text-align: right;">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info dropdown-toggle btn-sm" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false" style="margin-top: 8px">
+                            <%=loginAs.name%>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/newpost">New Post</a>
+                            <a class="dropdown-item" href="/draft">Drafts</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/user">Profile</a>
+                            <a class="dropdown-item" href="/author/<%=loginAs.username%>">Posts</a>
+                            <a class="dropdown-item" href="/dashboard">Dashboard</a>
+                            <a class="dropdown-item" href="/random">Random Content</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="/logout">Log out</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+        </div>
+
+        <div class="container">
+            <div id="headers" style="margin-bottom: 1rem;">
+                <h5 class="font-weight-600 no-margin">
+                    <%= post.title%>
+
+                </h5>
+                <div>
+                    <div class="post-data font-weight-400">
+                        posted on
+                        <span class="holo-green-dark">
+                            <%= post.created.toDateString() %>
+                        </span>
+                        by
+                        <a href="/user/<%=post.author.username%>" class="font-weight-500">
+                            <%= post.author.name %>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            <div id="content-display">
+                <div id="content" class="post-text"><%= post.body %></div>
+            </div>
+            <br>
+            <div id="postdata" class="post-data letter-space-neg05 font-weight-400">viewed <%=post.viewCount%> times |
+                <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a>
+            </div>
+            <hr style="margin-bottom: 4px">
+            <div id="navigation" class="letter-space-neg05 font-weight-500">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td style="width: 50%; text-align: left;">
+                                <% if (nextPost) {%>
+                                <a href="/post/<%=nextPost.id%>">←<%=nextPost.title%></a>
+                                <% } %>
+                            </td>
+                            <td style="width: 50%; text-align: right;">
+                                <% if (prevPost) {%>
+                                <a href="/post/<%=prevPost.id%>"><%=prevPost.title%>→</a>
+                                <% } %>
+                            </td>
+                            <td>
+                                <div></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <hr style="margin-top: 4px">
+            <script>
+                marked_passage = marked($('#content').text())
+                $('#posteditfield').val($('#content').text());
+                $('#content').html(marked_passage);
+            </script>
+        </div>
+        <div class="container">
+            <div id="licenses">
+                <span>
+                    <code
+                        class="gunjou">available by <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"><ins>CC BY-NC-SA 4.0</ins></a></code></code>
+                </span>
+            </div>
+            <br>
+        </div>
+    </div>
+</body>
