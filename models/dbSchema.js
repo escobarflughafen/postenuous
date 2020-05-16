@@ -61,5 +61,34 @@ var userSchema = new mongoose.Schema({
     }
 });
 
+var commentSchema = new mongoose.Schema({
+    body: String,
+    author: {
+        type: { 
+            name: String
+        }
+    },
+    postedOn: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'post'
+    },
+    parentComment: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'comment',
+        default: undefined
+    },
+    score: {
+        type: Number,
+        default: 0
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+
+
 exports.postSchema = postSchema
 exports.userSchema = userSchema
+exports.commentSchema = commentSchema

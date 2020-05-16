@@ -18,7 +18,7 @@
     <link href="/public/style.css" rel="stylesheet">
 </head>
 
-<body style="font-feature-settings: 'trad';">
+<body style="font-feature-settings:'';">
     <div style="padding: 16px">
         <div class="container">
             <div class="row">
@@ -57,10 +57,12 @@
                             <%=loginAs.name%>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="/newpost">New Post</a>
-                            <a class="dropdown-item" href="/drafts">Drafts</a>
+                            <a class="dropdown-item" href="/user"><code
+                                    class="gunjou">@<%= loginAs.username %></code></a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/user">Profile</a>
+                            <a class="dropdown-item" href="/newpost">New Post</a>
+                            <a class="dropdown-item" href="/draft">Drafts</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/author/<%=loginAs.username%>">Posts</a>
                             <a class="dropdown-item" href="/dashboard">Dashboard</a>
                             <a class="dropdown-item" href="/random">Random Content</a>
@@ -96,16 +98,6 @@
                             <div class="form-group">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <div class="input-group-text">🔐</div>
-                                    </div>
-                                    <input name="passwd" type="password" class="form-control" id="passwdfield"
-                                        placeholder="">
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
                                         <div class="input-group-text">📰</div>
                                     </div>
                                     <input name="title" type="text" class="form-control" id="titlefield"
@@ -130,8 +122,44 @@
                                 <input type="button" value="Preview" id="preview-btn" class="btn btn-light mb-2" />
                                 <input class="btn btn-primary mb-2" type="submit" value="Modify this Post"
                                     formaction="<%= post.id%>/modifyPost" />
-                                <input class="btn btn-danger mb-2" type="submit" value="Delete this Post"
-                                    formaction="<%= post.id%>/deletePost" />
+
+                                <span class="dropdown">
+                                    <input class="btn btn-danger mb-2" id="delete-btn" type="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        value="Delete this Post" />
+
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="delete-btn">
+                                        <h6 class="dropdown-header">this action is irreversible</h6>
+                                        <div class="dropdown-divider"></div>
+                                        <h6 class="dropdown-header">fill up the info to confirm</h6>
+                                        <div class="bold-padding" style="text-align: right;">
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">📰</div>
+                                                    </div>
+                                                    <input name="confirmtitle" type="text" class="form-control"
+                                                        id="confirmtitlefield" placeholder="title">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <div class="input-group-text">🔐</div>
+                                                    </div>
+                                                    <input name="confirmpassword" type="password" class="form-control"
+                                                        id="confirmpasswordfield" placeholder="password">
+                                                </div>
+                                            </div>
+                                            <input class="btn btn-danger btn-sm" type="submit"
+                                                formaction="<%=post.id%>/deletePost" value="CONFIRM">
+                                        </div>
+
+                                    </div>
+
+                                </span>
+
+                                <!--formaction="<%= post.id%>/deletePost" /-->
                             </div>
                         </form>
                         <script>
@@ -139,12 +167,6 @@
                                 var originalContent = $('#content').html();
                                 var isPreviewed = false;
                                 $("#preview-btn").click(function () {
-                                    /*if (isPreviewed) {
-                                        isPreviewed = false;
-                                        $(this).text('Preview');
-                                        $('#content').html(originalContent)
-                                    } else {*/
-
                                     $('#page-console').collapse('hide');
                                     $('#content').html(marked($('#posteditfield').val()));
                                     if (!isPreviewed) {
@@ -177,15 +199,35 @@
                             <%= post.author.name %>
                         </a>
                     </div>
-
                 </div>
             </div>
             <div id="content-display">
                 <div id="content" class="post-text"><%= post.body %></div>
             </div>
             <br>
-            <div id="postdata" class="post-data letter-space-neg05 font-weight-400">viewed <%=post.viewCount%> times |
-                <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a>
+            <div id="postdata">
+                <div id="postdata-header" class="post-data letter-space-neg05 font-weight-400">
+                    <span>viewed <%=post.viewCount%> times |</span>
+                    <a data-toggle="collapse" href="#comments-area" aria-expanded="false"
+                        aria-controls="collapseExample">
+                        <span>comments</span>
+                        <span id="commentarrow" class="symbol-monospace">↓</span>
+                    </a>
+                </div>
+                <div id="comments-area" class="collapse">
+                    <div class="top-comment">
+                        comment#1
+                        <div class="child-comment">
+                            comment#2
+                            <div class="child-comment">
+                                comment#3
+                            </div>
+                        </div>
+                        <div class="child-comment">
+                            comment#4
+                        </div>
+                    </div>
+                </div>
             </div>
             <hr style="margin-bottom: 4px">
             <div id="navigation" class="letter-space-neg05 font-weight-500">
@@ -202,6 +244,7 @@
                                 <a href="/post/<%=prevPost.id%>"><%=prevPost.title%>→</a>
                                 <% } %>
                             </td>
+                            <!-- for spacing -->
                             <td>
                                 <div></div>
                             </td>

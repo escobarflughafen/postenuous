@@ -34,24 +34,10 @@ app.use(session({
     rolling: true
 }));
 
-
-/*
-function handleNotFound(req, res, view) {
-    res.status(404).render(view, {
-        req: req
-    });
-}
-*/
-
-var postSchema = dbSchema.postSchema;
-var userSchema = dbSchema.userSchema;
-
-var User = mongoose.model('user', userSchema);
-
-var Post = mongoose.model('post', postSchema);
-
-var Draft = mongoose.model('draft', postSchema);
-
+var User = mongoose.model('user', dbSchema.userSchema);
+var Post = mongoose.model('post', dbSchema.postSchema);
+var Draft = mongoose.model('draft', dbSchema.postSchema);
+var Comment = mongoose.model('comment', dbSchema.commentSchema);
 
 
 app.get(["/", "/post", "/post/page"], (req, res) => {
@@ -153,25 +139,24 @@ app.get('*/newpost', (req, res) => {
 
 app.post('*/:id/deletePost', (req, res) => {
     if (req.session.userID) {
-        console.log(req);
         User.findById(req.session.userID, (err, loginAs) => {
             if (err) {
                 res.redirect('/logout')
             } else {
-                if (req.body.passwd == loginAs.password) {
-                    Post.findById(req.params.id, (err, post) => {
-                        if (err) {
-                            handleData.handleBadRequest(req, res, 'http-error');
-                        } else {
+                Post.findById(req.params.id).populate('author').exec((err, post) => {
+                    if (err) {
+                        handleData.handleBadRequest(req, res, 'http-error');
+                    } else {
+                        if ((req.body.confirmpassword == post.author.password || (loginAs.isAdmin && req.body.confirmpassword == loginAs.password)) && (req.body.confirmtitle == post.title)) {
                             post.remove();
                             res.redirect('/post');
                         }
-                    });
-                } else {
-                    res.redirect('/post/' + req.params.id);
-                }
+                    }
+                })
             }
         })
+    } else {
+        handleData.handleForbidden(req, res, 'http-error')
     }
 });
 
@@ -204,6 +189,7 @@ app.post('*/:id/modifyPost', (req, res) => {
 })
 
 app.get('/post/:id', (req, res) => {
+    console.log(req)
     Post.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } }).exec((err, post) => {
         if (err) {
             handleData.handleNotFound(req, res, 'http-error');
@@ -268,7 +254,7 @@ app.get('/post/page/:pageno', (req, res) => {
             if (pageno > pageCount || pageno < 1 || pageno == NaN) {
                 handleData.handleNotFound(req, res, 'http-error');
             } else {
-                var query = Post.find({}).populate('author').sort({ modified: -1 }).skip((parseInt(req.params.pageno) - 1) * 10).limit(10);
+                var query = Post.find({}).populate('author').sort({ created: -1 }).skip((parseInt(req.params.pageno) - 1) * 10).limit(10);
                 query.exec((err, posts) => {
                     if (err) {
                         handleData.handleBadRequest(req, res, 'http-error');
@@ -308,7 +294,7 @@ app.get('/author/:author', (req, res) => {
             handleData.handleBadRequest(req, res, 'http-error');
         } else {
             if (author) {
-                Post.find({ author: author.id }).populate('author').exec((err, posts) => {
+                Post.find({ author: author.id }).populate('author').sort({ created: -1 }).exec((err, posts) => {
                     if (req.session.userID) {
                         User.findById(req.session.userID, (err, loginAs) => {
                             if (err) {
@@ -335,86 +321,7 @@ app.get('/author/:author', (req, res) => {
             }
         }
     })
-    /*
-    Post.find({ author: req.params.author }).sort({ created: -1 }).exec((err, posts) => {
-        if (posts.length == 0) {
-            console.log('notfound author')
-            handleData.handleNotFound(req, res, 'notfound');
-        } else {
-            console.log(posts.length);
-            res.render('author', {
-                author: req.params.author,
-                posts: posts
-            });
-        }
-    });
-    */
 });
-
-//bad implementation
-
-//app.get('/archive', (req, res) => {
-/*  
-Post.distinct('author', (err, authors) => { Post.find({}, (err, posts) => {
-        var postCount = {};
-        for (let i = 0; i < authors.length; i++) {
-            postCount[authors[i]] = 0;
-        }
-        for (let i = 0; i < posts.length; i++) {
-            let author = posts[i].author;
-            postCount[author] += 1;
-        }
-        console.log(postCount);
-        res.render('archive', {
-            authors: authors,
-            postCount: postCount
-        });
-    });
-});
-*/
-/*
- User.find({}, (err, users) => {
-     Post.find({}).populate('author').exec((err, posts) => {
-         var postCount = {};
-         for (let i = 0; i < users.length; i++) {
-             postCount[users[i].username] = 0;
-         }
-
-         for (let i = 0; i < posts.length; i++) {
-             if (posts[i].author) {
-                 let author = posts[i].author.username;
-                 postCount[author] += 1;
-             }
-         }
-
-         console.log(postCount);
-         let authors = users.map(x => x.username);
-         res.render('archive', {
-             authors: authors,
-             postCount: postCount
-         });
-
-     })
- });
- */
-/*
-(err, posts) => {
-        var postcount = {};
-        for (let i = 0; i < users.length; i++) {
-            postCount[users[i].username] = 0;
-        }
-        for 
-*/
-//});
-
-
-/*
-app.get('/login', (req, res) => {
-    res.render('loginpage', {
-        title: 'login - postenuous'
-    });
-});
-*/
 
 app.post('*/login', (req, res) => {
     handleData.handleLogin(req, res, User);

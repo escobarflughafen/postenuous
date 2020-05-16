@@ -18,20 +18,20 @@
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
-<body style="font-feature-settings: 'trad'; font-size: 100%;">
+<body style="font-feature-settings:''; font-size: 100%;">
     <div style="padding: 16px">
         <div class="container">
             <div class="row">
                 <div class="col">
                     <div class="row">
-                        <div class="col">
+                        <div class="col-auto">
                             <h5 class="no-border no-margin no-padding" style="font-weight: 600;" >
                                 postenuous
                             </h5>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-auto">
                             <ul class="nav h5">
                                 <li class="nav-item">
                                     <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
@@ -48,19 +48,19 @@
                             </ul>
                         </div>
                     </div>
-
                 </div>
                 <div class="col-auto" style="text-align: right;">
                     <div class="btn-group">
                         <button type="button" class="btn btn-info dropdown-toggle btn-sm" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false" style="margin-top: 8px">
-                            <%=loginAs.name%>
+                            <%= loginAs.name %> 
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/user"><code class="gunjou">@<%= loginAs.username %></code></a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/newpost">New Post</a>
                             <a class="dropdown-item" href="/draft">Drafts</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/user">Profile</a>
                             <a class="dropdown-item" href="/author/<%=loginAs.username%>">Posts</a>
                             <a class="dropdown-item" href="/dashboard">Dashboard</a>
                             <a class="dropdown-item" href="/random">Random Content</a>
@@ -74,62 +74,6 @@
         </div>
 
         <div class="container">
-            <!--
-             <div>
-                <div class="collapse" id="addpostform" style="padding: 8px;">
-                    <script>
-                        function autoGrow(element) {
-                            element.style.height = "5rem";
-                            element.style.height = ((element.scrollHeight >= 480) ? 480 : element.scrollHeight) + "px";
-                        }
-                    </script>
-                    <form action="addPost" method="POST" style="padding: 16px; padding-top: 0;">
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">📰</div>
-                                </div>
-                                <input name="title" type="text" class="form-control" id="titlefield"
-                                    placeholder="title...">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">ℹ️</div>
-                                </div>
-                                <input name="brief" type="text" class="form-control" id="brieffield"
-                                    placeholder="brief...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
-                                rows="0" onclick="autoGrow(this)" oninput="autoGrow(this)"></textarea>
-                        </div>
-                        <input class="btn btn-primary mb-2" type="submit" value="Add Post" />
-                    </form>
-                    <hr>
-                    <button id="preview-btn" class="btn btn-info mb-2" >Preview</button>
-                    <div id="previewfield"></div>
-                    <script>
-                        var isPreviewed = false;
-                        $("#preview-btn").on('click', function () {
-                            if (isPreviewed) {
-                                isPreviewed = false;
-                                $(this).text('Preview')
-                                $('#previewfield').html('')
-                            } else {
-                                isPreviewed = true;
-                                $(this).text('Remove Preview')
-                                $('#previewfield').html(marked($('#posteditfield').val()))
-                                hljs.initHighlightingOnLoad();
-                            }
-                        });
-                    </script>
-                </div>
-            </div>
-            -->
             <div id="posts">
 
                 <div class="accordion" id="postAccordion">
@@ -170,24 +114,30 @@
                     <% } %>
                 </div>
                 <br>
-                <div class="letter-space-neg05">
-                    <% if (pageno != 1) { %>
-                    <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
-                    <span>
-                        &nbsp; ← <% } %>page
-                        <select id="pagination-selector" onchange="window.location=this.value">
-                            <% for (let i = 1; i <= pageCount; i++) { %>
-                            <% if (pageno != i) { %>
-                            <option value="/post/page/<%=i%>"><%=i%></option>
-                            <% } else { %>
-                            <option selected value="/post/page/<%=i%>"><%=i%></option>
-                            <% } %>
-                            <% } %>
-                        </select>
-                        of <%=pageCount%><% if (pageno != pageCount) { %> →&nbsp;
-                    </span>
-                    <a class="page-navigator" href="/post/page/<%=pageno+1%>">older posts</a> <% } %>
+                <div class="row">
+                    <div class="col-auto">
+                        <div class="letter-space-neg05">
+                            <% if (pageno != 1) { %>
+                            <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
+                            <span>
+                                &nbsp; ← <% } %>page
+                                <select id="pagination-selector" onchange="window.location=this.value">
+                                    <% for (let i = 1; i <= pageCount; i++) { %>
+                                    <% if (pageno != i) { %>
+                                    <option value="/post/page/<%=i%>"><%=i%></option>
+                                    <% } else { %>
+                                    <option selected value="/post/page/<%=i%>"><%=i%></option>
+                                    <% } %>
+                                    <% } %>
+                                </select>
+                                of <%=pageCount%><% if (pageno != pageCount) { %> →&nbsp;
+                            </span>
+                            <a class="page-navigator" href="/post/page/<%=pageno+1%>">older posts</a> <% } %>
+                            
+                        </div>
+                    </div>
                 </div>
+                
                 <hr>
                 <div id="licenses">
                     <span>

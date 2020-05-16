@@ -1,4 +1,4 @@
-$('#input_date').keypress(function(e){ 
+/*$('#input_date').keypress(function(e){ 
     　　if(e.keyCode=='13'){ 
     　　　　$.ajax({
     　　　　　　type: "POST",
@@ -27,3 +27,21 @@ $('#input_date').keypress(function(e){
     　　$('#response_festival').show();
     　　} 
     });
+*/
+
+function autoGrow(element, defaultHeight, limitedHeight) {
+  if (element) {
+    element.style.height = defaultHeight;
+    element.style.height = ((element.scrollHeight >= limitedHeight) ? limitedHeight : element.scrollHeight + "px");
+  }
+}
+
+/*
+function setCollapse(togglerElement, collapseElement) {
+  if (togglerElement && collapseElement) {
+    $(togglerElement).click( () => {
+      $(collapseElement).
+    })
+  }
+}
+*/

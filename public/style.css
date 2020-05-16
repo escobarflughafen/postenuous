@@ -6,13 +6,20 @@ body {
 }
 
 .post-text {
-    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-family: "helvetica neue", helvetica, "toppan bunkyu gothic", "yugothic", "hiragino gothic", sans-serif;
     /*
     text-orientation: initial;
     writing-mode: vertical-rl;
     */
 }
 
+.post-text-zh-CN {
+    font-family: "helvetica neue", helvetica, "PingFang SC", "Noto Sans CJK SC", sans-serif;
+    /*
+    text-orientation: initial;
+    writing-mode: vertical-rl;
+    */
+}
 code, pre {
     font-family: Menlo, Consolas, monospace;
 }
@@ -103,6 +110,13 @@ topbanner {
     padding: 4px;
 }
 
+.semibold-padding {
+    padding: 8px;
+}
+
+.bold-padding {
+    padding: 16px;
+}
 .borderless {
     border-width: 0;
 }
@@ -342,4 +356,9 @@ topbanner {
 
 .font-size-90p{
     font-size: 90%;
+}
+
+
+.child-comment {
+    margin-left: 16px;
 }

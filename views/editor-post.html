@@ -18,7 +18,7 @@
     <link href="/public/style.css" rel="stylesheet">
 </head>
 
-<body style="font-feature-settings: 'trad';">
+<body style="font-feature-settings:'';">
     <div style="padding: 16px">
         <div class="container">
             <div class="row">
@@ -57,10 +57,11 @@
                             <%=loginAs.name%>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="/newpost">New Post</a>
-                            <a class="dropdown-item" href="/drafts">Drafts</a>
+                            <a class="dropdown-item" href="/user"><code class="gunjou">@<%= loginAs.username %></code></a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/user">Profile</a>
+                            <a class="dropdown-item" href="/newpost">New Post</a>
+                            <a class="dropdown-item" href="/draft">Drafts</a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/author/<%=loginAs.username%>">Posts</a>
                             <a class="dropdown-item" href="/dashboard">Dashboard</a>
                             <a class="dropdown-item" href="/random">Random Content</a>
@@ -74,7 +75,8 @@
         </div>
 
         <div class="container">
-
+            <h5 class="letter-space-neg05 font-weight-500">create new post</h5>
+            <br>
             <div class="">
                 <script>
                     function autoGrow(element) {
@@ -109,9 +111,9 @@
                     <div style="text-align: right;">
 
                         <input id="preview-btn" type="button" value="Preview" class="btn btn-light mb-2" />
-                        <input class="btn btn-primary mb-2" type="submit" value="Add to Posts" formaction="<%=formaction%>" />
                         <input class="btn btn-secondary mb-2" type="submit" value="Save to Drafts"
                             formaction="/savetodraft" />
+                        <input class="btn btn-primary mb-2" type="submit" value="Add to Posts" formaction="<%=formaction%>" />
                     </div>
                 </form>
                 <script>

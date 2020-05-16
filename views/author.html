@@ -18,7 +18,7 @@
     <script>hljs.initHighlightingOnLoad();</script>
 </head>
 
-<body style="font-feature-settings: 'trad'; font-size: 100%;">
+<body style="font-feature-settings:''; font-size: 100%;">
     <div style="padding: 16px">
         <div class="container">
             <div class="row">
@@ -57,10 +57,11 @@
                             <%=loginAs.name%>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="/user"><code class="gunjou">@<%= loginAs.username %></code></a>
+                            <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/newpost">New Post</a>
                             <a class="dropdown-item" href="/draft">Drafts</a>
                             <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="/user">Profile</a>
                             <a class="dropdown-item" href="/author/<%=loginAs.username%>">Posts</a>
                             <a class="dropdown-item" href="/dashboard">Dashboard</a>
                             <a class="dropdown-item" href="/random">Random Content</a>
@@ -73,7 +74,7 @@
             <hr>
         </div>
 
-       <div class="container">
+        <div class="container">
             <div>
                 <h5 class="letter-space-neg05 no-margin">author archive: <a href="/user/<%=author.username%>"
                         class="font-weight-500"><%=author.name%></a></h5>
@@ -81,51 +82,49 @@
             </div>
             <br>
             <div id="posts">
-                <div class="accordion" id="postAccordion">
-                    <% for(let i = 0; i < posts.length; i++) { %>
-                    <div class="card post-caption justify-content-center">
-                        <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden"
-                            data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
-                            aria-controls="collapse_<%=i%>">
-                            <a href="/post/<%=posts[i].id%>" class="post-title kuro">
-                                <%= posts[i].title %>
-                            </a>
-                            <a href="#" id="arrow_<%=i%>" class="symbol-monospace">↓</a>
-                            <code style="color: gray; float: right;">
-                                    <%= posts[i].created.toLocaleString() %>
+                <table class="table table-sm table-responsive table-hover" style="display: table; width: 100%;">
+                    <thead>
+                        <tr>
+                            <th scope="col">title</th>
+                            <th scope="col">created at</th>
+                            <!--th scope="col">last modified</th-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% for(let i = 0; i < posts.length; i++) { %>
+                        <tr>
+                            <td>
+                                <a href="/post/<%=posts[i].id%>" class="post-title kuro">
+                                    <%= posts[i].title %>
+                                </a>
+                            </td>
+                            <td>
+                                <code style="color: gray;">
+                                    <%= posts[i].created.toDateString() %>
                                 </code>
-                        </div>
-                        <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="">
-                            <div class="card-body" style="padding: 0;">
-                                <div class="post-text">
-                                    <span id="abstract_<%=i%>"><%= posts[i].abstract %></span>
-                                    <span>
-                                        <a href="/post/<%=posts[i].id%>" class="symbol-monospace">
-                                            →
-                                        </a>
-                                    </span>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <% } %>
-                </div>
-
-                <hr>
-                <div id="licenses">
-                    <span>
-                        <code class="gunjou">available by <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"><ins>CC BY-NC-SA 4.0</ins></a></code>
-                    </span>
-                </div>
-                <br>
+                            </td>
+                            <!--
+                            <td>
+                                <code style="color: gray;">
+                                    <%= posts[i].modified.toDateString() %>
+                                </code>
+                            </td>
+                        -->
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
             </div>
-            <script>
-                $("div[id^='heading']").click(function () {
-                    let arrowsign = $(this).children()[1].innerText;
-                    $(this).children()[1].innerText = (arrowsign == "↑") ? "↓" : "↑";
-                })
-            </script>
+        </div>
+        <div class="container">
+            <hr>
+            <div id="licenses">
+                <span>
+                    <code
+                        class="gunjou">available by <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"><ins></ins>CC BY-NC-SA 4.0</ins></a></code>
+                </span>
+            </div>
+            <br>
         </div>
     </div>
 
