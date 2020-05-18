@@ -1,0 +1,16 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:''; font-size: 100%;">
+    <div style="padding: 16px">
+        <%- include('common/header-visitor.ejs') %>
+
+        <%- include('common/author-view.ejs', {author: author, posts: posts}) %>
+
+        <%- include('common/footer.ejs') %>
+
+    </div>
+</body>
+
+<script>
+    $('#login-area').hide()
+</script>

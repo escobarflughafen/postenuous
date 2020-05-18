@@ -1,0 +1,43 @@
+<div class="container">
+    <div>
+        <h5 class="letter-space-neg05 no-margin">author archive: <a href="/user/<%=author.username%>"
+                class="font-weight-500"><%=author.name%></a></h5>
+        <div class="post-data letter-space-neg05"><%=posts.length%> posts in total</div>
+    </div>
+    <br>
+    <div id="posts">
+        <table class="table table-sm table-responsive table-hover" style="display: table; width: 100%;">
+            <thead>
+                <tr>
+                    <th scope="col">title</th>
+                    <th scope="col">created at</th>
+                    <!--th scope="col">last modified</th-->
+                </tr>
+            </thead>
+            <tbody>
+                <% for(let i = 0; i < posts.length; i++) { %>
+                <tr>
+                    <td>
+                        <a href="/post/<%=posts[i].id%>" class="post-title kuro">
+                            <%= posts[i].title %>
+                        </a>
+                    </td>
+                    <td>
+                        <code style="color: gray;">
+                            <%= posts[i].created.toDateString() %>
+                        </code>
+                    </td>
+                    <!--
+                    <td>
+                        <code style="color: gray;">
+                            <%= posts[i].modified.toDateString() %>
+                        </code>
+                    </td>
+                -->
+                </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+</div>

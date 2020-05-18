@@ -1,0 +1,18 @@
+<div class="btn-group">
+    <button type="button" class="btn btn-info dropdown-toggle btn-sm" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false" style="margin-top: 8px">
+        <%= loginAs.name %> 
+    </button>
+    <div class="dropdown-menu dropdown-menu-right">
+        <a class="dropdown-item" href="/user"><code class="gunjou">@<%= loginAs.username %></code></a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/newpost">New Post</a>
+        <a class="dropdown-item" href="/draft">Drafts</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/author/<%=loginAs.username%>">Posts</a>
+        <a class="dropdown-item" href="/dashboard">Dashboard</a>
+        <a class="dropdown-item" href="/random">Random Content</a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item" href="/logout">Log out</a>
+    </div>
+</div>

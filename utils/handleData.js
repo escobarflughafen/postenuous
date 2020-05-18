@@ -43,7 +43,7 @@ exports.handleLogin = function (req, res, loginMongooseModel) {
                     }
                 })
             } else {
-                res.render('loginfailed');
+                res.render('html/loginfailed');
             }
         }
     });

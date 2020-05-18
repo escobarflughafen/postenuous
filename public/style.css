@@ -358,6 +358,9 @@ topbanner {
     font-size: 90%;
 }
 
+.top-comment {
+    margin-left: 0;
+}
 
 .child-comment {
     margin-left: 16px;

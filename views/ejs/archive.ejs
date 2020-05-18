@@ -1,0 +1,68 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:''; font-size: 100%;">
+    <div style="padding: 16px">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <h5 class="no-border no-margin no-padding" style="font-weight: 600;" >
+                        postenuous
+                    </h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <ul class="nav h5">
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-2 no-margin no-padding no-border" href="/post">posts</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-4 no-margin no-padding no-border" href="/archive">archives</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-6 no-margin no-padding no-border" href="/about">about</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link gunjou-8 no-margin no-padding no-border" data-toggle="collapse"
+                                data-target="#addpostform" aria-controls="addpostform" href="#">
+                                toggler
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <hr>
+        </div>
+        <div class="container">
+            <div id="authors">
+                <h5 class="font-weight-500">author archives</h5>
+                <% for(let i = 0; i < authors.length; i++) { %>
+                    <li><a href="/author/<%= authors[i]%>"><%= authors[i]%> (<%= postCount[authors[i]]%>)</a></li>
+                <% } %>
+                <hr>
+                <div id="licenses">
+                    <span>
+                        <code class="gunjou">available by <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en"><ins>CC BY-NC-SA 4.0</ins></a></code>
+                    </span>
+                </div>
+                <br>
+            </div>
+            <script>
+                /*
+                var abstracts = $("span[id^='abstract_']")
+                abstracts.toArray().forEach(element => {
+                    $(element).html(marked($(element).text()));
+                });
+                */
+                $("button[id^='arrow']").click(function () {
+                    $(this).text(($(this).text() == "↑") ? "↓" : "↑");
+                });
+            </script>
+        </div>
+    </div>
+
+</body>

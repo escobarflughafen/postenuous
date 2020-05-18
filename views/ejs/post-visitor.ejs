@@ -1,0 +1,14 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:'';">
+    <div style="padding: 16px">
+        <%- include('common/header-no-login.ejs') %>
+        <div class="container">
+            <%- include('common/post-view-visitor.ejs', {post: post}) %>
+            <br>
+            <%- include('common/post-data.ejs', {post: post}) %>
+            <%- include('common/post-navi.ejs', {nextPost: nextPost, prevPost: prevPost}) %>
+        </div>
+        <%- include('common/footer.ejs') %>
+    </div>
+</body>

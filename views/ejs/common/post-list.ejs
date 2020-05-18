@@ -1,0 +1,73 @@
+<div class="container">
+    <div id="posts">
+        <div class="accordion" id="postAccordion">
+            <% for(let i = 0; i < posts.length; i++) { %>
+            <div class="card post-caption">
+                <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden"
+                    data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
+                    aria-controls="collapse_<%=i%>">
+                    <a href="/post/<%=posts[i].id%>" class="post-title kuro">
+                        <%= posts[i].title %>
+                    </a>
+                    <a href="#" id="arrow_<%=i%>" class="symbol-monospace holo-blue-dark">↓</a>
+                </div>
+
+                <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="">
+                    <div class="card-body" style="padding: 0;">
+                        <div>
+                            <a href="/user/<%= posts[i].author.username %>" class="sub-title">
+                                <%= posts[i].author.name %>
+                            </a>
+                            &emsp;
+                            <code style="color: gray;">
+                            <%= posts[i].created.toLocaleString() %>
+                        </code>
+                        </div>
+                        <div class="post-text">
+                            <span id="abstract_<%=i%>"><%= posts[i].abstract %></span>
+                            <span>
+                                <a href="/post/<%=posts[i].id%>" class="symbol-monospace">
+                                    →
+                                </a>
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <% } %>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-auto">
+                <div class="letter-space-neg05">
+                    <% if (pageno != 1) { %>
+                    <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
+                    <span>
+                        &nbsp; ← <% } %>page
+                        <select id="pagination-selector" onchange="window.location=this.value">
+                            <% for (let i = 1; i <= pageCount; i++) { %>
+                            <% if (pageno != i) { %>
+                            <option value="/post/page/<%=i%>"><%=i%></option>
+                            <% } else { %>
+                            <option selected value="/post/page/<%=i%>"><%=i%></option>
+                            <% } %>
+                            <% } %>
+                        </select>
+                        of <%=pageCount%><% if (pageno != pageCount) { %> →&nbsp;
+                    </span>
+                    <a class="page-navigator" href="/post/page/<%=pageno+1%>">older posts</a> <% } %>
+
+                </div>
+            </div>
+        </div>
+        <hr>
+
+    </div>
+    <script>
+        $("div[id^='heading']").click(function () {
+            let arrowsign = $(this).children()[1].innerText;
+            $(this).children()[1].innerText = (arrowsign == "↑") ? "↓" : "↑";
+        })
+    </script>
+</div>

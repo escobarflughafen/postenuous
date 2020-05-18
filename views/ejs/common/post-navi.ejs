@@ -1,0 +1,28 @@
+<% if (prevPost && nextPost) { %>
+    <hr style="margin-bottom: 4px">
+    <div id="navigation" class="letter-space-neg05 font-weight-500">
+        <table>
+            <tbody>
+                <tr>
+                    <td style="width: 50%; text-align: left;">
+                        <% if (nextPost) {%>
+                        <a href="/post/<%=nextPost.id%>">←<%=nextPost.title%></a>
+                        <% } %>
+                    </td>
+                    <td style="width: 50%; text-align: right;">
+                        <% if (prevPost) {%>
+                        <a href="/post/<%=prevPost.id%>"><%=prevPost.title%>→</a>
+                        <% } %>
+                    </td>
+                    <!-- for spacing -->
+                    <td>
+                        <div></div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr style="margin-top: 4px">
+<% } else { %>
+    <hr>
+<% } %>

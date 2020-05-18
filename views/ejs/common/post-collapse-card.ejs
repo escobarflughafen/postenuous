@@ -1,0 +1,33 @@
+<div class="card post-caption">
+    <div class="card-header bg-white" id="heading_<%=i%>" style="padding: 0; border: hidden"
+        data-toggle="collapse" data-target="#post_<%=i%>" aria-expanded="true"
+        aria-controls="collapse_<%=i%>">
+        <a href="/post/<%=post.id%>" class="post-title kuro">
+            <%= post.title %>
+        </a>
+        <a href="#" id="arrow_<%=i%>" class="symbol-monospace holo-blue-dark">↓</a>
+    </div>
+
+    <div id="post_<%=i%>" class="collapse" aria-labelledby="heading_<%=i%>" data-parent="">
+        <div class="card-body" style="padding: 0;">
+            <div>
+                <a href="/user/<%= post.author.username %>" class="sub-title">
+                    <%= post.author.name %>
+                </a>
+                &emsp;
+                <code style="color: gray;">
+                <%= post.created.toLocaleString() %>
+            </code>
+            </div>
+            <div class="post-text">
+                <span id="abstract_<%=i%>"><%= post.abstract %></span>
+                <span>
+                    <a href="/post/<%=post.id%>" class="symbol-monospace">
+                        →
+                    </a>
+                </span>
+            </div>
+
+        </div>
+    </div>
+</div>

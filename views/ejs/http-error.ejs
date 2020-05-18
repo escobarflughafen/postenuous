@@ -1,0 +1,35 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:''; font-size: 100%;">
+    <div style="padding: 16px">
+        <%- include('common/header-no-login.ejs') %>
+        <div class="container">
+            <div>
+                <% if (code == 400) { %>
+                    <code>HTTP 400</code> - your request <code><%=req.url%></code> will not process due to client error.
+                <% } %>
+                <% if (code == 403) { %>
+                    <code>HTTP 403</code> - your have no permission to view <code><%=req.url%></code>.
+                <% } %>
+                <% if (code == 404) { %>
+                    <code>HTTP 404</code> - your request <code><%=req.url%></code> was not found.
+                <% } %>
+                <br>
+                <a href="/post">← back to posts</a>
+                <hr>
+            </div>
+            <script>
+                /*
+                var abstracts = $("span[id^='abstract_']")
+                abstracts.toArray().forEach(element => {
+                    $(element).html(marked($(element).text()));
+                });
+                */
+                $("button[id^='arrow']").click(function () {
+                    $(this).text(($(this).text() == "↑") ? "↓" : "↑");
+                });
+            </script>
+        </div>
+        <%- include('common/footer.ejs') %>
+    </div>
+</body>

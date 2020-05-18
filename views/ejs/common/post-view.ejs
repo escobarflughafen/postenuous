@@ -1,0 +1,133 @@
+<div id="headers" style="margin-bottom: 1rem;">
+    <h5 class="font-weight-600 no-margin">
+        <%= post.title%>
+        <a class="font-weight-400" data-toggle="collapse" href="#page-console" aria-expanded="false"
+            aria-controls="collapseExample">
+            [edit]
+        </a>
+    </h5>
+    <div class="collapse" style="margin-top: 0.5rem; margin-bottom: 0.5rem;" id="page-console">
+        <div class="card card-body">
+            <script>
+                function autoGrow(element) {
+                    if (element) {
+                        element.style.height = "5rem";
+                        element.style.height = ((element.scrollHeight >= 480) ? 480 : element.scrollHeight) + "px";
+                    }
+                }
+            </script>
+            <form method="POST">
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">📰</div>
+                        </div>
+                        <input name="title" type="text" class="form-control" id="titlefield"
+                            value="<%=post.title%>" placeholder="title...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">ℹ️</div>
+                        </div>
+                        <input name="brief" type="text" class="form-control" id="brieffield"
+                            value="<%=post.abstract%>" placeholder="brief...">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
+                        onclick="autoGrow(this)" oninput="autoGrow(this)"></textarea>
+                </div>
+
+                <div style="text-align: right;">
+                    <input type="button" value="Preview" id="preview-btn" class="btn btn-light mb-2" />
+                    <input class="btn btn-primary mb-2" type="submit" value="Modify this Post"
+                        formaction="<%= post.id%>/modifyPost" />
+
+                    <span class="dropdown">
+                        <input class="btn btn-danger mb-2" id="delete-btn" type="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                            value="Delete this Post" />
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="delete-btn">
+                            <h6 class="dropdown-header">this action is irreversible</h6>
+                            <div class="dropdown-divider"></div>
+                            <h6 class="dropdown-header">fill up the info to confirm</h6>
+                            <div class="bold-padding" style="text-align: right;">
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">📰</div>
+                                        </div>
+                                        <input name="confirmtitle" type="text" class="form-control"
+                                            id="confirmtitlefield" placeholder="title">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">🔐</div>
+                                        </div>
+                                        <input name="confirmpassword" type="password" class="form-control"
+                                            id="confirmpasswordfield" placeholder="password">
+                                    </div>
+                                </div>
+                                <input class="btn btn-danger btn-sm" type="submit"
+                                    formaction="<%=post.id%>/deletePost" value="CONFIRM">
+                            </div>
+
+                        </div>
+
+                    </span>
+
+                    <!--formaction="<%= post.id%>/deletePost" /-->
+                </div>
+            </form>
+            <script>
+                $(function () {
+                    var originalContent = $('#content').html();
+                    var isPreviewed = false;
+                    $("#preview-btn").click(function () {
+                        $('#page-console').collapse('hide');
+                        $('#content').html(marked($('#posteditfield').val()));
+                        if (!isPreviewed) {
+                            let previewButtonClone = $('#preview-btn').clone();
+                            previewButtonClone.val("Show Original Content");
+                            previewButtonClone.click(function () {
+                                $('#content').html(originalContent)
+                                $('#page-console').collapse('show');
+                                $('#preview-btn').text('Preview');
+                                $(this).remove();
+                                isPreviewed = false;
+                            })
+                            $('#content-display').append(previewButtonClone);
+                        }
+                        isPreviewed = true;
+                    });
+                });
+            </script>
+        </div>
+    </div>
+
+    <div>
+        <div class="post-data font-weight-400">
+            posted on
+            <span class="holo-green-dark">
+                <%= post.created.toDateString() %>
+            </span>
+            by
+            <a href="/user/<%=post.author.username %>" class="font-weight-500">
+                <%= post.author.name %>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="content-display">
+    <div id="content" class="post-text"><%= post.body %></div>
+</div>
+<script>
+    marked_passage = marked($('#content').text())
+    $('#posteditfield').val($('#content').text());
+    $('#content').html(marked_passage);
+</script>

@@ -17,9 +17,7 @@ app.set('view engine', 'html');
 var session = require('express-session');
 var cookie = require('cookie-parser');
 var fileStore = require('session-file-store');
-
 var dbUtil = require('./utils/dbUtil')
-
 var identityKey = 'skey';
 var handleData = require('./utils/handleData.js')
 
@@ -56,7 +54,7 @@ app.post('*/signup', (req, res) => {
         res.redirect('/');
     }).catch(err => {
         console.log(err);
-        handleData.handleBadRequest(req, res, 'http-error');
+        handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
     })
 })
 
@@ -67,22 +65,22 @@ app.get('/signup', (req, res) => {
                 res.redirect('/logout');
             } else {
                 if (loginAs.isAdmin) {
-                    res.render('signup', {
+                    res.render('html/signup', {
                         title: 'sign up - postenuous'
                     });
                 } else {
-                    handleData.handleForbidden(req, res, 'http-error');
+                    handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
                 }
             }
         })
     } else {
-        handleData.handleForbidden(req, res, 'http-error');
+        handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
     }
 })
 
 
 app.get('*/login', (req, res) => {
-    res.render('login', {
+    res.render('html/login', {
         title: 'login - postenuous'
     })
 })
@@ -111,7 +109,7 @@ app.post('*/addPost', (req, res) => {
                     res.redirect('/');
                 }).catch(err => {
                     console.log(err);
-                    handleData.handleBadRequest(req, res, 'http-error');
+                    handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
                 });
             }
         })
@@ -125,7 +123,7 @@ app.get('*/newpost', (req, res) => {
             if (err) {
                 res.redirect('/logout')
             } else {
-                res.render('editor-post', {
+                res.render('ejs/editor-post.ejs', {
                     title: 'new post - postenuous',
                     loginAs: loginAs,
                     formaction: 'addPost'
@@ -133,7 +131,7 @@ app.get('*/newpost', (req, res) => {
             }
         })
     } else {
-        handleData.handleForbidden(req, res, 'http-error');
+        handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
     }
 })
 
@@ -145,7 +143,7 @@ app.post('*/:id/deletePost', (req, res) => {
             } else {
                 Post.findById(req.params.id).populate('author').exec((err, post) => {
                     if (err) {
-                        handleData.handleBadRequest(req, res, 'http-error');
+                        handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
                     } else {
                         if ((req.body.confirmpassword == post.author.password || (loginAs.isAdmin && req.body.confirmpassword == loginAs.password)) && (req.body.confirmtitle == post.title)) {
                             post.remove();
@@ -156,7 +154,7 @@ app.post('*/:id/deletePost', (req, res) => {
             }
         })
     } else {
-        handleData.handleForbidden(req, res, 'http-error')
+        handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
     }
 });
 
@@ -192,12 +190,12 @@ app.get('/post/:id', (req, res) => {
     console.log(req)
     Post.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } }).exec((err, post) => {
         if (err) {
-            handleData.handleNotFound(req, res, 'http-error');
+            handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
         } else {
             //to refresh the viewCount
             Post.findById(req.params.id).populate('author').exec((err, post) => {
                 if (err) {
-                    handleData.handleNotFound(req, res, 'http-error');
+                    handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
                 } else {
                     var prevPostQuery = Post.findOne({ 'created': { $lt: post.created } }).sort({ 'created': -1 });
                     var nextPostQuery = Post.findOne({ 'created': { $gt: post.created } });
@@ -209,7 +207,7 @@ app.get('/post/:id', (req, res) => {
                                         res.redirect('/logout');
                                     } else {
                                         if (post.author.id == req.session.userID || loginAs.isAdmin) {
-                                            res.render('post', {
+                                            res.render('ejs/post.ejs', {
                                                 title: post.title + ' - postenuous',
                                                 loginAs: loginAs,
                                                 post: post,
@@ -217,7 +215,7 @@ app.get('/post/:id', (req, res) => {
                                                 nextPost: nextPost
                                             });
                                         } else {
-                                            res.render('post-other', {
+                                            res.render('ejs/post-other.ejs', {
                                                 title: post.title + ' - postenuous',
                                                 loginAs: loginAs,
                                                 post: post,
@@ -228,7 +226,7 @@ app.get('/post/:id', (req, res) => {
                                     }
                                 })
                             } else {
-                                res.render('post-visitor', {
+                                res.render('ejs/post-visitor.ejs', {
                                     title: post.title + ' - postenuous',
                                     post: post,
                                     prevPost: prevPost,
@@ -246,25 +244,25 @@ app.get('/post/:id', (req, res) => {
 app.get('/post/page/:pageno', (req, res) => {
     Post.countDocuments({}, (err, postCount) => {
         if (err) {
-            handleData.handleBadRequest(req, res, 'http-error');
+            handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
         } else {
             var pageCount = Math.ceil(postCount / 10);
             pageCount = (pageCount == 0) ? 1 : pageCount;
             var pageno = parseInt(req.params.pageno);
             if (pageno > pageCount || pageno < 1 || pageno == NaN) {
-                handleData.handleNotFound(req, res, 'http-error');
+                handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
             } else {
                 var query = Post.find({}).populate('author').sort({ created: -1 }).skip((parseInt(req.params.pageno) - 1) * 10).limit(10);
                 query.exec((err, posts) => {
                     if (err) {
-                        handleData.handleBadRequest(req, res, 'http-error');
+                        handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
                     } else {
                         if (req.session.userID) {
                             User.findById(req.session.userID, (err, loginAs) => {
                                 if (err) {
                                     res.redirect('/logout');
                                 } else {
-                                    res.render('index', {
+                                    res.render('ejs/index.ejs', {
                                         title: 'postenuous',
                                         loginAs: loginAs,
                                         posts: posts,
@@ -274,7 +272,7 @@ app.get('/post/page/:pageno', (req, res) => {
                                 }
                             });
                         } else {
-                            res.render('index-visitor', {
+                            res.render('ejs/index-visitor.ejs', {
                                 title: 'postenuous',
                                 posts: posts,
                                 pageno: pageno,
@@ -291,7 +289,7 @@ app.get('/post/page/:pageno', (req, res) => {
 app.get('/author/:author', (req, res) => {
     User.findOne({ username: req.params.author }, (err, author) => {
         if (err) {
-            handleData.handleBadRequest(req, res, 'http-error');
+            handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
         } else {
             if (author) {
                 Post.find({ author: author.id }).populate('author').sort({ created: -1 }).exec((err, posts) => {
@@ -300,7 +298,7 @@ app.get('/author/:author', (req, res) => {
                             if (err) {
                                 res.redirect('/logout');
                             } else {
-                                res.render('author', {
+                                res.render('ejs/author.ejs', {
                                     title: 'author: ' + req.params.author + ' - postenuous',
                                     loginAs: loginAs,
                                     author: author,
@@ -309,7 +307,7 @@ app.get('/author/:author', (req, res) => {
                             }
                         });
                     } else {
-                        res.render('author-visitor', {
+                        res.render('ejs/author-visitor.ejs', {
                             title: 'author: ' + req.params.author + ' - postenuous',
                             author: author,
                             posts: posts
@@ -317,7 +315,7 @@ app.get('/author/:author', (req, res) => {
                     }
                 });
             } else {
-                handleData.handleNotFound(req, res, 'http-error');
+                handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
             }
         }
     })
@@ -329,12 +327,12 @@ app.post('*/login', (req, res) => {
 
 app.get('/login-session-test', (req, res) => {
     if (req.session.userID) {
-        res.render('loginsuccessed', {
+        res.render('html/loginsuccessed', {
             title: 'session-test',
             username: req.session.userID
         });
     } else {
-        res.render('loginfailed', {
+        res.render('html/loginfailed', {
             title: 'failed to login - postenuous'
         });
     }
@@ -355,23 +353,23 @@ app.get('/user/:username', (req, res) => {
         username: req.params.username
     }, (err, user) => {
         if (err) {
-            handleData.handleNotFound(req, res, 'http-error');
+            handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
         } else {
             console.log(user)
             if (user) {
                 if (req.session.userID) {
                     User.findById(req.session.userID, (err, loginAs) => {
                         if (err) {
-                            handleData.handleBadRequest(req, res, 'http-error');
+                            handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
                         } else {
                             if (user.id == req.session.userID || (loginAs.isAdmin && !user.isAdmin)) {
-                                res.render('profile', {
+                                res.render('ejs/profile.ejs', {
                                     title: user.username + '@postenuous',
                                     loginAs: loginAs,
                                     user: user
                                 });
                             } else {
-                                res.render('profile-other', {
+                                res.render('ejs/profile-other.ejs', {
                                     title: user.username + '@postenuous',
                                     loginAs: loginAs,
                                     user: user
@@ -380,13 +378,13 @@ app.get('/user/:username', (req, res) => {
                         }
                     });
                 } else {
-                    res.render('profile-visitor', {
+                    res.render('ejs/profile-visitor.ejs', {
                         title: user.username + '@postenuous',
                         user: user
                     });
                 }
             } else {
-                handleData.handleNotFound(req, res, 'http-error');
+                handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
             }
         }
     })
@@ -435,7 +433,7 @@ app.post('/user/:username/modifyProfile', (req, res) => {
 
 
 app.get('/*', (req, res) => {
-    handleData.handleNotFound(req, res, 'http-error');
+    handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
 });
 
 app.listen(3000, () => {

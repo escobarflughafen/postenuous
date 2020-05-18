@@ -1,0 +1,135 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:'';">
+    <div style="padding: 16px">
+        <%- include('common/header.ejs', {loginAs: loginAs}) %>
+
+        <div class="container">
+            <div id="headers" style="margin-bottom: 1rem;">
+                <h5 class="font-weight-600 no-margin">
+                    <%= user.name%>
+                    <a class="font-weight-400" data-toggle="collapse" href="#profile-editor" aria-expanded="false"
+                        aria-controls="collapseExample">
+                        [edit]
+                    </a>
+                </h5>
+                <div class="collapse" style="margin-top: 0.5rem; margin-bottom: 0.5rem;" id="profile-editor">
+                    <div class="card card-body">
+                        <script>
+                            function autoGrow(element) {
+                                if (element) {
+                                    element.style.height = "5rem";
+                                    element.style.height = ((element.scrollHeight >= 480) ? 480 : element.scrollHeight) + "px";
+                                }
+                            }
+                        </script>
+                        <form method="POST">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">🔐</div>
+                                    </div>
+                                    <input name="password" type="password" class="form-control" id="passwdfield"
+                                        placeholder="">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">Name</div>
+                                            </div>
+                                            <input type="text" class="form-control" id="namefield" name="name"
+                                                value="<%=user.name%>">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">@️</div>
+                                            </div>
+                                            <input name="username" type="text" class="form-control" id="usernamefield"
+                                                value="<%=user.username%>" placeholder="new username">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <textarea name="about" class="form-control" id="abouteditfield" placeholder="about..."
+                                    onclick="autoGrow(this)" oninput="autoGrow(this)"></textarea>
+                            </div>
+                            <div style="text-align: right;">
+                                <input type="button" value="Preview" id="preview-btn" class="btn btn-light mb-2" />
+                                <input class="btn btn-primary mb-2" type="submit" value="Save"
+                                    formaction="/user/<%= user.username%>/modifyProfile" />
+                            </div>
+                        </form>
+                        <script>
+                            $(function () {
+                                var originalContent = $('#about-content').html();
+                                var isPreviewed = false;
+                                $("#preview-btn").click(function () {
+                                    $('#profile-editor').collapse('hide');
+                                    $('#about-content').html(marked($('#abouteditfield').val()));
+                                    if (!isPreviewed) {
+                                        let previewButtonClone = $('#preview-btn').clone();
+                                        previewButtonClone.val("Show Original Content");
+                                        previewButtonClone.click(function () {
+                                            $('#about-content').html(originalContent)
+                                            $('#profile-editor').collapse('show');
+                                            $('#preview-btn').text('Preview');
+                                            $(this).remove();
+                                            isPreviewed = false;
+                                        })
+                                        $('#content-display').append(previewButtonClone);
+                                    }
+                                    isPreviewed = true;
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="post-data font-weight-400">
+                        <a href="/author/<%=user.username%>" class="font-weight-500">
+                            @<%= user.username %>
+                        </a>
+                        joined
+                        <span class="holo-green-dark">
+                            <%= user.registeredDate.toDateString() %>
+                        </span>
+                    </div>
+                </div>
+                <div id="badge-display">
+                    <% if (user.isAdmin) { %>
+                    <span class="badge badge-success">admin</span>
+                    <% } %>
+                </div>
+            </div>
+            <div id="content-display">
+                <div id="about-content" class="post-text"><%= user.about %></div>
+            </div>
+            <br>
+            <div id="archive-display" class="post-data letter-space-neg05 font-weight-400">
+                <div id="post-archive">
+                    <a href="/author/<%=user.username%>">post archives</a>
+                </div>
+            </div>
+            <div id="postdata" class="post-data letter-space-neg05 font-weight-400">
+                <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a>
+            </div>
+            <script>
+                marked_passage = marked($('#about-content').text())
+                $('#abouteditfield').val($('#about-content').text());
+                $('#about-content').html(marked_passage);
+            </script>
+            <hr>
+        </div>
+        <%- include('common/footer.ejs') %>
+    </div>
+</body>

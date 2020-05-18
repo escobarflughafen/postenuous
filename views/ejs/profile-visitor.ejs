@@ -1,0 +1,49 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:'';">
+    <div style="padding: 16px">
+        <%- include('common/header-visitor.ejs') %>
+
+        <div class="container">
+            <div id="headers" style="margin-bottom: 1rem;">
+                <h5 class="font-weight-600 no-margin">
+                    <%= user.name%>
+                </h5>
+                <div>
+                    <div class="post-data font-weight-400">
+                        <a href="/author/<%=user.username%>" class="font-weight-500">
+                            @<%= user.username %>
+                        </a>
+                        joined
+                        <span class="holo-green-dark">
+                            <%= user.registeredDate.toDateString() %>
+                        </span>
+                    </div>
+                </div>
+                <div id="badge-display">
+                    <% if (user.isAdmin) { %>
+                    <span class="badge badge-success">admin</span>
+                    <% } %>
+                </div>
+            </div>
+            <div id="content-display">
+                <div id="about-content" class="post-text"><%= user.about %></div>
+            </div>
+            <br>
+            <div id="archive-display" class="post-data letter-space-neg05 font-weight-400">
+                <div id="post-archive">
+                    <a href="/author/<%=user.username%>">post archives</a>
+                </div>
+            </div>
+            <div id="postdata" class="post-data letter-space-neg05 font-weight-400">
+                <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a>
+            </div>
+            <script>
+                marked_passage = marked($('#about-content').text());
+                $('#about-content').html(marked_passage);
+            </script>
+        </div>
+
+        <%- include('common/footer.ejs') %>
+    </div>
+</body>

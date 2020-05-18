@@ -1,0 +1,24 @@
+<div id="headers" style="margin-bottom: 1rem;">
+    <h5 class="font-weight-600 no-margin">
+        <%= post.title%>
+    </h5>
+    <div>
+        <div class="post-data font-weight-400">
+            posted on
+            <span class="holo-green-dark">
+                <%= post.created.toDateString() %>
+            </span>
+            by
+            <a href="/user/<%=post.author.username%>" class="font-weight-500">
+                <%= post.author.name %>
+            </a>
+        </div>
+    </div>
+</div>
+<div id="content-display">
+    <div id="content" class="post-text"><%= post.body %></div>
+</div>
+<script>
+    marked_passage = marked($('#content').text())
+    $('#content').html(marked_passage);
+</script>
