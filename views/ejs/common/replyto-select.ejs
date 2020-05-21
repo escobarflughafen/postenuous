@@ -1,0 +1,4 @@
+<option value="noreply" selected>...</option>
+<% for( let i = 0; i < comments.length; i++ ) { %>
+<option id="replyoption<%=i%>" value="<%=comments[i].id%>">#<%=i%></option>
+<% } %>

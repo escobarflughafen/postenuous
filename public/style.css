@@ -20,6 +20,7 @@ body {
     writing-mode: vertical-rl;
     */
 }
+
 code, pre {
     font-family: Menlo, Consolas, monospace;
     letter-spacing: 0;
@@ -65,7 +66,6 @@ body {
 a {
     color: #0099CC;
 }
-
 
 topbanner {
     width: 100%;
@@ -117,6 +117,7 @@ topbanner {
 .bold-padding {
     padding: 16px;
 }
+
 .borderless {
     border-width: 0;
 }
@@ -293,7 +294,7 @@ topbanner {
     margin-bottom: 8px;
 }
 
-.hr-thin{
+.hr-thin {
     margin-top: 4px;
     margin-bottom: 4px;
 }
@@ -355,11 +356,11 @@ topbanner {
     color: grey;
 }
 
-.font-size-80p{
+.font-size-80p {
     font-size: 80%;
 }
 
-.font-size-90p{
+.font-size-90p {
     font-size: 90%;
 }
 
@@ -367,5 +368,18 @@ topbanner {
     margin-left: 0;
 }
 
-.child-comment {
+.child-comment {}
+
+@keyframes emphasize {
+    0% {}
+    50% {
+        background-color: #c6c8ca;
+        /*filter: invert(1);*/
+    }
+    100% {}
+}
+
+.comment-emphasized {
+    animation-name: emphasize;
+    animation-duration: 1000ms;
 }

@@ -1,6 +1,7 @@
 var express = require('express');
 var app = express();
 var mongoose = require('mongoose')
+var ejs = require('ejs');
 var path = require('path');
 var dbSchema = require('./models/dbSchema')
 var dbname = process.argv[process.argv.length - 1]
@@ -469,14 +470,32 @@ app.post("*/:id/addcomment", async (req, res) => {
     postedOn: req.params.id
   })
   console.log(req.params.id)
+  console.log(req.body)
 
-  Post.findById(req.params.id, (err, post) => {
-    console.log('hrer')
-    post.update({ $push: { comments: comment.id } }).exec();
-  })
-
-  comment.save().then(result => {
-    res.redirect('/post/' + req.params.id)
+  comment.save().then((result) => {
+    Post.findByIdAndUpdate(req.params.id, { $push: { comments: comment.id } }).exec((err, post) => {
+      if (err) {
+        if (isDebugMode) console.log(err);
+        handleBadRequest(req, res, 'http-error');
+      }
+      if (req.body.isAjax) {
+        Post.findById(req.params.id).populate('comments').exec((err, post) => {
+          ejs.renderFile('views/ejs/common/comments-area.ejs', { comments: post.comments }, (err, commentsHTML) => {
+            if (err) console.log(err)
+            ejs.renderFile('views/ejs/common/replyto-select.ejs', { comments: post.comments }, (err, replytoOptions) => {
+              if (err) console.log(err)
+              res.send({
+                'comments': commentsHTML,
+                'replytoOptions': replytoOptions,
+                'commentsCount': post.comments.length
+              });
+            });
+          });
+        });
+      } else {
+        res.redirect('/post/' + req.params.id)
+      }
+    })
   }).catch(err => {
     if (isDebugMode) console.log(err);
     handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');

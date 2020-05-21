@@ -1,84 +1,116 @@
 <div id="postdata">
     <div id="postdata-header" class="post-data letter-space-neg05 font-weight-400">
         <span>viewed <%=post.viewCount%> times |</span>
-        <a data-toggle="collapse" href="#comments-area" aria-expanded="false" aria-controls="collapseExample">
-            <span>comments (<%=post.comments.length%>)</span>
+        <a data-toggle="collapse" href="#comments-div" aria-expanded="false" aria-controls="collapseExample">
+            <span id="comment-count">comments (<%=post.comments.length%>)</span>
             <span id="commentarrow" class="symbol-monospace">↓</span>
         </a>
     </div>
-    <div id="comments-area" class="collapse">
-        <% if (post.comments.length > 0) { %>
-        <div id="comments">
-            <% for( let i = 0; i < post.comments.length; i++ ) { %>
-            <%- include('comment', {'i': i, comment: post.comments[i] }) %>
+    <div id="comments-div" class="collapse">
+        <div id="comments-area">
+            <% if (post.comments.length > 0) { %>
+            <%- include('comments-area', { comments: post.comments }) %>
             <% } %>
         </div>
-        <% } %>
-        <br>
+        <hr class="hr" style="margin-top: 4px;">
         <div id="comment-post">
-            <form method="POST">
-                <div class="form-row">
-                    <div class="form-group w-100 col">
-                        <textarea type="text" class="form-control" id="commenteditfield" name="comment" placeholder="comment here..."></textarea>
-                    </div>
+            <!--form method="POST"-->
+            <div class="form-row">
+                <div class="form-group w-100 col">
+                    <textarea type="text" class="form-control" id="commenteditfield" name="comment"
+                        placeholder="comment here..."></textarea>
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-auto">
-                        <label for="commentauthor" class="col-form-label-sm">name:</label>
-                    </div>
-                    <div class="form-group col-auto">
-                        <% if (loginAs) { %>
-                        <input type="text" class="form-control form-control-sm" id="commentauthor" name="name" value="<%=loginAs.name%>">
-                        <% } else { %>
-                        <input type="text" class="form-control form-control-sm" id="commentauthor" name="name" value="anonymous">
+            </div>
+            <div class="form-row">
+                <div class="form-group col-auto">
+                    <label for="commentauthor" class="col-form-label-sm">name:</label>
+                </div>
+                <div class="form-group col-auto">
+                    <% if (loginAs) { %>
+                    <input type="text" class="form-control form-control-sm" id="commentauthor" name="name"
+                        value="<%=loginAs.name%>">
+                    <% } else { %>
+                    <input type="text" class="form-control form-control-sm" id="commentauthor" name="name"
+                        value="anonymous">
+                    <% } %>
+                </div>
+                <div class="form-group col-auto">
+                    <label for="replyto" class="col-form-label-sm">reply to:</label>
+                </div>
+                <div class="form-group col-auto">
+                    <select id="replyto" name="replyto" class="form-control-sm form-control">
+                        <option value="noreply" selected>...</option>
+                        <% for( let i = 0; i < post.comments.length; i++ ) { %>
+                        <option id="replyoption<%=i%>" value="<%=post.comments[i].id%>">#<%=i%></option>
                         <% } %>
-                    </div>
-                    <div class="form-group col-auto">
-                        <label for="replyto" class="col-form-label-sm">reply to:</label>
-                    </div>
-                    <div class="form-group col-auto">
-                        <select id="replyto" name="replyto" class="form-control-sm form-control">
-                            <option value="noreply" selected>...</option>
-                            <% for( let i = 0; i < post.comments.length; i++ ) { %>
-                            <option id="replyoption<%=i%>" value="<%=post.comments[i].id%>">#<%=i%></option>
-                            <% } %>
-                        </select>
-                    </div>
-                    <div class="col-auto">
-                        <input class="btn btn-primary btn-sm" type="submit" value="Comment" formaction="<%=post.id%>/addcomment" />
-                    </div>
+                    </select>
                 </div>
-                <script>
-                    let refers = $("a[id^=link-to]");
-                    for(let i=0; i<refers.length; i++) {
-                        let refer = refers[i]
-                        $(refer).text($('#comment-no-'+ $(refer).text()).text())
+                <div class="col-auto">
+                    <button class="btn btn-primary btn-sm" id="commentsubmit">Comment</button>
+                </div>
+            </div>
+            <script>
+                let refers = $("a[id^=link-to]");
+                for (let i = 0; i < refers.length; i++) {
+                    let refer = refers[i]
+                    $(refer).text($('#comment-no-' + $(refer).text()).text())
+                }
+
+                $("a[id^=replyto").click(function () {
+                    console.log($(this).prop('href'))
+                });
+
+                $("a[id^=link-to-").click(function () {
+                    let replytoCommentElement = $('#' + $(this).prop('href').split('#')[1]);
+                    replytoCommentElement.addClass('comment-emphasized');
+
+                    setTimeout(() => {
+                        replytoCommentElement.removeClass('comment-emphasized');
+                    }, 1000)
+                })
+
+                $('#commentsubmit').click(function () {
+                    let params = {
+                        isAjax: true,
+                        comment: $('#commenteditfield').val(),
+                        replyto: $('#replyto').val(),
+                        name: $('#commentauthor').val()
                     }
+                    $.ajax({
+                        url: '<%=post.id%>/addcomment',
+                        type: 'POST',
+                        dateType: 'json',
+                        data: params
+                    }).done(function (data) {
+                        console.log(data)
+                        $('#comments-area').html("");
+                        $('#comments-area').html(data.comments);
+                        $('#replyto').html(data.replytoOptions);
+                        let refers = $("a[id^=link-to]");
+                        for (let i = 0; i < refers.length; i++) {
+                            let refer = refers[i]
+                            $(refer).text($('#comment-no-' + $(refer).text()).text())
+                        }
+                        $("a[id^=replyto").click(function () {
+                            console.log($(this).prop('href'))
+                        });
+                        $("a[id^=link-to-").click(function () {
+                            let replytoCommentElement = $('#' + $(this).prop('href').split('#')[1]);
+                            replytoCommentElement.addClass('comment-emphasized');
 
-                    $("a[id^=replyto").click(function () {
-                        $('#replyto').attr()
-                        $('option:selected', 'select[id="replyto"]').removeAttr('selected');
-                        $('#replyoption' + $(this).val()).prop('selected', true);
-                    });
-                </script>
-            </form>
-            
-        
-            <!--div class="form-row">
-                <div class="col-auto">
-                    
-                </div>
-                <div class="col-auto">
-                    <input name="comment" class="form-control" id="commenteditfield" placeholder="comment here...">
-                </div>
-            </div>
+                            setTimeout(() => {
+                                replytoCommentElement.removeClass('comment-emphasized');
+                            }, 1000)
+                        });
+                        $('#comment-count').text('comments (' + data.commentsCount + ')')
+                    }).fail(() => {
+                        alert('BadRequest')
+                    })
 
-            <div class="form-row" style="text-align: right;">
 
-            </div>
-
-        </form-->
-
+                })
+            </script>
+            <!--/form-->
+        </div>
     </div>
-</div>
 </div>
