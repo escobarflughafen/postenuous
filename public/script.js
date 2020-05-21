@@ -28,14 +28,27 @@
     　　} 
     });
 */
-
+/*
 function autoGrow(element, defaultHeight, limitedHeight) {
   if (element) {
     element.style.height = defaultHeight;
     element.style.height = ((element.scrollHeight >= limitedHeight) ? limitedHeight : element.scrollHeight + "px");
   }
 }
+*/
+function autoGrow(element) {
+  if (element) {
+    element.style.height = "5rem";
+    element.style.height = ((element.scrollHeight >= 320) ? 320 : element.scrollHeight) + "px";
+  }
+}
 
+function initAutoGrow(element) {
+  if (element) {
+    $(element).click(undefined)
+    autoGrow(element);
+  }
+}
 /*
 function setCollapse(togglerElement, collapseElement) {
   if (togglerElement && collapseElement) {

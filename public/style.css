@@ -22,6 +22,7 @@ body {
 }
 code, pre {
     font-family: Menlo, Consolas, monospace;
+    letter-spacing: 0;
 }
 
 code {
@@ -39,19 +40,18 @@ blockquote {
 }
 
 h1, h2, h3 {
-    font-weight: 500;
     font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
-    letter-spacing: -0.5px;
+    font-weight: 500;
 }
 
 h5 {
     font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
-    letter-spacing: -0.5px;
-    font-weight: 400;
+    font-weight: 500;
 }
 
-h1, h2 {
-    text-decoration: none;
+h6 {
+    font-family: "Helvetica Neue", Helvetica, "Toppan Bunkyu Gothic", "YuGothic", "Hiragino Gothic", sans-serif;
+    font-weight: 500;
 }
 
 article, figure, footer, header, main, nav, section {
@@ -293,6 +293,11 @@ topbanner {
     margin-bottom: 8px;
 }
 
+.hr-thin{
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
 .no-border {
     border-width: 0;
 }
@@ -363,5 +368,4 @@ topbanner {
 }
 
 .child-comment {
-    margin-left: 16px;
 }

@@ -9,7 +9,7 @@
                     <code>HTTP 400</code> - your request <code><%=req.url%></code> will not process due to client error.
                 <% } %>
                 <% if (code == 403) { %>
-                    <code>HTTP 403</code> - your have no permission to view <code><%=req.url%></code>.
+                    <code>HTTP 403</code> - your have no permission to access <code><%=req.url%></code>.
                 <% } %>
                 <% if (code == 404) { %>
                     <code>HTTP 404</code> - your request <code><%=req.url%></code> was not found.

@@ -7,7 +7,7 @@
         <div class="container">
             <%- include('common/post-view.ejs', {post: post}) %>
             <br>
-            <%- include('common/post-data.ejs', {post: post}) %>
+            <%- include('common/post-data.ejs', {post: post, loginAs: loginAs}) %>
             <%- include('common/post-navi.ejs', {nextPost: nextPost, prevPost: prevPost}) %>
         </div>
         <%- include('common/footer.ejs') %>

@@ -19,13 +19,8 @@ var postSchema = new mongoose.Schema({
     },
     comments: {
         type: [{
-            from: String,
-            content: String,
-            created: {
-                type: Date,
-                default: Date.now
-            }
-
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'comment'
         }],
         default: []
     },
@@ -44,17 +39,6 @@ var userSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
-    comments: {
-        type: [{
-            from: String,
-            content: String,
-            created: {
-                type: Date,
-                default: Date.now
-            }
-        }],
-        default: []
-    },
     isAdmin: {
         type: Boolean,
         default: false
@@ -64,8 +48,11 @@ var userSchema = new mongoose.Schema({
 var commentSchema = new mongoose.Schema({
     body: String,
     author: {
-        type: { 
-            name: String
+        type: {
+            name: {
+                type: String,
+                default: 'anonymous'
+            }
         }
     },
     postedOn: {
@@ -73,9 +60,9 @@ var commentSchema = new mongoose.Schema({
         ref: 'post'
     },
     parentComment: {
-        type: mongoose.Schema.Types.ObjectId, 
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'comment',
-        default: undefined
+        default: null
     },
     score: {
         type: Number,
