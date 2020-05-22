@@ -4,7 +4,12 @@ var mongoose = require('mongoose')
 var ejs = require('ejs');
 var path = require('path');
 var dbSchema = require('./models/dbSchema')
-var dbname = process.argv[process.argv.length - 1]
+var dbname = process.argv[2]
+
+var listenPort = parseInt(process.argv[3])
+if (listenPort.toString() == 'NaN')
+  listenPort = 3000;
+
 mongoose.connect("mongodb://localhost:27017/" + dbname).then(
   () => console.log('connected to MongoDB. db is', dbname)).catch(
     err => console.error('failed to connect to MongoDB', err));
@@ -111,7 +116,7 @@ app.post('*/addPost', (req, res) => {
         });
         if (isDebugMode) console.log(postData);
         postData.save().then(result => {
-          res.redirect('/');
+          res.redirect('/post/' + postData.id);
         }).catch(err => {
           console.log(err);
           handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
@@ -466,11 +471,14 @@ app.post("*/:id/addcomment", async (req, res) => {
   var comment = new Comment({
     body: req.body.comment,
     parentComment: (req.body.replyto == 'noreply') ? null : req.body.replyto,
-    author: { name: req.body.name },
-    postedOn: req.params.id
+    author: { name: ((req.body.name) ? req.body.name : 'anonymous') },
+    postedOn: req.params.id,
+    from: JSON.stringify({
+      remoteAddress: req.connection.remoteAddress,
+      remoteFamily: req.connection.remoteFamily,
+      remotePort: req.connection.remotePort
+    })
   })
-  console.log(req.params.id)
-  console.log(req.body)
 
   comment.save().then((result) => {
     Post.findByIdAndUpdate(req.params.id, { $push: { comments: comment.id } }).exec((err, post) => {
@@ -506,6 +514,6 @@ app.get('/*', (req, res) => {
   handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
 });
 
-app.listen(3000, () => {
-  console.log('Server listing on 3000');
+app.listen(listenPort, () => {
+  console.log('Server listing on ' + listenPort);
 })

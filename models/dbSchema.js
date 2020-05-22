@@ -24,7 +24,19 @@ var postSchema = new mongoose.Schema({
         }],
         default: []
     },
-
+    enableComment: {
+        type: Boolean,
+        default: true
+    },
+    isPrivate: {
+        type: Boolean,
+        default: true
+    },
+    availableTo: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'user',
+        default: []
+    }
 });
 
 var userSchema = new mongoose.Schema({
@@ -71,9 +83,16 @@ var commentSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
+    },
+    from: {
+        type: String,
+        default: ""
+    },
+    disabled: {
+        type: Boolean,
+        default: false 
     }
 });
-
 
 
 exports.postSchema = postSchema

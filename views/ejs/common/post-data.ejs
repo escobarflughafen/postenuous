@@ -25,7 +25,7 @@
                 <div class="form-group col-auto">
                     <label for="commentauthor" class="col-form-label-sm">name:</label>
                 </div>
-                <div class="form-group col-auto">
+                <div class="form-group col-auto" style="width: 8rem;">
                     <% if (loginAs) { %>
                     <input type="text" class="form-control form-control-sm" id="commentauthor" name="name"
                         value="<%=loginAs.name%>">
@@ -50,43 +50,9 @@
                 </div>
             </div>
             <script>
-                let refers = $("a[id^=link-to]");
-                for (let i = 0; i < refers.length; i++) {
-                    let refer = refers[i]
-                    $(refer).text($('#comment-no-' + $(refer).text()).text())
-                }
 
-                $("a[id^=replyto").click(function () {
-                    console.log($(this).prop('href'))
-                });
-
-                $("a[id^=link-to-").click(function () {
-                    let replytoCommentElement = $('#' + $(this).prop('href').split('#')[1]);
-                    replytoCommentElement.addClass('comment-emphasized');
-
-                    setTimeout(() => {
-                        replytoCommentElement.removeClass('comment-emphasized');
-                    }, 1000)
-                })
-
-                $('#commentsubmit').click(function () {
-                    let params = {
-                        isAjax: true,
-                        comment: $('#commenteditfield').val(),
-                        replyto: $('#replyto').val(),
-                        name: $('#commentauthor').val()
-                    }
-                    $.ajax({
-                        url: '<%=post.id%>/addcomment',
-                        type: 'POST',
-                        dateType: 'json',
-                        data: params
-                    }).done(function (data) {
-                        console.log(data)
-                        $('#comments-area').html("");
-                        $('#comments-area').html(data.comments);
-                        $('#replyto').html(data.replytoOptions);
-                        let refers = $("a[id^=link-to]");
+                function init() {
+                    let refers = $("a[id^=link-to]");
                         for (let i = 0; i < refers.length; i++) {
                             let refer = refers[i]
                             $(refer).text($('#comment-no-' + $(refer).text()).text())
@@ -102,9 +68,34 @@
                                 replytoCommentElement.removeClass('comment-emphasized');
                             }, 1000)
                         });
+                }
+
+                init();
+
+                $('#commentsubmit').click(function () {
+                    let params = {
+                        isAjax: true,
+                        comment: $('#commenteditfield').val(),
+                        replyto: $('#replyto').val(),
+                        name: $('#commentauthor').val()
+                    }
+                    $(this).prop('disabled', true);
+                    $.ajax({
+                        url: '<%=post.id%>/addcomment',
+                        type: 'POST',
+                        dateType: 'json',
+                        data: params
+                    }).done(function (data) {
+                        console.log(this)
+                        $('#comments-area').html("");
+                        $('#comments-area').html(data.comments);
+                        $('#replyto').html(data.replytoOptions);
+                        init()
                         $('#comment-count').text('comments (' + data.commentsCount + ')')
+                        $('#commentsubmit').prop('disabled', false);
                     }).fail(() => {
                         alert('BadRequest')
+                        $('#commentsubmit').prop('disabled', false);
                     })
 
 

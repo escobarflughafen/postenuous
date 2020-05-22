@@ -12,7 +12,7 @@
                 "<node_internals>/**"
             ],
             "program": "${workspaceFolder}/app.js",
-            "args": ["aoiblog"]
+            "args": ["aoiblog", "3000"]
         }
     ]
 }

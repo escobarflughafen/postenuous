@@ -1,10 +1,10 @@
 <hr class="hr-thin">
 <div id="comment-<%=comment.id%>">
   <div class="row">
-    <div class="col-auto">
+    <div class="col-auto" style="padding-right: 0;">
       <code id="comment-no-<%=comment.id%>">#<%=i%></code>
     </div>
-    <div class="col">
+    <div class="col" style="padding-left: 12px;">
       <% if (comment.parentComment) { %>
       <code>&gt; in reply to <a href="#comment-<%=comment.parentComment%>" id="link-to-<%=comment.parentComment%>"><%=comment.parentComment%></a></code>
       <% } %>
