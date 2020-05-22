@@ -58,3 +58,31 @@ function setCollapse(togglerElement, collapseElement) {
   }
 }
 */
+
+
+function removeComment(element, postID) {
+  var commentID = element.id.split('-');
+  commentID = commentID[commentID.length - 1]
+
+  let params = {
+    isAjax: true,
+    'commentID': commentID
+  }
+
+  $(element).addClass('disabled')
+  $.ajax({
+    url: window.location.href + '/removecomment',
+    type: 'POST',
+    dateType: 'json',
+    data: params
+  }).done(function (data) {
+    console.log(this)
+    $('#comments-area').html(data.comments);
+    $('#replyto').html(data.replytoOptions);
+    $('#comment-count').text('comments (' + data.commentsCount + ')');
+  }).fail(() => {
+    alert('BadRequest')
+    $(element).removeClass('disabled')
+  })
+
+}

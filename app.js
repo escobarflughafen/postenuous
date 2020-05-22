@@ -489,15 +489,19 @@ app.post("*/:id/addcomment", async (req, res) => {
       if (req.body.isAjax) {
         Post.findById(req.params.id).populate('comments').exec((err, post) => {
           ejs.renderFile('views/ejs/common/comments-area.ejs', { comments: post.comments }, (err, commentsHTML) => {
-            if (err) console.log(err)
-            ejs.renderFile('views/ejs/common/replyto-select.ejs', { comments: post.comments }, (err, replytoOptions) => {
-              if (err) console.log(err)
-              res.send({
-                'comments': commentsHTML,
-                'replytoOptions': replytoOptions,
-                'commentsCount': post.comments.length
+            if (err)
+              console.log(err)
+            else
+              ejs.renderFile('views/ejs/common/replyto-select.ejs', { comments: post.comments }, (err, replytoOptions) => {
+                if (err)
+                  console.log(err)
+                else
+                  res.send({
+                    'comments': commentsHTML,
+                    'replytoOptions': replytoOptions,
+                    'commentsCount': post.comments.length
+                  });
               });
-            });
           });
         });
       } else {
@@ -509,6 +513,55 @@ app.post("*/:id/addcomment", async (req, res) => {
     handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
   })
 })
+
+app.post("*/:id/removecomment", async (req, res) => {
+  if (req.session.userID) {
+    User.findById(req.session.userID, (err, user) => {
+      if (err) {
+        res.redirect('/')
+      } else {
+        Comment.findByIdAndUpdate(req.body.commentID, { disabled: true }, (err, comment) => {
+          if (err) {
+            if (isDebugMode) console.log(err);
+            handleBadRequest(req, res, 'http-error');
+          }
+          Post.findById(comment.postedOn)
+            .populate('author')
+            .populate('comments')
+            .exec((err, post) => {
+              if (err) {
+                if (isDebugMode) console.log(err);
+                handleBadRequest(req, res, 'http-error');
+              } else {
+                if (req.body.isAjax) {
+                  ejs.renderFile('views/ejs/common/comments-area.ejs', { comments: post.comments, editable: true }, (err, commentsHTML) => {
+                    if (err)
+                      console.log(err)
+                    else
+                      ejs.renderFile('views/ejs/common/replyto-select.ejs', { comments: post.comments }, (err, replytoOptions) => {
+                        if (err)
+                          console.log(err)
+                        else
+                          res.send({
+                            'comments': commentsHTML,
+                            'replytoOptions': replytoOptions,
+                            'commentsCount': post.comments.filter((comment) => { return !comment.disabled }).length
+                          });
+                      });
+                  });
+                } else {
+                  res.redirect('/post/' + req.params.id)
+                }
+              }
+            })
+        })
+      }
+    })
+  } else {
+    handleData.handleForbidden(req, res, 'http-error');
+  }
+})
+
 
 app.get('/*', (req, res) => {
   handleData.handleNotFound(req, res, 'ejs/http-error.ejs');

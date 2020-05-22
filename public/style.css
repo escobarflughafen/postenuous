@@ -383,3 +383,7 @@ topbanner {
     animation-name: emphasize;
     animation-duration: 1000ms;
 }
+
+.disabled {
+    pointer-events: none;
+}

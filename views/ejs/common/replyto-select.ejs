@@ -1,4 +1,6 @@
 <option value="noreply" selected>...</option>
 <% for( let i = 0; i < comments.length; i++ ) { %>
+<% if (!comments[i].disabled) { %>
 <option id="replyoption<%=i%>" value="<%=comments[i].id%>">#<%=i%></option>
+<% } %>
 <% } %>
