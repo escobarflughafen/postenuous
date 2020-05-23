@@ -1,9 +1,19 @@
 <div id="comments">
-  <% for( let i = 0; i < comments.length; i++ ) { %>
-  <% if (!comments[i].disabled) { %>
-  <%- include('comment', {'i': i, comment: comments[i], editable: editable }) %>
-  <% } else { %>
-  <%- include('comment-disabled', {'i': i, comment: comments[i], editable: editable}) %>
+  <% if (editable) { %>
+  <hr class="hr-thin">
+  <div class="letter-space-neg05"><span><a href="javascript:void(0);" onclick="toggleDisabledCommentsVisibility(this, false)">hide removed
+        comments</a></span></div>
   <% } %>
-  <% } %>
+  <table class="table table-sm table-hover" style="margin-top: 4px; width: 100%;">
+    <tbody>
+      <% for( let i = 0; i < comments.length; i++ ) { %>
+        <% if (!comments[i].disabled) { %>
+        <%- include('comment', {'i': i, comment: comments[i], editable: editable }) %>
+        <% } else { %>
+        <%- include('comment-disabled', {'i': i, comment: comments[i], editable: editable}) %>
+        <% } %>
+        <% } %>
+    </tbody>
+  </table>
+
 </div>

@@ -368,7 +368,6 @@ topbanner {
     margin-left: 0;
 }
 
-
 @keyframes emphasize {
     0% {}
     50% {
@@ -385,4 +384,15 @@ topbanner {
 
 .disabled {
     pointer-events: none;
+}
+
+.removed-comment {
+    background-color: white;
+    filter: invert(0.8);
+}
+
+.comment-table-cell {
+    white-space: normal;
+    /*word-wrap: break-word;*/
+    word-break: break-word;
 }

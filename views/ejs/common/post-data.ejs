@@ -8,12 +8,6 @@
         </a>
     </div>
     <div id="comments-div" class="collapse">
-        <% if (loginAs) { %>
-        <% if (post.comments.length > 0 && (loginAs.isAdmin || (loginAs.username == post.author.username))) { %>
-        <hr class="hr-thin">
-        <div><span><a href="javascript:void(0);" onclick="toggleDisabledCommentsVisibility(this)" show-all>show removed comments</a></span></div>
-        <% } %>
-        <% } %>
         <div id="comments-area">
             <% if (post.comments.length > 0) { %>
             <% if (loginAs) { %>
