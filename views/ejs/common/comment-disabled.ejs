@@ -1,0 +1,22 @@
+<hr class="hr-thin">
+<div id="comment-<%=comment.id%>">
+  <div class="row">
+    <div class="col-auto" style="padding-right: 0;">
+      <code id="comment-no-<%=comment.id%>">#<%=i%></code>
+    </div>
+    <div class="col" style="padding-left: 12px;">
+      <% if (comment.parentComment) { %>
+      <code>&gt; in reply to <a href="#comment-<%=comment.parentComment%>" id="link-to-<%=comment.parentComment%>"><%=comment.parentComment%></a></code>
+      <% } %>
+      <div>
+        <span><s><%=comment.body%></s></span>
+      </div>
+      <div style="font-size: 90%;" class="post-data">
+        <strong><%=comment.author.name%></strong> | <%=comment.createdAt.toLocaleString()%>
+        <% if (editable) { %>
+        <span> | <a href="javascript:void(0);" id="comment-show-link-<%=comment.id%>" onclick="showComment(this)">show</a></span>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>

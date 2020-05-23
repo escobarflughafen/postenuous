@@ -2,6 +2,8 @@
   <% for( let i = 0; i < comments.length; i++ ) { %>
   <% if (!comments[i].disabled) { %>
   <%- include('comment', {'i': i, comment: comments[i], editable: editable }) %>
+  <% } else { %>
+  <%- include('comment-disabled', {'i': i, comment: comments[i], editable: editable}) %>
   <% } %>
   <% } %>
 </div>

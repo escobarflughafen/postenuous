@@ -2,11 +2,18 @@
     <div id="postdata-header" class="post-data letter-space-neg05 font-weight-400">
         <span>viewed <%=post.viewCount%> times |</span>
         <a data-toggle="collapse" href="#comments-div" aria-expanded="false" aria-controls="collapseExample">
-            <span id="comment-count">comments (<%=post.comments.length%>)</span>
+            <span id="comment-count">comments
+                (<%=post.comments.filter((comment) => {return !comment.disabled}).length%>)</span>
             <span id="commentarrow" class="symbol-monospace">↓</span>
         </a>
     </div>
     <div id="comments-div" class="collapse">
+        <% if (loginAs) { %>
+        <% if (post.comments.length > 0 && (loginAs.isAdmin || (loginAs.username == post.author.username))) { %>
+        <hr class="hr-thin">
+        <div><span><a href="javascript:void(0);" onclick="toggleDisabledCommentsVisibility(this)" show-all>show removed comments</a></span></div>
+        <% } %>
+        <% } %>
         <div id="comments-area">
             <% if (post.comments.length > 0) { %>
             <% if (loginAs) { %>
@@ -45,7 +52,9 @@
                     <select id="replyto" name="replyto" class="form-control-sm form-control">
                         <option value="noreply" selected>...</option>
                         <% for( let i = 0; i < post.comments.length; i++ ) { %>
+                        <% if (!post.comments[i].disabled) { %>
                         <option id="replyoption<%=i%>" value="<%=post.comments[i].id%>">#<%=i%></option>
+                        <% } %>
                         <% } %>
                     </select>
                 </div>
@@ -54,7 +63,6 @@
                 </div>
             </div>
             <script>
-
                 function init() {
                     let refers = $("a[id^=link-to]");
                     for (let i = 0; i < refers.length; i++) {

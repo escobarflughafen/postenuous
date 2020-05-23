@@ -1,3 +1,5 @@
+var ejs = require('ejs')
+
 exports.handleNotFound = function (req, res, view) {
     res.status(404).render(view, {
         title: 'not found - postenuous',
@@ -53,4 +55,24 @@ exports.handleLogout = function (req, res) {
     req.session.username = null;
     req.session.userID = null;
     res.redirect('/');
+}
+
+
+exports.renderComment = function (post, editable = false, showAll = false, dataObject) {
+    var commentAreaEJS = (showAll) ? 'views/ejs/common/comments-area-all.ejs' : 'views/ejs/common/comments-area.ejs'
+
+    console.log(showAll, commentAreaEJS)
+    ejs.renderFile(commentAreaEJS, { 'comments': post.comments, 'editable': editable }, (err, commentsHTML) => {
+        if (err)
+            console.log(err)
+        else
+            ejs.renderFile('views/ejs/common/replyto-select.ejs', { comments: post.comments }, (err, replytoOptions) => {
+                if (err)
+                    console.log(err)
+                else {
+                    dataObject.commentsHTML = commentsHTML;
+                    dataObject.replytoOptions = replytoOptions
+                }
+            });
+    });
 }

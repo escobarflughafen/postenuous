@@ -36,6 +36,26 @@ function autoGrow(element, defaultHeight, limitedHeight) {
   }
 }
 */
+
+function init() {
+  let refers = $("a[id^=link-to]");
+  for (let i = 0; i < refers.length; i++) {
+      let refer = refers[i]
+      $(refer).text($('#comment-no-' + $(refer).text()).text())
+  }
+  $("a[id^=replyto").click(function () {
+      console.log($(this).prop('href'))
+  });
+  $("a[id^=link-to-").click(function () {
+      let replytoCommentElement = $('#' + $(this).prop('href').split('#')[1]);
+      replytoCommentElement.addClass('comment-emphasized');
+
+      setTimeout(() => {
+          replytoCommentElement.removeClass('comment-emphasized');
+      }, 1000)
+  });
+}
+
 function autoGrow(element) {
   if (element) {
     element.style.height = "5rem";
@@ -60,7 +80,7 @@ function setCollapse(togglerElement, collapseElement) {
 */
 
 
-function removeComment(element, postID) {
+function removeComment(element) {
   var commentID = element.id.split('-');
   commentID = commentID[commentID.length - 1]
 
@@ -76,7 +96,6 @@ function removeComment(element, postID) {
     dateType: 'json',
     data: params
   }).done(function (data) {
-    console.log(this)
     $('#comments-area').html(data.comments);
     $('#replyto').html(data.replytoOptions);
     $('#comment-count').text('comments (' + data.commentsCount + ')');
@@ -85,4 +104,66 @@ function removeComment(element, postID) {
     $(element).removeClass('disabled')
   })
 
+}
+
+function showComment(element) {
+  var commentID = element.id.split('-');
+  commentID = commentID[commentID.length - 1]
+
+  let params = {
+    isAjax: true,
+    'commentID': commentID
+  }
+
+  $(element).addClass('disabled')
+  $.ajax({
+    url: window.location.href + '/showcomment',
+    type: 'POST',
+    dateType: 'json',
+    data: params
+  }).done(function (data) {
+    $('#comments-area').html(data.comments);
+    $('#replyto').html(data.replytoOptions);
+    $('#comment-count').text('comments (' + data.commentsCount + ')');
+  }).fail(() => {
+    alert('BadRequest')
+    $(element).removeClass('disabled')
+  })
+
+}
+
+function toggleDisabledCommentsVisibility(element) {
+  if($(element).prop('show-all') == undefined) {
+    $(element).prop('show-all', true)
+  }
+  let params = {
+    isAjax: true,
+    showDisabledComments: $(element).prop('show-all')
+  }
+  /*
+  if ($(element).prop('show-all')) {
+    $(element).text('hide removed comments');
+  } else {
+    $(element).text('show removed comments');
+  }
+  */
+  $(element).addClass('disabled')
+
+  $.ajax({
+    url: window.location.href + '/toggleallcomment',
+    type: 'POST',
+    dateType: 'json',
+    data: params
+  }).done(function (data) {
+    console.log(data)
+    $('#comments-area').html(data.commentsHTML);
+    $('#replyto').html(data.replytoOptions);
+    $(element).prop('show-all', !$(element).prop('show-all'));
+    $(element).removeClass('disabled')
+    $(element).text(($(element).prop('show-all')) ? 'show disabled comments' : 'hide disabled comments' )
+    init()
+  }).fail(() => {
+    alert('BadRequest')
+    $(element).removeClass('disabled')
+  })
 }
