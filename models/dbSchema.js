@@ -64,6 +64,14 @@ var commentSchema = new mongoose.Schema({
             name: {
                 type: String,
                 default: 'anonymous'
+            },
+            homepage: {
+                type: String,
+                default: ''
+            },
+            userID:  {
+                type: mongoose.Schema.Types.ObjectId,
+                default: null
             }
         }
     },
@@ -90,11 +98,23 @@ var commentSchema = new mongoose.Schema({
     },
     disabled: {
         type: Boolean,
-        default: false 
+        default: false
     }
 });
 
+var logSchema = new mongoose.Schema({
+    operator: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    log: String,
+    time: {
+        type: Date,
+        default: Date.now
+    }
+})
 
 exports.postSchema = postSchema
 exports.userSchema = userSchema
 exports.commentSchema = commentSchema
+exports.logSchema = logSchema

@@ -17,7 +17,7 @@
             <% } %>
             <% } %>
         </div>
-        <hr class="hr" style="margin-top: 4px;">
+        <hr class="hr">
         <div id="comment-post">
             <!--form method="POST"-->
             <div class="form-row">
@@ -27,22 +27,35 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-group col-auto">
-                    <label for="commentauthor" class="col-form-label-sm">name:</label>
+                <div class="col-auto">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">name</div>
+                        </div>
+                        <% if (loginAs) { %>
+                        <input type="text" class="form-control" id="commentauthor" placeholder="" name="name"
+                            value="<%=loginAs.name%>">
+                        <% } else { %>
+                        <input type="text" class="form-control" id="commentauthor" name="name" value="anonymous">
+                        <% } %>
+                    </div>
                 </div>
-                <div class="form-group col-auto" style="width: 6rem;">
-                    <% if (loginAs) { %>
-                    <input type="text" class="form-control form-control-sm" id="commentauthor" name="name"
-                        value="<%=loginAs.name%>">
-                    <% } else { %>
-                    <input type="text" class="form-control form-control-sm" id="commentauthor" name="name"
-                        value="anonymous">
-                    <% } %>
+                <div class="col-auto">
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">homepage</div>
+                        </div>
+                        <% if (loginAs) { %>
+                        <input type="text" class="form-control" id="commentauthorhomepage"
+                            name="homepage" value="/user/<%=loginAs.username%>">
+                        <% } else { %>
+                        <input type="text" class="form-control" id="commentauthorhomepage"
+                            name="homepage">
+                        <% } %>
+                    </div>
                 </div>
                 <div class="form-group col-auto">
                     <label for="replyto" class="col-form-label-sm">reply to:</label>
-                </div>
-                <div class="form-group col-auto">
                     <select id="replyto" name="replyto" class="form-control-sm form-control">
                         <option value="noreply" selected>...</option>
                         <% for( let i = 0; i < post.comments.length; i++ ) { %>
@@ -83,7 +96,8 @@
                         isAjax: true,
                         comment: $('#commenteditfield').val(),
                         replyto: $('#replyto').val(),
-                        name: $('#commentauthor').val()
+                        name: $('#commentauthor').val(),
+                        homepage: $('#commentauthorhomepage').val()
                     }
                     $(this).prop('disabled', true);
                     $.ajax({
@@ -101,8 +115,6 @@
                         alert('BadRequest')
                         $('#commentsubmit').prop('disabled', false);
                     })
-
-
                 })
             </script>
             <!--/form-->

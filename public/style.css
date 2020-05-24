@@ -26,8 +26,15 @@ code, pre {
     letter-spacing: 0;
 }
 
+pre {
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
 code {
-    overflow-x: hidden;
+    white-space: pre;
+    word-break: normal;
+    word-wrap: normal;
 }
 
 .symbol-monospace {

@@ -1,17 +1,25 @@
 <tr id="comment-<%=comment.id%>" class="bg-dark text-white">
-  <th scope="row"><code id="comment-no-<%=comment.id%>" class="text-white"><s>#<%=i%></s></code></th>
+  <th scope="row"><code id="comment-no-<%=comment.id%>" class="text-white">#<%=i%></code></th>
   <td class="comment-table-cell">
     <% if (comment.parentComment) { %>
-    <code class="text-white">&gt; in reply to <a href="#comment-<%=comment.parentComment%>" id="link-to-<%=comment.parentComment%>"><%=comment.parentComment%></a></code>
+    <code
+      class="text-white">&gt; in reply to <a href="#comment-<%=comment.parentComment%>" id="link-to-<%=comment.parentComment%>"><%=comment.parentComment%></a></code>
     <% } %>
     <div>
       <span><%=comment.body%></span>
     </div>
     <div style="font-size: 90%;" class="post-data text-white">
-      <strong><%=comment.author.name%></strong> | <%=comment.createdAt.toLocaleString()%>
+      <% if(comment.author.homepage && comment.author.homepage.length > 0) { %>
+        <strong><a href='/redirect/?site=<%=comment.author.homepage%>'><%=comment.author.name%></a></strong>
+      <% } else { %>
+      <strong><%=comment.author.name%></strong>
+      <% } %>
+      |
+      <%=comment.createdAt.toLocaleString()%>
       <% if (editable) { %>
-      <span> | <a href="javascript:void(0);" id="comment-show-link-<%=comment.id%>"
-          onclick="showComment(this)">show</a></span>
+      <span>|
+        <a href="javascript:void(0);" id="comment-show-link-<%=comment.id%>"
+          onclick="toggleComment(this)">show</a></span>
       <% } %>
     </div>
   </td>

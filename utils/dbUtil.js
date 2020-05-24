@@ -71,7 +71,6 @@ async.waterfall([
   console.log('err => ' + err);
   console.log('result => ' + result);
 });
-*/
 
 var a = async () => {
   return 1;
@@ -88,3 +87,5 @@ var c = async () => {
 }
 
 c()
+
+*/

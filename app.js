@@ -262,7 +262,7 @@ app.get('/post/:id', (req, res) => {
           if (req.session.userID) {
             let loginAs = await User.findById(req.session.userID).exec().catch(() => { res.redirect('/logout') });
             done('loginAs', loginAs);
-            if (post.author.id == req.session.userID || loginAs.isAdmin) {
+            if (post.author.id == req.session.userID) {
               done('mode', 'editor');
             } else {
               done('mode', 'other-user');
@@ -471,7 +471,11 @@ app.post("*/:id/addcomment", async (req, res) => {
   var comment = new Comment({
     body: req.body.comment,
     parentComment: (req.body.replyto == 'noreply') ? null : req.body.replyto,
-    author: { name: ((req.body.name == '') ? 'anonymous' : req.body.name) },
+    author: {
+      name: ((req.body.name == '') ? 'anonymous' : req.body.name),
+      homepage: req.body.homepage,
+      userID: req.session.userID
+    },
     postedOn: req.params.id,
     from: JSON.stringify({
       remoteAddress: req.connection.remoteAddress,
@@ -487,23 +491,50 @@ app.post("*/:id/addcomment", async (req, res) => {
         handleBadRequest(req, res, 'http-error');
       }
       if (req.body.isAjax) {
-        Post.findById(req.params.id).populate('comments').exec((err, post) => {
-          ejs.renderFile('views/ejs/common/comments-area.ejs', { comments: post.comments, editable: false }, (err, commentsHTML) => {
-            if (err)
-              console.log(err)
-            else
-              ejs.renderFile('views/ejs/common/replyto-select.ejs', { comments: post.comments }, (err, replytoOptions) => {
-                if (err)
-                  console.log(err)
-                else
-                  res.send({
-                    'comments': commentsHTML,
-                    'replytoOptions': replytoOptions,
-                    'commentsCount': post.comments.filter((comment) => { return !comment.disabled }).length
+        if (req.session.userID) {
+          User.findById(req.session.userID, (err, loginAs) => {
+            if (err) {
+              res.redirect('/logout')
+            } else {
+              Post.findById(req.params.id).populate('comments').populate('author').exec((err, post) => {
+                ejs.renderFile('views/ejs/common/comments-area.ejs', { comments: post.comments, editable: (loginAs.isAdmin || (loginAs.username == post.author.username)) },
+                  (err, commentsHTML) => {
+                    if (err)
+                      console.log(err)
+                    else
+                      ejs.renderFile('views/ejs/common/replyto-select.ejs', { comments: post.comments }, (err, replytoOptions) => {
+                        if (err)
+                          console.log(err)
+                        else
+                          res.send({
+                            'comments': commentsHTML,
+                            'replytoOptions': replytoOptions,
+                            'commentsCount': post.comments.filter((comment) => { return !comment.disabled }).length
+                          });
+                      });
                   });
               });
+            }
+          })
+        } else {
+          Post.findById(req.params.id).populate('comments').exec((err, post) => {
+            ejs.renderFile('views/ejs/common/comments-area.ejs', { comments: post.comments, editable: false }, (err, commentsHTML) => {
+              if (err)
+                console.log(err)
+              else
+                ejs.renderFile('views/ejs/common/replyto-select.ejs', { comments: post.comments }, (err, replytoOptions) => {
+                  if (err)
+                    console.log(err)
+                  else
+                    res.send({
+                      'comments': commentsHTML,
+                      'replytoOptions': replytoOptions,
+                      'commentsCount': post.comments.filter((comment) => { return !comment.disabled }).length
+                    });
+                });
+            });
           });
-        });
+        }
       } else {
         res.redirect('/post/' + req.params.id)
       }
@@ -573,9 +604,7 @@ app.post("*/:id/removecomment", async (req, res) => {
 })
 
 app.post("*/:id/togglecomment", async (req, res) => {
-  
   // chain: user -> post -> comment -> render/send
-
   if (req.session.userID) {
     User.findById(req.session.userID).exec().catch((reason) => {
       if (isDebugMode) console.log(reason),
@@ -594,9 +623,9 @@ app.post("*/:id/togglecomment", async (req, res) => {
       if (isDebugMode) console.log(reason)
       handleData.handleBadRequest(req, res, 'ejs/http-error')
     }).then((data) => {
-      console.log(data)
       let user = data[0], comment = data[1]
       if ((comment.postedOn.author.username == user.username) || user.isAdmin) {
+        showRemovedComment = comment.disabled;
         comment.update({ 'disabled': !comment.disabled }).exec();
         return Post.findById(comment.postedOn.id).populate('comments').exec();
       } else {
@@ -606,9 +635,9 @@ app.post("*/:id/togglecomment", async (req, res) => {
       if (isDebugMode) console.log(reason);
       handleData.handleBadRequest(req, res, 'ejs/http-error');
     }).then((post) => {
-      console.log(post.comments.filter((comment) => { return !comment.disabled }).length)
       if (req.body.isAjax) {
-        ejs.renderFile('views/ejs/common/comments-area-all.ejs', { comments: post.comments, editable: true }, (err, commentsHTML) => {
+        let commentAreaEJS = (req.body.isShowingRemovedComments == 'true') ? 'views/ejs/common/comments-area-all.ejs' : 'views/ejs/common/comments-area.ejs'
+        ejs.renderFile(commentAreaEJS, { comments: post.comments, editable: true }, (err, commentsHTML) => {
           if (err)
             console.log(err)
           else

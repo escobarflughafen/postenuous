@@ -8,11 +8,20 @@
       <span><%=comment.body%></span>
     </div>
     <div style="font-size: 90%;" class="post-data">
-      <strong><%=comment.author.name%></strong> | <%=comment.createdAt.toLocaleString()%> | <a href="#replyto"
-        id="replyto<%=i%>" value="<%=i%>">reply</a>
+      <% if(comment.author.homepage && comment.author.homepage.length > 0) { %>
+        <strong><a href='/redirect/?site=<%=comment.author.homepage%>'><%=comment.author.name%></a></strong>
+      <% } else { %>
+      <strong><%=comment.author.name%></strong>
+      <% } %>
+      |
+      <%=comment.createdAt.toLocaleString()%>
+      |
+      <a href="#replyto" id="replyto<%=i%>" value="<%=i%>">reply</a>
       <% if (editable) { %>
-      <span> | <a href="javascript:void(0);" id="comment-remove-link-<%=comment.id%>"
-          onclick="removeComment(this)">remove</a></span>
+      <span>
+        |
+        <a href="javascript:void(0);" id="comment-remove-link-<%=comment.id%>"
+          onclick="toggleComment(this)">remove</a></span>
       <% } %>
     </div>
   </td>
