@@ -2,7 +2,7 @@
 
 <body style="font-feature-settings:'';">
     <div style="padding: 16px">
-        <%- include('common/header-no-login.ejs') %>
+        <%- include('common/header.ejs', {loginAs: null, noUserDropdown: true}) %>
         <div class="container">
             <%- include('common/post-view-visitor.ejs', {post: post}) %>
             <br>

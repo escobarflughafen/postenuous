@@ -99,6 +99,10 @@ var commentSchema = new mongoose.Schema({
     disabled: {
         type: Boolean,
         default: false
+    },
+    deleted: {
+        type: Boolean,
+        default: false
     }
 });
 

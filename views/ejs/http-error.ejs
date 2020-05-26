@@ -2,11 +2,11 @@
 
 <body style="font-feature-settings:''; font-size: 100%;">
     <div style="padding: 16px">
-        <%- include('common/header-no-login.ejs') %>
+        <%- include('common/header.ejs', {loginAs: null, noUserDropdown: true}) %>
         <div class="container">
             <div>
                 <% if (code == 400) { %>
-                    <code>HTTP 400</code> - your request <code><%=req.url%></code> will not process due to client error.
+                    <code>HTTP 400</code> - your request <code><%=req.url%></code> was processed with errors.
                 <% } %>
                 <% if (code == 403) { %>
                     <code>HTTP 403</code> - your have no permission to access <code><%=req.url%></code>.

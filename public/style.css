@@ -32,7 +32,6 @@ pre {
 }
 
 code {
-    white-space: pre;
     word-break: normal;
     word-wrap: normal;
 }
@@ -377,9 +376,18 @@ topbanner {
 
 @keyframes emphasize {
     0% {}
+    33% {
+        background-color: #c6c8ca;
+        
+        
+    }
     50% {
         background-color: #c6c8ca;
-        /*filter: invert(1);*/
+        filter: invert(1);
+        
+    }
+    67% {
+        background-color: #c6c8ca;
     }
     100% {}
 }

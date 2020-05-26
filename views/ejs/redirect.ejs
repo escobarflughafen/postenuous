@@ -1,0 +1,28 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:''; font-size: 100%;">
+  <div style="padding: 16px">
+  <%- include('common/header.ejs', {loginAs: null, noUserDropdown: true}) %>
+    <div class="container">
+      <div>
+        <h5><code>NOTICE:</code></h5>
+        you are leaving postenuous, click <code><a href="http://<%=req.query.site%>"><%=req.query.site%></a></code> to process.
+        <br><br>
+        <a href="<%=req.headers.referer%>">← back to previous page</a>
+        <hr>
+      </div>
+      <script>
+        /*
+        var abstracts = $("span[id^='abstract_']")
+        abstracts.toArray().forEach(element => {
+            $(element).html(marked($(element).text()));
+        });
+        */
+        $("button[id^='arrow']").click(function () {
+          $(this).text(($(this).text() == "↑") ? "↓" : "↑");
+        });
+      </script>
+    </div>
+    <%- include('common/footer.ejs') %>
+  </div>
+</body>

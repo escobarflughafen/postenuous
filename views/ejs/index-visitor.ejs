@@ -2,9 +2,9 @@
 
 <body style="font-feature-settings:''; font-size: 100%;">
     <div style="padding: 16px">
-        <%- include('common/header-visitor.ejs') %>
+        <%- include('common/header.ejs', {noUserDropdown: false, loginAs: null}) %>
 
-        <%- include('common/post-list.ejs', {posts: posts, pageno: pageno, pageCount: pageCount}) %> 
+        <%- include('common/post-list.ejs', {posts: posts, pageno: pageno, pageCount: pageCount}) %>
 
         <%- include('common/footer.ejs') %>
     </div>

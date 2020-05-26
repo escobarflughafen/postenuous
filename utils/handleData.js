@@ -24,6 +24,12 @@ exports.handleForbidden = function (req, res, view) {
     })
 }
 
+exports.handleRedirect = function (req, res, view) {
+    res.render(view, {
+        title: 'redirect to ' + req.query.site + ' - postenuous',
+        req: req
+    })
+}
 
 
 exports.handleLogin = function (req, res, loginMongooseModel) {
@@ -41,7 +47,7 @@ exports.handleLogin = function (req, res, loginMongooseModel) {
                     } else {
                         req.session.username = req.body.username;
                         req.session.userID = user.id;
-                        res.redirect('/');
+                        res.redirect(req.headers.referer);
                     }
                 })
             } else {

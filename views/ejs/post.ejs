@@ -2,13 +2,30 @@
 
 <body style="font-feature-settings:'';">
     <div style="padding: 16px">
-        <%- include('common/header.ejs', {loginAs: loginAs}) %>
-
+        <% if (loginAs) { %>
+        <%- include('common/header.ejs', {loginAs: loginAs, noUserDropdown: true}) %>
+        <% } else { %>
+        <%- include('common/header.ejs', {loginAs: null, noUserDropdown: true}) %>
+        <% } %>
         <div class="container">
+            <% if (loginAs && loginAs.id == post.author.id) { %>
             <%- include('common/post-view.ejs', {post: post}) %>
+            <% } else { %>
+            <%- include('common/post-view-visitor.ejs') %>
+            <% } %>
+
             <br>
+
+            <% if (post.enableComment) { %>
             <%- include('common/post-data.ejs', {post: post, loginAs: loginAs}) %>
-           
+            <% } else { %>
+            <div id="postdata">
+                <div id="postdata-header" class="post-data letter-space-neg05 font-weight-400">
+                    <span>viewed <%=post.viewCount%> times</span>
+                </div>
+            </div>
+            <% } %>
+
             <%- include('common/post-navi.ejs', {nextPost: nextPost, prevPost: prevPost}) %>
         </div>
         <%- include('common/footer.ejs') %>

@@ -2,8 +2,7 @@
 
 <body style="font-feature-settings:''; font-size: 100%;">
     <div style="padding: 16px">
-        <%- include('common/header-visitor.ejs') %>
-
+        <%- include('common/header.ejs', {noUserDropdown: true, loginAs: null}) %>
         <%- include('common/author-view.ejs', {author: author, posts: posts}) %>
 
         <%- include('common/footer.ejs') %>

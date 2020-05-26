@@ -225,18 +225,19 @@ app.get('/post/:id', (req, res) => {
     if (isDebugMode) console.log(Object.keys(results).length + ' - ' + key)
     if (Object.keys(results).length === 5) {
       results.title = results.post.title + ' - postenuous'
+      console.log(results)
       switch (results.mode) {
-        case 'editor':
+        case 'author':
           res.render('ejs/post.ejs', results);
           break;
 
         case 'other-user':
-          res.render('ejs/post-other.ejs', results);
+          res.render('ejs/post.ejs', results);
           break;
 
         case 'visitor':
         default:
-          res.render('ejs/post-visitor.ejs', results);
+          res.render('ejs/post.ejs', results);
           break;
       }
     }
@@ -263,7 +264,7 @@ app.get('/post/:id', (req, res) => {
             let loginAs = await User.findById(req.session.userID).exec().catch(() => { res.redirect('/logout') });
             done('loginAs', loginAs);
             if (post.author.id == req.session.userID) {
-              done('mode', 'editor');
+              done('mode', 'author');
             } else {
               done('mode', 'other-user');
             }
@@ -687,7 +688,30 @@ app.post('*/:id/toggleallcomment', (req, res) => {
   }
 })
 
+
+app.post('*/:id/editpost', (req, res) => {
+   
+})
+
+app.get('/redirect', (req, res) => {
+  if (req.query.site) {
+    if (req.query.site[0] == '/') {
+      res.redirect(req.query.site);
+    } else {
+      handleData.handleRedirect(req, res, 'ejs/redirect.ejs');
+    }
+  } else {
+    handleData.handleNotFound(req, res, 'ejs/http-error');
+  }
+})
+
+
+/*
+  <- default NotFound routing ->
+*/
+
 app.get('/*', (req, res) => {
+  console.log(req.session)
   handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
 });
 
