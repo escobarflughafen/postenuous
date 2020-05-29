@@ -24,9 +24,10 @@ exports.handleForbidden = function (req, res, view) {
     })
 }
 
-exports.handleRedirect = function (req, res, view) {
+exports.handleRedirect = function (req, res, redirectTo, view) {
     res.render(view, {
         title: 'redirect to ' + req.query.site + ' - postenuous',
+        redirectTo: redirectTo,
         req: req
     })
 }

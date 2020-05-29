@@ -43,21 +43,21 @@
             <div class="col-auto">
                 <div class="letter-space-neg05">
                     <% if (pageno != 1) { %>
-                    <a class="page-navigator" href="/post/page/<%=pageno-1%>">newer posts</a>
+                    <a class="page-navigator" href="/post/page/<%=pageno-1%>/?perpage=<%=postPerPage%>">newer posts</a>
                     <span>
                         &nbsp; ← <% } %>page
                         <select id="pagination-selector" onchange="window.location=this.value">
                             <% for (let i = 1; i <= pageCount; i++) { %>
                             <% if (pageno != i) { %>
-                            <option value="/post/page/<%=i%>"><%=i%></option>
+                            <option value="/post/page/<%=i%>/?perpage=<%=postPerPage%>"><%=i%></option>
                             <% } else { %>
-                            <option selected value="/post/page/<%=i%>"><%=i%></option>
+                            <option selected value="/post/page/<%=i%>/?perpage=<%=postPerPage%>"><%=i%></option>
                             <% } %>
                             <% } %>
                         </select>
                         of <%=pageCount%><% if (pageno != pageCount) { %> →&nbsp;
                     </span>
-                    <a class="page-navigator" href="/post/page/<%=pageno+1%>">older posts</a> <% } %>
+                    <a class="page-navigator" href="/post/page/<%=pageno+1%>/?perpage=<%=postPerPage%>">older posts</a> <% } %>
 
                 </div>
             </div>

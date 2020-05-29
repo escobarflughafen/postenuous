@@ -45,12 +45,8 @@
                         <div class="input-group-prepend">
                             <div class="input-group-text">name</div>
                         </div>
-                        <% if (loginAs) { %>
-                        <input type="text" class="form-control" id="commentauthor" placeholder="" name="name"
-                            value="<%=loginAs.name%>">
-                        <% } else { %>
-                        <input type="text" class="form-control" id="commentauthor" name="name" value="anonymous">
-                        <% } %>
+                        <input type="text" class="form-control" id="commentauthor" placeholder="" name="name" style="width: 8rem"
+                        <% if (loginAs) { %>  value="<%=loginAs.name%>" <% } %> >
                     </div>
                 </div>
 

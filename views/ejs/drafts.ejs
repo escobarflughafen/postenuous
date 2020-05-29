@@ -8,20 +8,17 @@
             <h5 class="letter-space-neg05 font-weight-500">create new post</h5>
             <br>
             <div class="">
-                <% if (drafts) { %>
                 <div class="form-group">
-                    <select class="custom-select" id="draftselector" onchange="getDraft(this)">
-                        <option value="new" selected> - choose from your drafts - </option>
-                        <% for (let i=0; i<drafts.length; i++) { %>
-                        <option value="<%=drafts[i].id%>"><%=drafts[i].title%> -
-                            <%=drafts[i].abstract%></option>
-                        <% } %>
-                    </select>
+                    <select class="custom-select">
+                        <option selected>choose from your drafts</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                      </select>
                 </div>
-                <% } %>
-
+               
                 <form method="POST">
-
+                    
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -40,36 +37,13 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">🏷️</div>
-                            </div>
-                            <input name="tags" type="text" class="form-control" id="tagsfield" placeholder="tags, seperate with comma...">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <textarea name="body" class="form-control" id="posteditfield" placeholder="you can format with HTML <tags/> or markdown"
+                        <textarea name="body" class="form-control" id="posteditfield" placeholder="something..."
                             rows="0" oninput="autoGrow(this)" onclick="initAutoGrow(this)"></textarea>
                     </div>
-                    <div class="form-group">
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="privatepostcheckbox" value="option1">
-                            <label class="form-check-label" for="privatepostcheckbox">private post</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="disablecommentcheckbox" value="option2">
-                            <label class="form-check-label" for="disablecommentcheckbox">disable comment</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" id="newdraftcheckbox" value="option3">
-                            <label class="form-check-label" for="newdraftcheckbox">save as new draft</label>
-                        </div>
-                    </div>
-
                     <div style="text-align: right;">
 
                         <input id="preview-btn" type="button" value="Preview" class="btn btn-light mb-2" />
-                        <input id="savetodraft-btn" onclick="saveToDraft(this)" class="btn btn-secondary mb-2" type="button" value="Save to Drafts"
+                        <input class="btn btn-secondary mb-2" type="submit" value="Save to Drafts"
                             formaction="/savetodraft" />
                         <input class="btn btn-primary mb-2" type="submit" value="Add to Posts"
                             formaction="<%=formaction%>" />

@@ -39,13 +39,15 @@ exports.asyncSetAdmin = function (userID, userModel, callback) {
 
 exports.getAllDocument = function (model, callback) {
   async.waterfall([
-    (cb) => {cb(null, model)},
-    (model, cb) => {model.find({}, (err, users) => {
-      cb(err, users);
-    })}
+    (cb) => { cb(null, model) },
+    (model, cb) => {
+      model.find({}, (err, users) => {
+        cb(err, users);
+      })
+    }
   ], (err, users) => {
-    if(err) {
-      throw(err)
+    if (err) {
+      throw (err)
     } else {
       callback(users);
     }
@@ -89,3 +91,18 @@ var c = async () => {
 c()
 
 */
+
+
+exports.getLoginAs = async function (req, res, userModel, callback) {
+  if (req.session.userID) {
+    try {
+      var loginAs = await userModel.findById(req.session.userID).exec();
+    } catch (err) {
+      var err = err
+      res.redirect('/logout')
+    }
+    callback(err, loginAs);
+  } else {
+    handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
+  }
+}

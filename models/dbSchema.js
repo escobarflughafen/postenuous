@@ -36,8 +36,48 @@ var postSchema = new mongoose.Schema({
         type: [mongoose.Schema.Types.ObjectId],
         ref: 'user',
         default: []
+    },
+    modifyHistory: {
+        type: [{
+            abstract: String,
+            body: String,
+            modifiedAt: {
+                type: Date,
+                default: Date.now
+            },
+            tags: [String]
+        }],
+        default: []
     }
 });
+
+var draftSchema = new mongoose.Schema({
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'users'
+    },
+    title: String,
+    abstract: String,
+    body: String,
+    tags: [String],
+    createdAt: {
+        type: Date,
+        default: Date.now
+    },
+    isPrivate: {
+        type: Boolean,
+        default: false
+    },
+    availableTo: {
+        type: [mongoose.Schema.Types.ObjectId],
+        ref: 'user',
+        default: []
+    },
+    enableComment: {
+        type: Boolean,
+        default: true
+    }
+})
 
 var userSchema = new mongoose.Schema({
     username: {
@@ -120,5 +160,6 @@ var logSchema = new mongoose.Schema({
 
 exports.postSchema = postSchema
 exports.userSchema = userSchema
+exports.draftSchema = draftSchema
 exports.commentSchema = commentSchema
 exports.logSchema = logSchema

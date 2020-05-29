@@ -44,7 +44,7 @@ app.use(session({
 
 var User = mongoose.model('user', dbSchema.userSchema);
 var Post = mongoose.model('post', dbSchema.postSchema);
-var Draft = mongoose.model('draft', dbSchema.postSchema);
+var Draft = mongoose.model('draft', dbSchema.draftSchema);
 var Comment = mongoose.model('comment', dbSchema.commentSchema);
 
 
@@ -129,13 +129,14 @@ app.post('*/addPost', (req, res) => {
 
 app.get('*/newpost', (req, res) => {
   if (req.session.userID) {
-    User.findById(req.session.userID, (err, loginAs) => {
+    User.findById(req.session.userID, async (err, loginAs) => {
       if (err) {
-        res.redirect('/logout')
+        res.redirect('/logout');
       } else {
         res.render('ejs/editor-post.ejs', {
           title: 'new post - postenuous',
           loginAs: loginAs,
+          drafts: await Draft.find({ author: loginAs.id }),
           formaction: 'addPost'
         })
       }
@@ -254,10 +255,10 @@ app.get('/post/:id', (req, res) => {
         } else {
           done('post', post);
           await Post.findOne({ 'created': { $lt: post.created } }).sort({ 'created': -1 }).exec().catch(
-            () => { handleData.handleBadRequest(req, res, 'http-error') }
+            () => { handleData.handleBadRequest(req, res, 'http-error.ejs') }
           ).then((prevPost) => { done('prevPost', prevPost) });
           await Post.findOne({ 'created': { $gt: post.created } }).exec().catch(
-            () => { handleData.handleBadRequest(req, res, 'http-error') }
+            () => { handleData.handleBadRequest(req, res, 'http-error.ejs') }
           ).then((nextPost) => { done('nextPost', nextPost) });
 
           if (req.session.userID) {
@@ -283,13 +284,17 @@ app.get('/post/page/:pageno', (req, res) => {
     if (err) {
       handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
     } else {
-      var pageCount = Math.ceil(postCount / 10);
+      let postPerPage = 12;
+      if (req.query.perpage) {
+        postPerPage = parseInt(req.query.perpage) || postPerPage
+      }
+      var pageCount = Math.ceil(postCount / postPerPage);
       pageCount = (pageCount == 0) ? 1 : pageCount;
       var pageno = parseInt(req.params.pageno);
       if (pageno > pageCount || pageno < 1 || pageno == NaN) {
         handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
       } else {
-        var query = Post.find({}).populate('author').sort({ created: -1 }).skip((parseInt(req.params.pageno) - 1) * 10).limit(10);
+        var query = Post.find({}).populate('author').sort({ created: -1 }).skip((parseInt(req.params.pageno) - 1) * postPerPage).limit(postPerPage);
         query.exec((err, posts) => {
           if (err) {
             handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
@@ -304,7 +309,8 @@ app.get('/post/page/:pageno', (req, res) => {
                     loginAs: loginAs,
                     posts: posts,
                     pageno: pageno,
-                    pageCount: pageCount
+                    pageCount: pageCount,
+                    postPerPage: postPerPage
                   });
                 }
               });
@@ -313,7 +319,8 @@ app.get('/post/page/:pageno', (req, res) => {
                 title: 'postenuous',
                 posts: posts,
                 pageno: pageno,
-                pageCount: pageCount
+                pageCount: pageCount,
+                postPerPage: postPerPage
               });
             }
           }
@@ -489,7 +496,7 @@ app.post("*/:id/addcomment", async (req, res) => {
     Post.findByIdAndUpdate(req.params.id, { $push: { comments: comment.id } }).exec((err, post) => {
       if (err) {
         if (isDebugMode) console.log(err);
-        handleBadRequest(req, res, 'http-error');
+        handleBadRequest(req, res, 'http-error.ejs');
       }
       if (req.body.isAjax) {
         if (req.session.userID) {
@@ -565,7 +572,7 @@ app.post("*/:id/removecomment", async (req, res) => {
       ]
     }).catch((reason) => {
       if (isDebugMode) console.log(reason)
-      handleData.handleBadRequest(req, res, 'ejs/http-error')
+      handleData.handleBadRequest(req, res, 'ejs/http-error.ejs')
     }).then((data) => {
       console.log(data)
       let user = data[0], comment = data[1]
@@ -573,11 +580,11 @@ app.post("*/:id/removecomment", async (req, res) => {
         comment.update({ 'disabled': true }).exec();
         return Post.findById(comment.postedOn.id).populate('comments').exec();
       } else {
-        handleData.handleForbidden(req, res, 'ejs/http-error')
+        handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
       }
     }).catch((reason) => {
       if (isDebugMode) console.log(reason);
-      handleData.handleBadRequest(req, res, 'ejs/http-error');
+      handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
     }).then((post) => {
       if (req.body.isAjax) {
         ejs.renderFile('views/ejs/common/comments-area.ejs', { comments: post.comments, editable: true }, (err, commentsHTML) => {
@@ -600,7 +607,7 @@ app.post("*/:id/removecomment", async (req, res) => {
       }
     });
   } else {
-    handleData.handleForbidden(req, res, 'ejs/http-error')
+    handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
   }
 })
 
@@ -622,7 +629,7 @@ app.post("*/:id/togglecomment", async (req, res) => {
       ]
     }).catch((reason) => {
       if (isDebugMode) console.log(reason)
-      handleData.handleBadRequest(req, res, 'ejs/http-error')
+      handleData.handleBadRequest(req, res, 'ejs/http-error.ejs')
     }).then((data) => {
       let user = data[0], comment = data[1]
       if ((comment.postedOn.author.username == user.username) || user.isAdmin) {
@@ -630,11 +637,11 @@ app.post("*/:id/togglecomment", async (req, res) => {
         comment.update({ 'disabled': !comment.disabled }).exec();
         return Post.findById(comment.postedOn.id).populate('comments').exec();
       } else {
-        handleData.handleForbidden(req, res, 'ejs/http-error')
+        handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
       }
     }).catch((reason) => {
       if (isDebugMode) console.log(reason);
-      handleData.handleBadRequest(req, res, 'ejs/http-error');
+      handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
     }).then((post) => {
       if (req.body.isAjax) {
         let commentAreaEJS = (req.body.isShowingRemovedComments == 'true') ? 'views/ejs/common/comments-area-all.ejs' : 'views/ejs/common/comments-area.ejs'
@@ -658,7 +665,7 @@ app.post("*/:id/togglecomment", async (req, res) => {
       }
     });
   } else {
-    handleData.handleForbidden(req, res, 'ejs/http-error')
+    handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
   }
 })
 
@@ -678,30 +685,103 @@ app.post('*/:id/toggleallcomment', (req, res) => {
               res.redirect(req.url)
             }
           } else {
-            handleData.handleForbidden(req, res, 'ejs/http-error')
+            handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
           }
         })
       }
     })
   } else {
-    handleData.handleForbidden(req, res, 'ejs/http-error')
+    handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
   }
 })
 
 
-app.post('*/:id/editpost', (req, res) => {
-   
-})
-
-app.get('/redirect', (req, res) => {
-  if (req.query.site) {
-    if (req.query.site[0] == '/') {
-      res.redirect(req.query.site);
+app.post('*/savetodraft', async (req, res) => {
+  if (req.session.userID) {
+    var user = await User.findById(req.session.userID).exec();
+    /*
+    var availableTo = req.body.availableto.split(' ')
+      .filter((username) => { return username != '' })
+      .map(async (username) => {
+        return await User.distinct('username', { 'username': username }).exec();
+      });
+    console.log(availableTo)
+    */
+    var draft;
+    var data = {
+      author: user.id,
+      title: req.body.title,
+      abstract: req.body.abstract || req.body.body.slice(0, 140),
+      body: req.body.body,
+      tags: req.body.tags.split(','),
+      isPrivate: req.body.isPrivate == 'true',
+      enableComment: req.body.disableComment == 'false',
+      //availableTo: req.body.availableTo.split('')
+    }
+    console.log(req.body)
+    try {
+      draft = await Draft.findById(req.body.draftID).exec();
+    } catch (err) {
+      console.log(err);
+      draft = new Draft(data)
+    }
+    console.log(draft)
+    if (draft.isNew) {
+      await draft.save()
     } else {
-      handleData.handleRedirect(req, res, 'ejs/redirect.ejs');
+      await draft.update(data).exec()
+    }
+    if (req.body.isAjax) {
+      res.send(JSON.stringify({
+        id: draft.id,
+        title: draft.title,
+        abstract: draft.abstract
+      }))
+    } else {
+      res.redirect(req.url)
     }
   } else {
-    handleData.handleNotFound(req, res, 'ejs/http-error');
+    handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
+  }
+})
+
+app.post('*/getdraft', async (req, res) => {
+  dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
+    if (err) {
+      res.redirect('/logout');
+    } else {
+      try {
+        var draft = await Draft.findById(req.body.draftID).exec();
+      } catch (err) {
+        handleBadRequest(req, res, 'ejs/http-error.ejs')
+      }
+      res.send(JSON.stringify({
+        title: draft.title,
+        abstract: draft.abstract,
+        tags: draft.tags.join(','),
+        body: draft.body,
+        isPrivate: draft.isPrivate,
+        disableComment: !draft.enableComment,
+        availableTo: draft.availableTo
+      }));
+    }
+  });
+});
+
+
+app.get('/redirect', (req, res) => {
+  var redirectTo = req.query.site;
+  if (redirectTo) {
+    if (redirectTo[0] == '/') {
+      res.redirect(redirectTo);
+    } else {
+      if (redirectTo.split('://').length == 1) {
+        redirectTo = 'http://' + redirectTo
+      }
+      handleData.handleRedirect(req, res, redirectTo, 'ejs/redirect.ejs');
+    }
+  } else {
+    handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
   }
 })
 
@@ -711,6 +791,7 @@ app.get('/redirect', (req, res) => {
 */
 
 app.get('/*', (req, res) => {
+  console.log(req.url)
   console.log(req.session)
   handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
 });
