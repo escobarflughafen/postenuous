@@ -106,13 +106,17 @@ app.post('*/addPost', (req, res) => {
       if (err) {
         res.redirect('/logout')
       } else {
+        console.log(req.body)
         var postData = new Post({
           title: req.body.title,
           author: loginAs.id,
           modified: Date.now(),
           tag: [],
           body: req.body.body,
-          abstract: (req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief
+          abstract: (req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief,
+          tags: req.body.tags.split(','),
+          isPrivate: req.body.isprivate=='true',
+          enableComment: req.body.disablecomment=='false'
         });
         if (isDebugMode) console.log(postData);
         postData.save().then(result => {

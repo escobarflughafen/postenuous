@@ -1,15 +1,16 @@
 var isShowingRemovedComments = false;
 
-function init() {
+function initComments() {
   let refers = $("a[id^=link-to]");
   for (let i = 0; i < refers.length; i++) {
     let refer = refers[i]
     $(refer).text($('#comment-no-' + $(refer).text()).text())
   }
-  $("a[id^=replyto").click(function () {
+  $("a[id^=replyto]").click(function () {
     console.log($(this).prop('href'))
+    $('#replyto').val($(this).prop('id').split('-')[1])
   });
-  $("a[id^=link-to-").click(function () {
+  $("a[id^=link-to-]").click(function () {
     let replytoCommentElement = $('#' + $(this).prop('href').split('#')[1]);
     replytoCommentElement.addClass('comment-emphasized');
 
@@ -31,6 +32,33 @@ function initAutoGrow(element) {
     $(element).click(undefined)
     autoGrow(element);
   }
+}
+
+
+function addComment(element) {
+  let params = {
+    isAjax: true,
+    comment: $('#commenteditfield').val(),
+    replyto: $('#replyto').val(),
+    name: $('#commentauthor').val(),
+    homepage: $('#commentauthorhomepage').val()
+  }
+  $(element).prop('disabled', true);
+  $.ajax({
+    url: window.location.href.split('#')[0] + '/addcomment',
+    type: 'POST',
+    dateType: 'json',
+    data: params
+  }).done(function (data) {
+    $('#comments-area').html(data.comments);
+    $('#replyto').html(data.replytoOptions);
+    initComments();
+    $('#comment-count').text('comments (' + data.commentsCount + ')')
+    $(element).prop('disabled', false);
+  }).fail(() => {
+    alert('BadRequest')
+    $(element).prop('disabled', false);
+  })
 }
 
 
@@ -81,7 +109,7 @@ function toggleComment(element) {
     $('#comments-area').html(data.comments);
     $('#replyto').html(data.replytoOptions);
     $('#comment-count').text('comments (' + data.commentsCount + ')');
-    init()
+    initComments()
   }).fail(() => {
     alert('BadRequest')
     $(element).removeClass('disabled')
@@ -135,7 +163,7 @@ function toggleDisabledCommentsVisibility(element, showAll = true) {
     $('#comments-area').html(data.commentsHTML);
     $('#replyto').html(data.replytoOptions);
     $(element).removeClass('disabled')
-    init()
+    initComments()
     isShowingRemovedComments = !isShowingRemovedComments
   }).fail((message) => {
     console.log(window.location.href)
@@ -173,7 +201,7 @@ function saveToDraft(element) {
     var draft = JSON.parse(data)
     if ($('#newdraftcheckbox').prop('checked')) {
       $('#newdraftcheckbox').prop('checked', false);
-      $('#draftselector').append("<option value='"+ draft.id +"'>" + draft.title + ' - ' + draft.abstract + "</option> ");
+      $('#draftselector').append("<option value='" + draft.id + "'>" + draft.title + ' - ' + draft.abstract + "</option> ");
       $('#draftselector').val(draft.id)
     } else {
       $("option[value='" + params.draftID + "']").text(params.title + ' - ' + params.abstract);
@@ -211,4 +239,18 @@ function getDraft(element) {
     })
   }
 
+}
+
+
+function toggleSign(element, sign1, sign2, haveCollapse = false) {
+  var sign = $(element).text();
+  if (sign != sign1 && sign != sign2) {
+    $(element).text(sign1)
+  } else {
+    if(haveCollapse) {
+      let collapseObject = $('#collapse-' + $(element).prop('id').split('-')[1]);
+      collapseObject.collapse('toggle');
+    }
+    $(element).text((sign == sign1) ? sign2 : sign1)
+  }
 }

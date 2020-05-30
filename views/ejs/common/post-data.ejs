@@ -62,56 +62,11 @@
                     </select>
                 </div>
                 <div class="col-auto">
-                    <button class="btn btn-primary" id="commentsubmit">Comment</button>
+                    <button class="btn btn-primary" id="commentsubmit" onclick="addComment(this)">Comment</button>
                 </div>
             </div>
             <script>
-                function init() {
-                    let refers = $("a[id^=link-to]");
-                    for (let i = 0; i < refers.length; i++) {
-                        let refer = refers[i]
-                        $(refer).text($('#comment-no-' + $(refer).text()).text())
-                    }
-                    $("a[id^=replyto").click(function () {
-                        console.log($(this).prop('href'))
-                    });
-                    $("a[id^=link-to-").click(function () {
-                        let replytoCommentElement = $('#' + $(this).prop('href').split('#')[1]);
-                        replytoCommentElement.addClass('comment-emphasized');
-
-                        setTimeout(() => {
-                            replytoCommentElement.removeClass('comment-emphasized');
-                        }, 1000)
-                    });
-                }
-
-                init();
-
-                $('#commentsubmit').click(function () {
-                    let params = {
-                        isAjax: true,
-                        comment: $('#commenteditfield').val(),
-                        replyto: $('#replyto').val(),
-                        name: $('#commentauthor').val(),
-                        homepage: $('#commentauthorhomepage').val()
-                    }
-                    $(this).prop('disabled', true);
-                    $.ajax({
-                        url: '<%=post.id%>/addcomment',
-                        type: 'POST',
-                        dateType: 'json',
-                        data: params
-                    }).done(function (data) {
-                        $('#comments-area').html(data.comments);
-                        $('#replyto').html(data.replytoOptions);
-                        init()
-                        $('#comment-count').text('comments (' + data.commentsCount + ')')
-                        $('#commentsubmit').prop('disabled', false);
-                    }).fail(() => {
-                        alert('BadRequest')
-                        $('#commentsubmit').prop('disabled', false);
-                    })
-                })
+                initComments();
             </script>
             <!--/form-->
         </div>

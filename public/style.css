@@ -411,3 +411,10 @@ topbanner {
     /*word-wrap: break-word;*/
     word-break: break-word;
 }
+
+.header-navi {
+    padding: 0;
+    margin: 0;
+    border-width: 0;
+    /*margin-bottom: 8px;*/
+}

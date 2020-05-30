@@ -16,7 +16,7 @@
       |
       <%=comment.createdAt.toLocaleString()%>
       |
-      <a href="#replyto" id="replyto<%=i%>" value="<%=i%>">reply</a>
+      <a href="#replyto" id="replyto-<%=comment.id%>" value="<%=i%>">reply</a>
       <% if (editable) { %>
       <span>
         |
