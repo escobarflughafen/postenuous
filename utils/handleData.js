@@ -83,3 +83,18 @@ exports.renderComment = function (post, editable = false, showAll = false, dataO
             });
     });
 }
+
+
+exports.handleTags = function (tags) {
+    var rawTagArr = tags.split(',');
+    return rawTagArr.map((tag) => {
+        let startPos = 0, endPos = tag.length - 1;
+        for (startPos; startPos < tag.length; startPos++) {
+            if (tag[startPos] != ' ') break;
+        }
+        for (endPos; endPos >= 0; endPos--) {
+            if (tag[endPos] != ' ') break;
+        }
+        return tag.slice(startPos, endPos + 1)
+    })
+}

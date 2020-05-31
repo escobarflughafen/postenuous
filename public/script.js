@@ -231,7 +231,7 @@ function getDraft(element) {
       let draft = JSON.parse(data)
       $('#titlefield').val(draft.title);
       $('#brieffield').val(draft.abstract);
-      $('#tagsfield').val(draft.tags);
+      $('#tagsfield').val(draft.tags.join(', '));
       $('#posteditfield').val(draft.body);
       $('#privatepostcheckbox').prop('checked', draft.isPrivate);
       $('#disablecommentcheckbox').prop('checked', draft.disableComment);
@@ -248,9 +248,11 @@ function toggleSign(element, sign1, sign2, haveCollapse = false) {
     $(element).text(sign1)
   } else {
     if(haveCollapse) {
-      let collapseObject = $('#collapse-' + $(element).prop('id').split('-')[1]);
+      var collapseObject = $('#collapse-' + $(element).prop('id').split('-')[1]);
       collapseObject.collapse('toggle');
     }
     $(element).text((sign == sign1) ? sign2 : sign1)
   }
 }
+
+

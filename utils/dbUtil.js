@@ -98,11 +98,10 @@ exports.getLoginAs = async function (req, res, userModel, callback) {
     try {
       var loginAs = await userModel.findById(req.session.userID).exec();
     } catch (err) {
-      var err = err
-      res.redirect('/logout')
+      var err = err;
     }
     callback(err, loginAs);
   } else {
-    handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
+    handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
   }
 }

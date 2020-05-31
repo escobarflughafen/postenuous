@@ -37,7 +37,7 @@ var postSchema = new mongoose.Schema({
         ref: 'user',
         default: []
     },
-    modifyHistory: {
+    history: {
         type: [{
             abstract: String,
             body: String,
@@ -48,6 +48,10 @@ var postSchema = new mongoose.Schema({
             tags: [String]
         }],
         default: []
+    },
+    removed: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -76,6 +80,10 @@ var draftSchema = new mongoose.Schema({
     enableComment: {
         type: Boolean,
         default: true
+    },
+    removed: {
+        type: Boolean,
+        default: false
     }
 })
 

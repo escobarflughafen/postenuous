@@ -1,7 +1,7 @@
 <%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
 
-<body style="font-feature-settings:''; font-size: 100%;">
-    <div style="padding: 16px;">
+<body style="font-feature-settings:''; font-size: 100%; background-color: whitesmoke;">
+    <div style="margin: 48px; padding: 16px; background-color:white;box-shadow: 0 0 16px 2px grey;">
         <%- include('common/header.ejs', {loginAs: loginAs, noUserDropdown: false}) %>
 
         <%- include('common/post-list.ejs', {posts: posts, pageno: pageno, pageCount: pageCount, postPerPage: postPerPage}) %>

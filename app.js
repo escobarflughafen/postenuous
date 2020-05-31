@@ -111,15 +111,17 @@ app.post('*/addPost', (req, res) => {
           title: req.body.title,
           author: loginAs.id,
           modified: Date.now(),
-          tag: [],
           body: req.body.body,
           abstract: (req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief,
-          tags: req.body.tags.split(','),
-          isPrivate: req.body.isprivate=='true',
-          enableComment: req.body.disablecomment=='false'
+          tags: handleData.handleTags(req.body.tags),
+          isPrivate: req.body.isprivate == 'true',
+          enableComment: req.body.disablecomment == 'false'
         });
         if (isDebugMode) console.log(postData);
-        postData.save().then(result => {
+        postData.save().then(async (result) => {
+          if (req.body.draft != 'new') {
+            await Draft.findByIdAndUpdate(req.body.draft, { removed: true }).exec();
+          }
           res.redirect('/post/' + postData.id);
         }).catch(err => {
           console.log(err);
@@ -139,8 +141,10 @@ app.get('*/newpost', (req, res) => {
       } else {
         res.render('ejs/editor-post.ejs', {
           title: 'new post - postenuous',
+          post: false,
+          headings: 'create new post',
           loginAs: loginAs,
-          drafts: await Draft.find({ author: loginAs.id }),
+          drafts: await Draft.find({ author: loginAs.id, removed: false }).exec(),
           formaction: 'addPost'
         })
       }
@@ -197,13 +201,32 @@ app.post('*/:id/modifyPost', (req, res) => {
             handleNotFound(req, res, 'notfound');
           } else {
             if (post.author == req.session.userID || loginAs.isAdmin) {
+              console.log(req.body);
               post.update({
                 title: req.body.title,
-                abstract: req.body.brief,
+                abstract: (req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief,
                 body: req.body.body,
-                modified: Date.now()
-              }, (err, raw) => {
-                res.redirect('/post/' + req.params.id);
+                modified: Date.now(),
+                tags: handleData.handleTags(req.body.tags),
+                isPrivate: req.body.isprivate == 'isprivate',
+                enableComment: !(req.body.disablecomment),
+                $push: {
+                  history: {
+                    abstract: post.abstract,
+                    body: post.body,
+                    tags: post.tags
+                  }
+                }
+              }, async (err, raw) => {
+                if (err) {
+                  console.log(err)
+                  handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
+                } else {
+                  if(req.body.draft != 'new') {
+                    await Draft.findByIdAndUpdate(req.body.draft, {removed: true}).exec();
+                  }
+                  res.redirect('/post/' + req.params.id);
+                }
               })
             }
           }
@@ -717,7 +740,7 @@ app.post('*/savetodraft', async (req, res) => {
       title: req.body.title,
       abstract: req.body.abstract || req.body.body.slice(0, 140),
       body: req.body.body,
-      tags: req.body.tags.split(','),
+      tags: handleData.handleTags(req.body.tags),
       isPrivate: req.body.isPrivate == 'true',
       enableComment: req.body.disableComment == 'false',
       //availableTo: req.body.availableTo.split('')
@@ -772,6 +795,23 @@ app.post('*/getdraft', async (req, res) => {
   });
 });
 
+app.get('*/:id/edit', async (req, res) => {
+  dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
+    if (err) {
+      res.redirect('/logout')
+    } else {
+      let post = await Post.findById(req.params.id).populate('author').exec();
+      res.render('ejs/editor-post.ejs', {
+        title: 'editing post - postenuous',
+        post: post,
+        headings: 'editing your post',
+        loginAs: loginAs,
+        drafts: await Draft.find({ author: loginAs.id, removed: false }).exec(),
+        formaction: 'modifyPost'
+      });
+    }
+  })
+})
 
 app.get('/redirect', (req, res) => {
   var redirectTo = req.query.site;
