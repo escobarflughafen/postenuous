@@ -222,8 +222,8 @@ app.post('*/:id/modifyPost', (req, res) => {
                   console.log(err)
                   handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
                 } else {
-                  if(req.body.draft != 'new') {
-                    await Draft.findByIdAndUpdate(req.body.draft, {removed: true}).exec();
+                  if (req.body.draft != 'new') {
+                    await Draft.findByIdAndUpdate(req.body.draft, { removed: true }).exec();
                   }
                   res.redirect('/post/' + req.params.id);
                 }
@@ -802,9 +802,9 @@ app.get('*/:id/edit', async (req, res) => {
     } else {
       let post = await Post.findById(req.params.id).populate('author').exec();
       res.render('ejs/editor-post.ejs', {
-        title: 'editing post - postenuous',
+        title: 'post editor - postenuous',
         post: post,
-        headings: 'editing your post',
+        headings: 'edit your post',
         loginAs: loginAs,
         drafts: await Draft.find({ author: loginAs.id, removed: false }).exec(),
         formaction: 'modifyPost'
@@ -829,6 +829,16 @@ app.get('/redirect', (req, res) => {
   }
 })
 
+
+app.get('/latencytest', (req, res) => {
+  res.render('ejs/latencytest.ejs', {
+    title: 'network latency test - postenuous'
+  })
+})
+
+app.post('/latencytest', (req, res) => {
+  res.send(JSON.stringify({ atServer: Date.now() }));
+})
 
 /*
   <- default NotFound routing ->

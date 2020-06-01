@@ -9,17 +9,22 @@
             <br>
             <div class="">
                 <form method="POST">
-                    <% if (drafts) { %>
-                    <div class="form-group">
+                    <div class="input-group form-group">
                         <select class="custom-select" id="draftselector" name="draft" onchange="getDraft(this)">
                             <option value="new" selected> - choose from your drafts - </option>
+
+                            <% if (drafts) { %>
                             <% for (let i=0; i<drafts.length; i++) { %>
                             <option value="<%=drafts[i].id%>"><%=drafts[i].title%> -
                                 <%=drafts[i].abstract%></option>
                             <% } %>
+
+                            <% } %>
                         </select>
+                        <div class="input-group-append">
+                            <input class="btn btn-outline-primary mb-2" type="button" value="remove" />
+                        </div>
                     </div>
-                    <% } %>
 
                     <div class="form-group">
                         <div class="input-group">
@@ -74,12 +79,23 @@
                     </div>
 
                     <div style="text-align: right;">
-                        <input id="preview-btn" type="button" value="Preview" class="btn btn-light mb-2" />
-                        <input id="savetodraft-btn" onclick="saveToDraft(this)" class="btn btn-secondary mb-2"
-                            type="button" value="Save to Drafts" formaction="/savetodraft" />
-                        <input class="btn btn-primary mb-2" type="submit" <% if (post) { %> value="Modify Post"
-                            <% } else { %> value="Add to Posts" <% } %> formaction="<%=formaction%>" />
+
+                        <div class="btn-group w-100" role="group" aria-label="edting-button-group">
+                            <input id="preview-btn" type="button" value="Preview"
+                                class="btn text-white bg-gunjou-2 mb-2" />
+                            <input id="savetodraft-btn" onclick="saveToDraft(this)"
+                                class="btn text-white bg-gunjou-5 mb-2" type="button" value="Save to Drafts"
+                                formaction="/savetodraft" />
+                            <input class="btn text-white bg-gunjou-8 mb-2" type="submit" <% if (post) { %>
+                                value="Modify Post" <% } else { %> value="Add to Posts" <% } %>
+                                formaction="<%=formaction%>" />
+
+                        </div>
+                        <% if (post) { %>
+                        <input class="btn btn-warning mb-2" type="button" value="🚮" />
+                        <% } %>
                     </div>
+
                 </form>
             </div>
         </div>

@@ -117,33 +117,6 @@ function toggleComment(element) {
 
 }
 
-/*
-function toggleDisabledCommentsVisibility(element, showAll = true) {
-
-  let params = {
-    isAjax: true,
-    showDisabledComments: showAll
-  }
-
-  $(element).addClass('disabled')
-
-  $.ajax({
-    url: window.location.href + '/toggleallcomment',
-    type: 'POST',
-    dateType: 'json',
-    data: params
-  }).done(function (data) {
-    $('#comments-area').html(data.commentsHTML);
-    $('#replyto').html(data.replytoOptions);
-    $(element).removeClass('disabled')
-    init()
-  }).fail((message) => {
-    console.log(message)
-    alert('BadRequest: ' + message.toString())
-    $(element).removeClass('disabled')
-  })
-}*/
-
 
 function toggleDisabledCommentsVisibility(element, showAll = true) {
 
@@ -199,15 +172,15 @@ function saveToDraft(element) {
     data: params
   }).done(function (data) {
     var draft = JSON.parse(data)
-    if ($('#newdraftcheckbox').prop('checked')) {
+    if ($('#newdraftcheckbox').prop('checked') || $('#draftselector').val() == 'new') {
       $('#newdraftcheckbox').prop('checked', false);
       $('#draftselector').append("<option value='" + draft.id + "'>" + draft.title + ' - ' + draft.abstract + "</option> ");
       $('#draftselector').val(draft.id)
     } else {
       $("option[value='" + params.draftID + "']").text(params.title + ' - ' + params.abstract);
-
     }
     setTimeout(() => {
+      $('#preview-btn').click();
       $(element).removeClass('disabled');
       $(element).val("Save to Drafts")
     }, 200);
@@ -231,10 +204,11 @@ function getDraft(element) {
       let draft = JSON.parse(data)
       $('#titlefield').val(draft.title);
       $('#brieffield').val(draft.abstract);
-      $('#tagsfield').val(draft.tags.join(', '));
+      $('#tagsfield').val(draft.tags);
       $('#posteditfield').val(draft.body);
       $('#privatepostcheckbox').prop('checked', draft.isPrivate);
       $('#disablecommentcheckbox').prop('checked', draft.disableComment);
+      $('#preview-btn').click();
       $(element).removeClass('disabled');
     })
   }
@@ -247,7 +221,7 @@ function toggleSign(element, sign1, sign2, haveCollapse = false) {
   if (sign != sign1 && sign != sign2) {
     $(element).text(sign1)
   } else {
-    if(haveCollapse) {
+    if (haveCollapse) {
       var collapseObject = $('#collapse-' + $(element).prop('id').split('-')[1]);
       collapseObject.collapse('toggle');
     }

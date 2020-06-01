@@ -1,0 +1,36 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:''; font-size: 100%;">
+  <div style="padding: 16px">
+    <%- include('common/header.ejs', {loginAs: null, noUserDropdown: true}) %>
+    <div class="container">
+      <div>
+        <code>YOUR NETWORK LATENCY:</code>
+        <br>
+        client -> <code id="toserverresult"></code> -> server -> <code id="toclientresult"></code> -> client
+        <br>
+        loopback latency: <code id="loopbackresult"></code>
+        <br>
+        <code></code>
+        <br>
+        <a href="/post">← back to posts</a>
+        <hr>
+      </div>
+      <script>
+        var sendEpoch = Date.now();
+        $.ajax({
+          url: window.location.href,
+          type: 'POST',
+          dataType: 'json',
+          data: {padding: 'helloworld'}
+        }).done(function(data) {
+          var returnEpoch = Date.now();
+          $('#toserverresult').text(data.atServer - sendEpoch + 'ms');
+          $('#toclientresult').text(returnEpoch - data.atServer + 'ms');
+          $('#loopbackresult').text(returnEpoch - sendEpoch + 'ms');
+        })
+      </script>
+    </div>
+    <%- include('common/footer.ejs') %>
+  </div>
+</body>
