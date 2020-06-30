@@ -117,9 +117,9 @@ app.post('*/addPost', (req, res) => {
           enableComment: req.body.disablecomment != 'true',
           history: [{
             title: req.body.title,
-            abstract:(req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief,
+            abstract: (req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief,
             body: req.body.body,
-            tags: handleData.handleTags(req.body.tags) 
+            tags: handleData.handleTags(req.body.tags)
           }]
         });
         if (isDebugMode) console.log(postData);
@@ -270,8 +270,12 @@ app.get('/post/:id', (req, res) => {
           break;
 
         case 'visitor':
-        default:
           res.render('ejs/post.ejs', results);
+          break;
+
+        case 'forbidden':
+        default:
+          handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
           break;
       }
     }
@@ -294,17 +298,26 @@ app.get('/post/:id', (req, res) => {
             () => { handleData.handleBadRequest(req, res, 'http-error.ejs') }
           ).then((nextPost) => { done('nextPost', nextPost) });
 
+          // TODO: add sharekey feature
           if (req.session.userID) {
             let loginAs = await User.findById(req.session.userID).exec().catch(() => { res.redirect('/logout') });
             done('loginAs', loginAs);
             if (post.author.id == req.session.userID) {
               done('mode', 'author');
             } else {
-              done('mode', 'other-user');
+              if (post.isPrivate) {
+                done('mode', 'forbidden')
+              } else {
+                done('mode', 'other-user');
+              }
             }
           } else {
             done('loginAs', undefined);
-            done('mode', 'visitor');
+            if (post.isPrivate) {
+              done('mode', 'forbidden')
+            } else {
+              done('mode', 'visitor');
+            }
           }
         }
       });

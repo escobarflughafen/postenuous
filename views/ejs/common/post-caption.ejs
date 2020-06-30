@@ -3,6 +3,7 @@
     <div id="caption-<%=post.id%>">
       <h6 style="margin-bottom: 0;">
         <a href="/post/<%=post.id%>" class="post-title kuro">
+          <% if(post.isPrivate) { %> <span class="holo-red-light">[private]</span> <% } %>
           <%= post.title %>
         </a>
         <a href="javascript:void(0);" onclick="toggleSign(this, '↓', '↑', true)" id="arrow-<%=post.id%>"
