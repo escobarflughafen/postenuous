@@ -1,4 +1,34 @@
 var isShowingRemovedComments = false;
+var isTextChanged = true;
+var tempDraft = {
+  title: '',
+  brief: '',
+  tags: '',
+  body: ''
+}
+
+function ackTextChanged(element) {
+  isTextChanged = !isTextChanged;
+}
+
+function renewTempDraft() {
+  if (isTextChanged) {
+    tempDraft = {
+      title: $('#titlefield').val(),
+      abstract: $('#brieffield').val(),
+      tags: $('#tagsfield').val(),
+      body: $('#posteditfield').val(),
+    }
+    isTextChanged = false;
+  }
+}
+
+function setTempDraft() {
+  $('#titlefield').val(tempDraft.title);
+  $('#brieffield').val(tempDraft.abstract);
+  $('#tagsfield').val(tempDraft.tags);
+  $('#posteditfield').val(tempDraft.body);
+}
 
 function initComments() {
   let refers = $("a[id^=link-to]");
@@ -187,7 +217,10 @@ function saveToDraft(element) {
   })
 }
 
+
+
 function getDraft(element) {
+  renewTempDraft();
   var draftID = $(element).val();
   if (draftID != 'new') {
     let params = {
@@ -211,11 +244,14 @@ function getDraft(element) {
       $('#preview-btn').click();
       $(element).removeClass('disabled');
     })
+  } else {
+    setTempDraft();
   }
 
 }
 
 function getPostHistory(element) {
+  renewTempDraft();
   var historyIndex = $(element).val();
   if (historyIndex != 'new') {
     historyIndex = parseInt(historyIndex)
@@ -239,6 +275,8 @@ function getPostHistory(element) {
       $('#preview-btn').click();
       $(element).removeClass('disabled');
     })
+  } else {
+    setTempDraft();
   }
 
 }
@@ -275,3 +313,4 @@ function latencyTest(element) {
     if (element) $(element).removeClass('disabled')
   })
 }
+
