@@ -120,15 +120,14 @@
                     <a href="/author/<%=user.username%>">post archives</a>
                 </div>
             </div>
-            <div id="postdata" class="post-data letter-space-neg05 font-weight-400">
+            <!--div id="postdata" class="post-data letter-space-neg05 font-weight-400">
                 <a href="#">comments<span id="commentarrow" class="symbol-monospace">↓</span></a>
-            </div>
+            </div-->
             <script>
                 marked_passage = marked($('#about-content').text())
                 $('#abouteditfield').val($('#about-content').text());
                 $('#about-content').html(marked_passage);
             </script>
-            <hr>
         </div>
         <%- include('common/footer.ejs') %>
     </div>

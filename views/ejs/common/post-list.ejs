@@ -1,11 +1,8 @@
 <div class="container">
-
     <div id="posts">
-        <div class="accordion" id="postAccordion">
-            <% for(let i = 0; i < posts.length; i++) { %>
-                <%- include('post-caption.ejs', {post: posts[i]}) %>
-            <% } %>
-        </div>
+        <% for(let i = 0; i < posts.length; i++) { %>
+        <%- include('post-caption.ejs', {post: posts[i]}) %>
+        <% } %>
         <br>
         <div class="row">
             <div class="col-auto">
@@ -31,7 +28,6 @@
                 </div>
             </div>
         </div>
-        <hr>
 
     </div>
     <script>

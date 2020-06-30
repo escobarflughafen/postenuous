@@ -457,5 +457,7 @@ topbanner {
     padding: 0;
     margin: 0;
     border-width: 0;
+    margin-right: 8px;
+    text-decoration: underline;
     /*margin-bottom: 8px;*/
 }

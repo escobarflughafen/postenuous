@@ -106,7 +106,6 @@ app.post('*/addPost', (req, res) => {
       if (err) {
         res.redirect('/logout')
       } else {
-        console.log(req.body)
         var postData = new Post({
           title: req.body.title,
           author: loginAs.id,
@@ -115,7 +114,13 @@ app.post('*/addPost', (req, res) => {
           abstract: (req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief,
           tags: handleData.handleTags(req.body.tags),
           isPrivate: req.body.isprivate == 'true',
-          enableComment: req.body.disablecomment == 'false'
+          enableComment: req.body.disablecomment != 'true',
+          history: [{
+            title: req.body.title,
+            abstract:(req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief,
+            body: req.body.body,
+            tags: handleData.handleTags(req.body.tags) 
+          }]
         });
         if (isDebugMode) console.log(postData);
         postData.save().then(async (result) => {
@@ -212,9 +217,10 @@ app.post('*/:id/modifyPost', (req, res) => {
                 enableComment: !(req.body.disablecomment),
                 $push: {
                   history: {
-                    abstract: post.abstract,
-                    body: post.body,
-                    tags: post.tags
+                    title: req.body.title,
+                    abstract: (req.body.brief == "") ? req.body.body.slice(0, 140) : req.body.brief,
+                    body: req.body.body,
+                    tags: handleData.handleTags(req.body.tags)
                   }
                 }
               }, async (err, raw) => {
@@ -791,6 +797,34 @@ app.post('*/getdraft', async (req, res) => {
         disableComment: !draft.enableComment,
         availableTo: draft.availableTo
       }));
+    }
+  });
+});
+
+
+app.post('*/gethistory', async (req, res) => {
+  console.log(req.body)
+  dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
+    if (err) {
+      res.redirect('/logout');
+    } else {
+      try {
+        var post = await Post.findById(req.body.postID).exec();
+      } catch (err) {
+        handleBadRequest(req, res, 'ejs/http-error.ejs');
+      }
+      console.log(post);
+      if (post.author != loginAs.id) {
+        handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
+      } else {
+        var i = parseInt(req.body.i)
+        res.send(JSON.stringify({
+          title: post.history[i].title,
+          abstract: post.history[i].abstract,
+          tags: post.history[i].tags.join(','),
+          body: post.history[i].body,
+        }));
+      }
     }
   });
 });

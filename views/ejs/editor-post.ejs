@@ -21,11 +21,26 @@
 
                             <% } %>
                         </select>
+                     
                         <div class="input-group-append">
                             <input class="btn btn-outline-primary mb-2" type="button" value="remove" />
                         </div>
                     </div>
-
+                    
+                    <% if (post) {%>
+                    <div class="input-group form-group">
+                        <select class="custom-select" id="historyselector" name="history" onchange="getPostHistory(this)">
+                            <option value="new" selected> - choose from history edits - </option>
+                            <% if (post.history.length > 0) { %>
+                            <% for (let i=0; i<post.history.length; i++) { %>
+                            <option value="<%=i%>"><%=post.history[i].title%> - <%=post.history[i].modifiedAt.toString() %>
+                                </option>
+                            <% } %>
+                            <% } %>
+                        </select>
+                    </div>
+                    <% } %>
+                    <br>
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -92,7 +107,7 @@
 
                         </div>
                         <% if (post) { %>
-                        <input class="btn btn-warning mb-2" type="button" value="🚮" />
+                        <input class="btn btn-warning mb-2" type="button" value="Move to Recycle Bin" />
                         <% } %>
                     </div>
 
@@ -103,7 +118,6 @@
             <div id="content-display">
                 <div id="content" class="post-text"></div>
             </div>
-            <hr>
         </div>
         <%- include('common/footer.ejs') %>
     </div>

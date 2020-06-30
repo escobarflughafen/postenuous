@@ -215,6 +215,34 @@ function getDraft(element) {
 
 }
 
+function getPostHistory(element) {
+  var historyIndex = $(element).val();
+  if (historyIndex != 'new') {
+    historyIndex = parseInt(historyIndex)
+    let params = {
+      isAjax: true,
+      postID: window.location.href.split('/')[4],
+      i: historyIndex
+    }
+    $(element).addClass('disabled');
+    $.ajax({
+      url: '/gethistory',
+      type: 'POST',
+      dateType: 'json',
+      data: params
+    }).done(function (data) {
+      let historyPost = JSON.parse(data)
+      $('#titlefield').val(historyPost.title);
+      $('#brieffield').val(historyPost.abstract);
+      $('#tagsfield').val(historyPost.tags);
+      $('#posteditfield').val(historyPost.body);
+      $('#preview-btn').click();
+      $(element).removeClass('disabled');
+    })
+  }
+
+}
+
 
 function toggleSign(element, sign1, sign2, haveCollapse = false) {
   var sign = $(element).text();
@@ -230,3 +258,20 @@ function toggleSign(element, sign1, sign2, haveCollapse = false) {
 }
 
 
+function latencyTest(element) {
+  if (element) $(element).addClass('disabled')
+
+  var sendEpoch = Date.now();
+  $.ajax({
+    url: window.location.href,
+    type: 'POST',
+    dataType: 'json',
+    data: { padding: 'helloworld' }
+  }).done(function (data) {
+    var returnEpoch = Date.now();
+    $('#toserverresult').text('=' + String(data.atServer - sendEpoch) + 'ms=>');
+    $('#toclientresult').text('=' + String(returnEpoch - data.atServer) + 'ms=>');
+    $('#loopbackresult').text(String(returnEpoch - sendEpoch) + 'ms');
+    if (element) $(element).removeClass('disabled')
+  })
+}

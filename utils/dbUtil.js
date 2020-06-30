@@ -1,5 +1,6 @@
 var mongoose = require('mongoose')
 var async = require('async');
+var handleData = require('../utils/handleData')
 var dbSchema = require('../models/dbSchema')
 var userSchema = dbSchema.userSchema;
 var postSchema = dbSchema.postSchema;

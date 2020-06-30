@@ -39,6 +39,7 @@ var postSchema = new mongoose.Schema({
     },
     history: {
         type: [{
+            title: String,
             abstract: String,
             body: String,
             modifiedAt: {
