@@ -14,8 +14,6 @@ mongoose.connect("mongodb://localhost:27017/" + dbname).then(
   () => console.log('connected to MongoDB. db is', dbname)).catch(
     err => console.error('failed to connect to MongoDB', err));
 var bodyParser = require('body-parser')
-app.use(express.static(path.join(__dirname, 'public')));
-app.use("/public", express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.engine('html', require('ejs').renderFile);
@@ -30,6 +28,8 @@ var async = require('async')
 
 var isDebugMode = true;
 
+// setting static directories
+app.use("/static", express.static(path.join(__dirname, 'static')));
 
 app.use(cookie());
 app.use(session({
