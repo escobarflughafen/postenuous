@@ -1,10 +1,13 @@
-var express = require('express');
-var app = express();
-var mongoose = require('mongoose')
-var ejs = require('ejs');
-var path = require('path');
-var dbSchema = require('./models/dbSchema')
-var dbname = process.argv[2]
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose')
+const ejs = require('ejs');
+const path = require('path');
+const dbSchema = require('./models/dbSchema')
+const dbname = process.argv[2]
+const fileutil = require('./utils/fileutil.js')
+const multer = require('multer');
+
 
 var listenPort = parseInt(process.argv[3])
 if (listenPort.toString() == 'NaN')
@@ -13,23 +16,28 @@ if (listenPort.toString() == 'NaN')
 mongoose.connect("mongodb://localhost:27017/" + dbname).then(
   () => console.log('connected to MongoDB. db is', dbname)).catch(
     err => console.error('failed to connect to MongoDB', err));
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
-var session = require('express-session');
-var cookie = require('cookie-parser');
-var fileStore = require('session-file-store');
-var dbUtil = require('./utils/dbUtil')
+const session = require('express-session');
+const cookie = require('cookie-parser');
+const fileStore = require('session-file-store');
+const dbUtil = require('./utils/dbUtil')
 var identityKey = 'skey';
-var handleData = require('./utils/handleData.js')
-var async = require('async')
+const handleData = require('./utils/handleData.js')
+const async = require('async')
 
 var isDebugMode = true;
 
-// setting static directories
+// settings for handling static directories
 app.use("/static", express.static(path.join(__dirname, 'static')));
+
+// settings for receiving files
+app.use("/public", express.static(path.join(__dirname, 'public')));
+var upload = multer({ dest: './public' })
+
 
 app.use(cookie());
 app.use(session({
@@ -876,6 +884,29 @@ app.get('/redirect', (req, res) => {
   }
 })
 
+app.post('/upload', upload.single('file'), (req, res) => {
+  dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
+    if (req.body.isAjax) {
+      res.send(dir);
+    } else {
+      res.redirect(req.rawHeaders[27]);
+    }
+  })
+})
+
+
+/*
+  <- tests ->
+*/
+
+app.get('/fileuploader', (req, res) => {
+  dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
+    res.render('ejs/fileuploader.ejs', {
+      title: 'file uploader - postenuous'
+    })
+  })
+})
+
 
 app.get('/latencytest', (req, res) => {
   res.render('ejs/latencytest.ejs', {
@@ -884,6 +915,8 @@ app.get('/latencytest', (req, res) => {
 })
 
 app.post('/latencytest', (req, res) => {
+  console.log('-- LATENCY TEST --');
+  console.log(req);
   res.send(JSON.stringify({ atServer: Date.now() }));
 })
 

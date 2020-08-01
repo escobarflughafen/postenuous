@@ -1,0 +1,26 @@
+<%- include('common/metadata.ejs', {lang: 'en-US', title: title}) %>
+
+<body style="font-feature-settings:''; font-size: 100%;">
+  <div style="padding: 16px">
+    <%- include('common/header.ejs', {loginAs: null, noUserDropdown: true}) %>
+    <div class="container">
+      <div class="row">
+        <div class="col-auto">
+          <h5>file uploader</h5>
+          <form action="/upload" method="POST" enctype="multipart/form-data">
+            filename: <input type="text" name="filename" value=""><br/>
+            save to: <input type="text" name="path" value="">
+            <input type="file" name="file" id=""><br />
+            <input type="submit" value="upload">
+          </form>
+        </div>
+      </div>
+      <div class="w-100">
+        <button class="btn btn-primary w-100" onclick="">upload via ajax</button>
+      </div>
+      <br>
+    </div>
+    <%- include('common/footer.ejs') %>
+  </div>
+
+</body>

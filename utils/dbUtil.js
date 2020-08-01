@@ -55,51 +55,13 @@ exports.getAllDocument = function (model, callback) {
   })
 }
 
-//exports.getPagination = function()
-
-
-/*
-async.waterfall([
-  (cb) => { cb(null, '1', '2') },
-  (arg1, arg2, cb) => {
-    console.log('arg1 => ' + arg1);
-    console.log('arg2 => ' + arg2);
-    cb(null, '3')
-  },
-  (arg3, cb) => {
-    console.log('arg3 => ' + arg3);
-    cb(null, 'done');
-  }
-], (err, result) => {
-  console.log('err => ' + err);
-  console.log('result => ' + result);
-});
-
-var a = async () => {
-  return 1;
-}
-
-var b = async () => {
-  return 2;
-}
-
-var c = async () => {
-  var r1 = await a()
-  var r2 = await b()
-  console.log(r1, r2)
-}
-
-c()
-
-*/
-
-
 exports.getLoginAs = async function (req, res, userModel, callback) {
   if (req.session.userID) {
+    var err;
     try {
       var loginAs = await userModel.findById(req.session.userID).exec();
     } catch (err) {
-      var err = err;
+      res.redirect('/logout')
     }
     callback(err, loginAs);
   } else {
