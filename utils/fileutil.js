@@ -29,7 +29,7 @@ exports.mv = (from, dest) => {
       existed = fs.existsSync(destname);
     }
     fs.renameSync(from, destname);
-    return true;
+    return destname;
   } else {
     console.error('file not exists');
     return false;

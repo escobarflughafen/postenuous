@@ -910,10 +910,10 @@ app.post('/upload', upload.single('file'), (req, res) => {
     let reqfilename = req.body.filename.split(' ').join('').split('/').join('')
     var filename = (reqfilename == '') ? req.file.originalname : reqfilename;
 
-    fileutil.mv(req.file.path, rootDir + uploadDir + filename);
+    let destname = fileutil.mv(req.file.path, rootDir + uploadDir + filename).split('/');
 
     if (req.body.isAjax) {
-      res.send(publicURL + '/' + loginAs.id + '/' + uploadDir + filename);
+      res.send(publicURL + '/' + loginAs.id + '/' + uploadDir + destname[destname.length - 1]);
     } else {
       res.redirect(req.rawHeaders[27]);
     }
