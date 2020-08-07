@@ -349,13 +349,17 @@ function getTextareaSelection(taElem) {
 function textEditorAddStyle(element, textarea, markdownSyntax) {
   var editorElem = $(textarea)[0];
 
-  let text = editorElem.value.slice(0, editorElem.selectionStart)
+  var sStart = editorElem.selectionStart, sEnd = editorElem.selectionEnd;
+
+  let text = editorElem.value.slice(0, sStart)
     + markdownSyntax
-    + editorElem.value.slice(editorElem.selectionStart, editorElem.selectionEnd)
+    + editorElem.value.slice(sStart, sEnd)
     + markdownSyntax
-    + editorElem.value.slice(editorElem.selectionEnd, editorElem.value.length);
+    + editorElem.value.slice(sEnd, editorElem.value.length);
 
   editorElem.value = text;
+  editorElem.focus();
+  editorElem.setSelectionRange(sStart + markdownSyntax.length, sEnd + markdownSyntax.length);
 }
 
 function textEditorAddHyperlink(element, textarea) {
@@ -398,7 +402,7 @@ function textEditorAddHorizontalLine(element, textarea) {
   var editorElem = $(textarea)[0];
   var selection = getTextareaSelection(editorElem);   // selection array [lines, lnStart, lnEnd, selStart, selEnd]
   var lines = selection[0];
-  lines.splice(selection[2]+1, 0, '\n----------------\n')
+  lines.splice(selection[2] + 1, 0, '\n----------------\n')
   editorElem.value = lines.join('\n');
   editorElem.focus();
   editorElem.setSelectionRange(selection[3], selection[3]);
@@ -431,23 +435,57 @@ function textEditorAddCode(element, textarea) {
   }
 }
 
-function textEditorUploadPhoto(element, textarea) {
+function textEditorUploadPhoto(element, fileinput) {
+  var fileinputElem = $(fileinput)[0];
+  fileinputElem.click();
+}
+
+function handlePhotoUpload(elem, uploadBtn, textarea) {
   var editorElem = $(textarea)[0];
+  var photos = $(elem).prop('files');
 
   var text = "";
   var sStart = editorElem.selectionStart;
+  var sEnd = editorElem.selectionEnd;
 
-  // TODO: Ajax Upload
+  let postID = window.location.href.split('/');
+  postID = postID[postID.length - 2];
 
-  
 
-  text = editorElem.value.slice(0, sStart)
-    + "![ caption ]("
-    + '/TODO - photo URL'
-    + ")"
-    + editorElem.value.slice(sStart, editorElem.value.length);
+  // formData configure as req.body
+  var formData = new FormData();
+  formData.append('file', photos[0]);
+  formData.append('filename', '');
+  formData.append('path', 'posts/' + postID + '/')
+  formData.append('isAjax', true);
 
-  editorElem.value = text;
-  editorElem.focus();
-  editorElem.setSelectionRange(sStart + 1, sStart + 10);
+  $(uploadBtn).addClass('disabled');
+
+  $.ajax({
+    url: '/upload',
+    data: formData,
+    cache: false,
+    contentType: false,
+    processData: false,
+    type: 'POST',
+  }).done((url) => {
+    let caption = ' caption '
+    if (sStart != sEnd) {
+      caption = editorElem.value.slice(sStart, sEnd);
+    }
+
+    text = editorElem.value.slice(0, sStart)
+      + "![" + caption + "]("
+      + url
+      + ")"
+      + editorElem.value.slice(sEnd, editorElem.value.length);
+    editorElem.value = text;
+    editorElem.focus();
+    editorElem.setSelectionRange(sStart + 2, sStart + caption.length + 2);
+    $(uploadBtn).removeClass('disabled');
+
+  }).fail((msg) => {
+    alert('failed with uploading ' + photos[0].name);
+    $(uploadBtn).removeClass('disabled');
+  })
 }

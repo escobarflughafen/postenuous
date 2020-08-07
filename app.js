@@ -37,7 +37,7 @@ var isDebugMode = true;
 app.use("/static", express.static(path.join(__dirname, 'static')));
 
 // settings for receiving files
-var publicURL = '/publicß';
+var publicURL = '/public';
 var publicPath = './public';
 app.use(publicURL, express.static(path.join(__dirname, publicPath)));
 
@@ -890,7 +890,8 @@ app.get('/redirect', (req, res) => {
 })
 
 app.post('/upload', upload.single('file'), (req, res) => {
-  dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
+  dbUtil.getLoginAs(req, res, User, (err, loginAs) => {
+    console.log(req);
     console.log(req.file);
     console.log(req.body);
 
@@ -912,7 +913,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     fileutil.mv(req.file.path, rootDir + uploadDir + filename);
 
     if (req.body.isAjax) {
-      res.send(rootDir + uploadDir + filename);
+      res.send(publicURL + '/' + loginAs.id + '/' + uploadDir + filename);
     } else {
       res.redirect(req.rawHeaders[27]);
     }

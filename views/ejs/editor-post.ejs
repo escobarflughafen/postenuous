@@ -79,7 +79,7 @@
                             oninput="autoGrow(this)"
                             onclick="initAutoGrow(this)"><% if(post) { %><%=post.body%><% } %></textarea>
 
-                        <div class="btn-group" role="group" aria-label="editingGroup">
+                        <div class="btn-group btn-group-sm" role="group" aria-label="editingGroup">
                             <button type="button" class="btn text-white bg-gunjou-0" style="border-top-left-radius: 0;" onclick="textEditorAddStyle(this, '#posteditfield', '**')">
                                 <span style="font-weight: 600;">B</span>
                             </button>
@@ -104,10 +104,12 @@
                             <button type="button" class="btn text-white bg-gunjou-7" onclick="textEditorAddHorizontalLine(this, '#posteditfield')">
                                 <span>hr</span>
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-8" 
-                                style="border-top-right-radius: 0;">
+                            <input type="file" name="file" id="photouploader" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this, '#photoUploadBtn', '#posteditfield')">
+                            <button type="button" class="btn text-white bg-gunjou-8" id="photoUploadBtn"
+                                style="border-top-right-radius: 0;" onclick="textEditorUploadPhoto(this, '#photouploader')">
                                 <span>add photo</span>
                             </button>
+                            
                         </div>
                         <hr>
                     </div>
