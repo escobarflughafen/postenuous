@@ -1,0 +1,9 @@
+import sys
+
+lines = open(sys.argv[-1], 'r').readlines()
+
+plain_text = []
+for i in lines:
+    plain_text.append(i.replace('■', '0').replace('■', '1'))
+
+print(plain_text)

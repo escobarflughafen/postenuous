@@ -74,10 +74,44 @@
                     </div>
                     <div class="form-group">
                         <textarea name="body" class="form-control" id="posteditfield"
-                            placeholder="you can format with HTML <tags/> or markdown" rows="0"
-                            onchange="ackTextChanged(this)" oninput="autoGrow(this)"
+                            placeholder="you can format with HTML <tags/> or markdown"
+                            style="border-bottom-left-radius: 0;" rows="0" onchange="ackTextChanged(this)"
+                            oninput="autoGrow(this)"
                             onclick="initAutoGrow(this)"><% if(post) { %><%=post.body%><% } %></textarea>
+
+                        <div class="btn-group" role="group" aria-label="editingGroup">
+                            <button type="button" class="btn text-white bg-gunjou-0" style="border-top-left-radius: 0;" onclick="textEditorAddStyle(this, '#posteditfield', '**')">
+                                <span style="font-weight: 600;">B</span>
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-1" onclick="textEditorAddStyle(this, '#posteditfield', '*')">
+                                <span style="font-style: italic; font-family: serif;">I</span>
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-2" onclick="textEditorAddHyperlink(this, '#posteditfield')">
+                                <span>link</span>
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-3" onclick="textEditorAddLinePrefix(this, '#posteditfield', '>')">
+                                <span>quote</span>
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-4" onclick="textEditorAddCode(this, '#posteditfield')">
+                                <code style="color:white">code</code>
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-5" onclick="textEditorAddLinePrefix(this, '#posteditfield', '-')">
+                                <span>list</span>
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-6" onclick="textEditorAddLinePrefix(this, '#posteditfield', '1.')">
+                                <span>ordered list</span>
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-7" onclick="textEditorAddHorizontalLine(this, '#posteditfield')">
+                                <span>hr</span>
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-8" 
+                                style="border-top-right-radius: 0;">
+                                <span>add photo</span>
+                            </button>
+                        </div>
+                        <hr>
                     </div>
+
                     <div class="form-group">
                         <div class="form-check form-check-inline">
                             <input name="isprivate" class="form-check-input" type="checkbox" id="privatepostcheckbox"

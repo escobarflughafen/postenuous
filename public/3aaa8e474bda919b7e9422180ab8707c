@@ -1,0 +1,20 @@
+#include <stdio.h>
+
+union foo {
+    int i;
+    float r;
+};
+
+int main(void){
+    printf("sizeof(float) -> %lu\n", sizeof(float));
+    union foo a;
+    printf("%lu\n", sizeof(a));
+    a.i = 10;
+    printf("%d\n", a);
+    a.r = 100.435;
+    printf("%f\n", (a));
+    union foo b;
+    b.r = 100.435;
+    printf("%f\n", b.r);
+    return 0;
+}

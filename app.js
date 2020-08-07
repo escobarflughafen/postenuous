@@ -27,7 +27,9 @@ const fileStore = require('session-file-store');
 const dbUtil = require('./utils/dbUtil')
 var identityKey = 'skey';
 const handleData = require('./utils/handleData.js')
-const async = require('async')
+const async = require('async');
+const { fileURLToPath } = require('url');
+const { fstat } = require('fs');
 
 var isDebugMode = true;
 
@@ -35,8 +37,11 @@ var isDebugMode = true;
 app.use("/static", express.static(path.join(__dirname, 'static')));
 
 // settings for receiving files
-app.use("/public", express.static(path.join(__dirname, 'public')));
-var upload = multer({ dest: './public' })
+var publicURL = '/publicß';
+var publicPath = './public';
+app.use(publicURL, express.static(path.join(__dirname, publicPath)));
+
+var upload = multer({ dest: publicPath })
 
 
 app.use(cookie());
@@ -886,13 +891,33 @@ app.get('/redirect', (req, res) => {
 
 app.post('/upload', upload.single('file'), (req, res) => {
   dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
+    console.log(req.file);
+    console.log(req.body);
+
+    var rootDir = publicPath + '/' + loginAs.id + '/';
+    var uploadDir = req.body.path.split(' ').join('').split('/').filter((f) => { return f != ''; }).join('/') + '/';
+
+    // create path to save files
+    try {
+      fileutil.mkdir(rootDir + uploadDir);
+    } catch (err) {
+      console.log(err);
+      handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
+    }
+
+    // rename uploaded file
+    let reqfilename = req.body.filename.split(' ').join('').split('/').join('')
+    var filename = (reqfilename == '') ? req.file.originalname : reqfilename;
+
+    fileutil.mv(req.file.path, rootDir + uploadDir + filename);
+
     if (req.body.isAjax) {
-      res.send(dir);
+      res.send(rootDir + uploadDir + filename);
     } else {
       res.redirect(req.rawHeaders[27]);
     }
-  })
-})
+  });
+});
 
 
 /*
@@ -900,11 +925,11 @@ app.post('/upload', upload.single('file'), (req, res) => {
 */
 
 app.get('/fileuploader', (req, res) => {
-  dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
-    res.render('ejs/fileuploader.ejs', {
-      title: 'file uploader - postenuous'
-    })
+  //dbUtil.getLoginAs(req, res, User, async (err, loginAs) => {
+  res.render('ejs/fileuploader.ejs', {
+    title: 'file uploader - postenuous'
   })
+  //})
 })
 
 
