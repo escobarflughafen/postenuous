@@ -398,7 +398,7 @@ function textEditorAddLinePrefix(element, textarea, prefix) {
   editorElem.setSelectionRange(selection[3], selection[3]);
 }
 
-function textEditorAddHorizontalLine(element, textarea) {
+function textEditorInsertHorizontalLine(element, textarea) {
   var editorElem = $(textarea)[0];
   var selection = getTextareaSelection(editorElem);   // selection array [lines, lnStart, lnEnd, selStart, selEnd]
   var lines = selection[0];
@@ -408,14 +408,20 @@ function textEditorAddHorizontalLine(element, textarea) {
   editorElem.setSelectionRange(selection[3], selection[3]);
 }
 
-function textEditorInsertLines(element, textarea, lines) {
+function textEditorInsertTable(element, textarea, rowNum, colNum) {
   var editorElem = $(textarea)[0];
   var selection = getTextareaSelection(editorElem);   // selection array [lines, lnStart, lnEnd, selStart, selEnd]
   var lines = selection[0];
-  lines.splice(selection[2] + 1, 0, '\n----------------\n')
+  let thead = "|  ".repeat(colNum) + "|";
+  let sepeator = "| - ".repeat(colNum) + "|";
+  let row = "|  ".repeat(colNum) + "|";
+  let table = thead + '\n' + sepeator + '\n' + (row + '\n').repeat(rowNum);
+
+  lines.splice(selection[2] + 1, 0, table);
+
   editorElem.value = lines.join('\n');
   editorElem.focus();
-  editorElem.setSelectionRange(selection[3], selection[3]);
+  editorElem.setSelectionRange(selection[3], selection[3] + table.length + 2 + rowNum);
 }
 
 function textEditorAddCode(element, textarea) {

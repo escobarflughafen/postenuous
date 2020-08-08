@@ -9,7 +9,7 @@
             <br>
             <div class="">
                 <form method="POST">
-                    <div class="input-group form-group">
+                    <div class="input-group input-group-sm form-group">
                         <select class="custom-select" id="draftselector" name="draft" onchange="getDraft(this)">
                             <option value="new" selected> - choose from your drafts - </option>
 
@@ -23,7 +23,7 @@
                         </select>
 
                         <div class="input-group-append">
-                            <input class="btn text-white bg-gunjou-9 mb-2" type="button" value="remove" />
+                            <input class="btn btn-sm text-white bg-gunjou-9 mb-2" type="button" value="remove" />
                         </div>
                     </div>
 
@@ -65,7 +65,8 @@
                     <div class="form-group">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <div class="input-group-text"><img src="/static/icons/local_offer-24px-filled.svg"></div>
+                                <div class="input-group-text"><img src="/static/icons/local_offer-24px-filled.svg">
+                                </div>
                             </div>
                             <input name="tags" type="text" class="form-control" id="tagsfield"
                                 placeholder="tags, seperate with comma..." <% if(post) { %>
@@ -75,34 +76,42 @@
                     <div class="form-group">
                         <textarea name="body" class="form-control" id="posteditfield"
                             placeholder="you can format with HTML <tags/> or markdown"
-                            style="border-bottom-left-radius: 0;" rows="0" onchange="ackTextChanged(this)"
-                            oninput="autoGrow(this)"
+                            style="border-bottom-left-radius: 0; border-bottom-right-radius: 0;" rows="0"
+                            onchange="ackTextChanged(this)" oninput="autoGrow(this)"
                             onclick="initAutoGrow(this)"><% if(post) { %><%=post.body%><% } %></textarea>
 
                         <div class="btn-group btn-group-sm" role="group" aria-label="editingGroup">
-                            
-                            <button type="button" class="btn text-white bg-gunjou-0" style="border-top-left-radius: 0;" onclick="textEditorAddStyle(this, '#posteditfield', '**')">
+
+                            <button type="button" class="btn text-white bg-gunjou-0" style="border-top-left-radius: 0;"
+                                onclick="textEditorAddStyle(this, '#posteditfield', '**')">
                                 <img src="/static/icons/format_bold-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-1" onclick="textEditorAddStyle(this, '#posteditfield', '*')">
+                            <button type="button" class="btn text-white bg-gunjou-1"
+                                onclick="textEditorAddStyle(this, '#posteditfield', '*')">
                                 <img src="/static/icons/format_italic-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-2" onclick="textEditorAddHyperlink(this, '#posteditfield')">
+                            <button type="button" class="btn text-white bg-gunjou-2"
+                                onclick="textEditorAddHyperlink(this, '#posteditfield')">
                                 <img src="/static/icons/link-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-3" onclick="textEditorAddLinePrefix(this, '#posteditfield', '>')">
+                            <button type="button" class="btn text-white bg-gunjou-3"
+                                onclick="textEditorAddLinePrefix(this, '#posteditfield', '>')">
                                 <img src="/static/icons/format_quote-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-4" onclick="textEditorAddCode(this, '#posteditfield')">
+                            <button type="button" class="btn text-white bg-gunjou-4"
+                                onclick="textEditorAddCode(this, '#posteditfield')">
                                 <img src="/static/icons/code-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-5" onclick="textEditorAddLinePrefix(this, '#posteditfield', '-')">
+                            <button type="button" class="btn text-white bg-gunjou-5"
+                                onclick="textEditorAddLinePrefix(this, '#posteditfield', '-')">
                                 <img src="/static/icons/list-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-6" onclick="textEditorAddLinePrefix(this, '#posteditfield', '1.')">
+                            <button type="button" class="btn text-white bg-gunjou-6"
+                                onclick="textEditorAddLinePrefix(this, '#posteditfield', '1.')">
                                 <img src="/static/icons/format_list_numbered-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-7" onclick="textEditorAddHorizontalLine(this, '#posteditfield')">
+                            <button type="button" class="btn text-white bg-gunjou-7"
+                                onclick="textEditorInsertHorizontalLine(this, '#posteditfield')">
                                 <img src="/static/icons/horizontal_rule-24px.svg">
                             </button>
                             <!--
@@ -111,45 +120,47 @@
                             </button>
                             -->
                             <div class="btn-group btn-group-sm">
-                                <button type="button" class="btn text-white bg-gunjou-8">
+                                <button type="button" class="btn text-white bg-gunjou-8"
+                                    onclick="textEditorInsertTable(this, '#posteditfield', $('#rowselector')[0].value, $('#colselector')[0].value)">
                                     <img src="/static/icons/table-24px.svg">
                                 </button>
-                                <button type="button" class="btn text-white bg-gunjou-8 dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                  <span class="sr-only">table format</span>
+                                <button type="button"
+                                    class="btn text-white bg-gunjou-8 dropdown-toggle dropdown-toggle-split"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="sr-only">table format</span>
                                 </button>
-                                <div class="dropdown-menu">
-                                    <form class="px-4 py-3">
-                                      <div class="form-group">
-                                        <label for="exampleDropdownFormEmail1">Email address</label>
-                                        <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
-                                      </div>
-                                      <div class="form-group">
-                                        <label for="exampleDropdownFormPassword1">Password</label>
-                                        <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
-                                      </div>
-                                      <div class="form-group">
-                                        <div class="form-check">
-                                          <input type="checkbox" class="form-check-input" id="dropdownCheck">
-                                          <label class="form-check-label" for="dropdownCheck">
-                                            Remember me
-                                          </label>
+                                <div class="dropdown-menu dropdown-menu-right px-4 py-3">
+                                    <div class="form-row">
+                                        <style>
+                                            .col {
+                                                margin: 0;
+                                            }
+                                        </style>
+                                        <div class="form-group col">
+                                            <label for="rowselector">row</label>
+                                            <input type="number" class="form-control form-control-sm" id="rowselector"
+                                                value=3 min=1>
                                         </div>
-                                      </div>
-                                      <button type="submit" class="btn btn-primary">Sign in</button>
-                                    </form>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">New around here? Sign up</a>
-                                    <a class="dropdown-item" href="#">Forgot password?</a>
-                                  </div>
-                              </div>
+                                        <div class="form-group col">
+                                            <label for="rowselector">column</label>
+                                            <input type="number" class="form-control form-control-sm" id="colselector"
+                                                value=4 min=1>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <input type="file" name="file" id="photouploader" accept="image/*" style="display: none;" onchange="handlePhotoUpload(this, '#photoUploadBtn', '#posteditfield')">
+                            <input type="file" name="file" id="photouploader" accept="image/*" style="display: none;"
+                                onchange="handlePhotoUpload(this, '#photoUploadBtn', '#posteditfield')">
                             <button type="button" class="btn text-white bg-gunjou-9" id="photoUploadBtn"
-                                style="border-top-right-radius: 0;" onclick="textEditorUploadPhoto(this, '#photouploader')">
-                                <img src="/static/icons/add_photo_alternate-24px.svg"> 
+                                style="border-top-right-radius: 0;"
+                                onclick="textEditorUploadPhoto(this, '#photouploader')">
+                                <img src="/static/icons/add_photo_alternate-24px.svg">
                             </button>
-                            
+
                         </div>
+
+
                         <hr>
                     </div>
 
@@ -169,11 +180,10 @@
                             <input class="form-check-input" type="checkbox" id="newdraftcheckbox" value="option3">
                             <label class="form-check-label" for="newdraftcheckbox">save as new draft</label>
                         </div>
+
                     </div>
-
-                    <div style="text-align: right;">
-
-                        <div class="btn-group w-100" role="group" aria-label="edting-button-group">
+                    <div class="form-group">
+                        <div class="btn-group btn-group-sm w-100" role="group" aria-label="edting-button-group">
                             <input id="preview-btn" type="button" value="Preview"
                                 class="btn text-white bg-gunjou-2 mb-2" />
                             <input id="savetodraft-btn" onclick="saveToDraft(this)"
@@ -188,6 +198,7 @@
                         <input class="btn btn-warning mb-2" type="button" value="Move to Recycle Bin" />
                         <% } %>
                     </div>
+
 
                 </form>
             </div>
