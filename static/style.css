@@ -3,6 +3,12 @@ body {
     /*
     overflow-y: scroll;
     */
+    max-width: 640pt;
+    margin: auto;
+}
+
+img {
+    max-width: 100%;
 }
 
 .post-text {

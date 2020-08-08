@@ -408,6 +408,16 @@ function textEditorAddHorizontalLine(element, textarea) {
   editorElem.setSelectionRange(selection[3], selection[3]);
 }
 
+function textEditorInsertLines(element, textarea, lines) {
+  var editorElem = $(textarea)[0];
+  var selection = getTextareaSelection(editorElem);   // selection array [lines, lnStart, lnEnd, selStart, selEnd]
+  var lines = selection[0];
+  lines.splice(selection[2] + 1, 0, '\n----------------\n')
+  editorElem.value = lines.join('\n');
+  editorElem.focus();
+  editorElem.setSelectionRange(selection[3], selection[3]);
+}
+
 function textEditorAddCode(element, textarea) {
   var editorElem = $(textarea)[0];
 
@@ -455,7 +465,7 @@ function handlePhotoUpload(elem, uploadBtn, textarea) {
   // formData configure as req.body
   var formData = new FormData();
   formData.append('file', photos[0]);
-  formData.append('filename', '');
+  formData.append('filename', photos[0].name.split(' ').join('_'));
   formData.append('path', 'posts/' + postID + '/')
   formData.append('isAjax', true);
 
