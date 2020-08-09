@@ -1,5 +1,6 @@
 var isShowingRemovedComments = false;
 var isTextChanged = true;
+var isPreviewed = false;
 var tempDraft = {
   title: '',
   brief: '',
@@ -401,8 +402,8 @@ function textEditorAddLinePrefix(element, textarea, prefix) {
 function textEditorInsertHorizontalLine(element, textarea) {
   var editorElem = $(textarea)[0];
   var selection = getTextareaSelection(editorElem);   // selection array [lines, lnStart, lnEnd, selStart, selEnd]
-  var lines = selection[0];
-  lines.splice(selection[2] + 1, 0, '\n----------------\n')
+  var lines = selection[0]
+  lines.splice(selection[2] + 1, 0, ('\n----------------\n'));
   editorElem.value = lines.join('\n');
   editorElem.focus();
   editorElem.setSelectionRange(selection[3], selection[3]);
@@ -415,7 +416,7 @@ function textEditorInsertTable(element, textarea, rowNum, colNum) {
   let thead = "|  ".repeat(colNum) + "|";
   let sepeator = "| - ".repeat(colNum) + "|";
   let row = "|  ".repeat(colNum) + "|";
-  let table = thead + '\n' + sepeator + '\n' + (row + '\n').repeat(rowNum);
+  let table = ('\n' + thead + '\n' + sepeator + '\n' + (row + '\n').repeat(rowNum));
 
   lines.splice(selection[2] + 1, 0, table);
 
@@ -504,4 +505,20 @@ function handlePhotoUpload(elem, uploadBtn, textarea) {
     alert('failed with uploading ' + photos[0].name);
     $(uploadBtn).removeClass('disabled');
   })
+}
+
+function textEditorPreview(element, textarea, previewdiv) {
+  $(previewdiv).html('<hr>' + marked($(textarea).val()) + '<hr>');
+  let originalContent = '';
+  if (!isPreviewed) {
+    let previewButtonClone = $(element).clone();
+    previewButtonClone.text("Remove Preview");
+    previewButtonClone.click(function () {
+      $(previewdiv).html(originalContent)
+      $(this).remove();
+      isPreviewed = false;
+    })
+    $(previewdiv).parent().append(previewButtonClone);
+  }
+  isPreviewed = true;
 }

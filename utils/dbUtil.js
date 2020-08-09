@@ -1,7 +1,7 @@
 var mongoose = require('mongoose')
-var async = require('async');
+// var async = require('async');
 var handleData = require('../utils/handleData')
-var dbSchema = require('../models/dbSchema')
+var dbSchema = require('../models/dbSchema');
 var userSchema = dbSchema.userSchema;
 var postSchema = dbSchema.postSchema;
 
@@ -15,7 +15,7 @@ exports.setAdmin = function (userID, userModel, callback) {
     }
   })
 }
-
+/*
 exports.asyncSetAdmin = function (userID, userModel, callback) {
   async.waterfall([
     (cb) => { cb(null, userID, userModel) },
@@ -54,7 +54,7 @@ exports.getAllDocument = function (model, callback) {
     }
   })
 }
-
+*/
 exports.getLoginAs = async function (req, res, userModel, callback) {
   if (req.session.userID) {
     var err;
@@ -67,4 +67,10 @@ exports.getLoginAs = async function (req, res, userModel, callback) {
   } else {
     handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
   }
+}
+
+exports.getPost = function (postID, postModel, callback) {
+    postModel.findByID(postID, (err, post) => {
+      callback(err, post);
+    });
 }

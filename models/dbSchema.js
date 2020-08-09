@@ -51,7 +51,7 @@ var postSchema = new mongoose.Schema({
         }],
         default: []
     },
-    removed: {
+    archived: {
         type: Boolean,
         default: false
     }

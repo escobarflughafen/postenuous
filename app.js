@@ -172,42 +172,32 @@ app.get('*/newpost', (req, res) => {
   }
 })
 
-app.post('*/:id/deletePost', (req, res) => {
-  if (req.session.userID) {
-    async.waterfall([
-      (cb) => {
-        User.findById(req.session.userID, (err, loginAs) => {
-          cb(err, loginAs);
-        })
-      },
-      (loginAs, cb) => {
-        Post.findById(req.params.id).populate('author').exec((err, post) => {
-          cb(err, loginAs, post);
-        })
-      },
-      (loginAs, post, cb) => {
-        if ((req.body.confirmpassword == post.author.password || (loginAs.isAdmin && req.body.confirmpassword == loginAs.password)) && (req.body.confirmtitle == post.title)) {
-          cb(null, post);
-        } else {
-          cb(true, post);
-        }
-      }
-    ], (err, post) => {
+app.post('*/:id/archivepost', (req, res) => {
+  dbUtil.getLoginAs(req, res, User, (err, loginAs) => {
+    if (err) {
+      res.redirect('/logout');
+    }
+    Post.findById(req.params.id, (err, post) => {
       if (err) {
-        handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
-      } else {
-        console.log('post removed: ' + post.title);
-        post.remove();
-        res.redirect('/post')
+        handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
       }
-    })
-  }
-  else {
-    handleData.handleForbidden(req, res, 'ejs/http-error.ejs')
-  }
+      if (post.author == loginAs.id) {
+        post.update({
+          archived: true,
+        }, (err, raw) => {
+          if (err) {
+            handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
+          }
+          res.redirect('/post')
+        });
+      } else {
+        handleData.handleForbidden(req, res, 'ejs/http-error.ejs');
+      }
+    });
+  });
 });
 
-app.post('*/:id/modifyPost', (req, res) => {
+app.post('*/:id/modifypost', (req, res) => {
   if (req.session.userID) {
     User.findById(req.session.userID, (err, loginAs) => {
       if (err) {
@@ -258,10 +248,10 @@ app.post('*/:id/modifyPost', (req, res) => {
 
 app.get('/test/post/:id', async (req, res) => {
   var post;
+
   Post.findByIdAndUpdate(req.params.id, { $inc: { viewCount: 1 } }).exec().catch(() => {
     handleData.handleNotFound(req, res, 'ejs/http-error.ejs')
-  }).then()
-  console.log(post);
+  }).then();
   res.send('ok');
 })
 
@@ -339,13 +329,20 @@ app.get('/post/:id', (req, res) => {
 });
 
 app.get('/post/page/:pageno', (req, res) => {
-  Post.countDocuments({}, (err, postCount) => {
+  /*
+  Post.find({}, (err, posts) => {
+    posts.forEach((post) => {
+      post.update({ archived: false }).exec();
+    })
+  })
+  */
+  Post.countDocuments({ archived: false }, (err, postCount) => {
     if (err) {
       handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
     } else {
       let postPerPage = 12;
       if (req.query.perpage) {
-        postPerPage = parseInt(req.query.perpage) || postPerPage
+        postPerPage = parseInt(req.query.perpage) || postPerPage;
       }
       var pageCount = Math.ceil(postCount / postPerPage);
       pageCount = (pageCount == 0) ? 1 : pageCount;
@@ -353,7 +350,7 @@ app.get('/post/page/:pageno', (req, res) => {
       if (pageno > pageCount || pageno < 1 || pageno == NaN) {
         handleData.handleNotFound(req, res, 'ejs/http-error.ejs');
       } else {
-        var query = Post.find({}).populate('author').sort({ created: -1 }).skip((parseInt(req.params.pageno) - 1) * postPerPage).limit(postPerPage);
+        var query = Post.find({ archived: false }).populate('author').sort({ created: -1 }).skip((parseInt(req.params.pageno) - 1) * postPerPage).limit(postPerPage);
         query.exec((err, posts) => {
           if (err) {
             handleData.handleBadRequest(req, res, 'ejs/http-error.ejs');
@@ -867,7 +864,7 @@ app.get('*/:id/edit', async (req, res) => {
         headings: 'edit your post',
         loginAs: loginAs,
         drafts: await Draft.find({ author: loginAs.id, removed: false }).exec(),
-        formaction: 'modifyPost'
+        formaction: 'modifypost'
       });
     }
   })
@@ -919,6 +916,7 @@ app.post('/upload', upload.single('file'), (req, res) => {
     }
   });
 });
+
 
 
 /*

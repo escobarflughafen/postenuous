@@ -28,7 +28,7 @@
                     </div>
 
                     <% if (post) {%>
-                    <div class="input-group form-group">
+                    <div class="input-group input-group-sm form-group">
                         <select class="custom-select" id="historyselector" name="history"
                             onchange="getPostHistory(this)">
                             <option value="new" selected> - choose from history edits - </option>
@@ -82,23 +82,24 @@
 
                         <div class="btn-group btn-group-sm" role="group" aria-label="editingGroup">
 
-                            <button type="button" class="btn text-white bg-gunjou-0" style="border-top-left-radius: 0;"
+                            <button type="button" class="btn text-white bg-gunjou-0" id="preview-btn"
+                                style="border-top-left-radius: 0;"
+                                onclick="textEditorPreview(this, '#posteditfield', '#content')">
+                                <img src="/static/icons/preview-24px.svg">
+                            </button>
+                            <button type="button" class="btn text-white bg-gunjou-3"
                                 onclick="textEditorAddStyle(this, '#posteditfield', '**')">
                                 <img src="/static/icons/format_bold-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-1"
+                            <button type="button" class="btn text-white bg-gunjou-3"
                                 onclick="textEditorAddStyle(this, '#posteditfield', '*')">
                                 <img src="/static/icons/format_italic-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-2"
-                                onclick="textEditorAddHyperlink(this, '#posteditfield')">
-                                <img src="/static/icons/link-24px.svg">
-                            </button>
-                            <button type="button" class="btn text-white bg-gunjou-3"
+                            <button type="button" class="btn text-white bg-gunjou-5"
                                 onclick="textEditorAddLinePrefix(this, '#posteditfield', '>')">
                                 <img src="/static/icons/format_quote-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-4"
+                            <button type="button" class="btn text-white bg-gunjou-5"
                                 onclick="textEditorAddCode(this, '#posteditfield')">
                                 <img src="/static/icons/code-24px.svg">
                             </button>
@@ -106,11 +107,11 @@
                                 onclick="textEditorAddLinePrefix(this, '#posteditfield', '-')">
                                 <img src="/static/icons/list-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-6"
+                            <button type="button" class="btn text-white bg-gunjou-5"
                                 onclick="textEditorAddLinePrefix(this, '#posteditfield', '1.')">
                                 <img src="/static/icons/format_list_numbered-24px.svg">
                             </button>
-                            <button type="button" class="btn text-white bg-gunjou-7"
+                            <button type="button" class="btn text-white bg-gunjou-5"
                                 onclick="textEditorInsertHorizontalLine(this, '#posteditfield')">
                                 <img src="/static/icons/horizontal_rule-24px.svg">
                             </button>
@@ -120,12 +121,12 @@
                             </button>
                             -->
                             <div class="btn-group btn-group-sm">
-                                <button type="button" class="btn text-white bg-gunjou-8"
+                                <button type="button" class="btn text-white bg-gunjou-5"
                                     onclick="textEditorInsertTable(this, '#posteditfield', $('#rowselector')[0].value, $('#colselector')[0].value)">
                                     <img src="/static/icons/table-24px.svg">
                                 </button>
                                 <button type="button"
-                                    class="btn text-white bg-gunjou-8 dropdown-toggle dropdown-toggle-split"
+                                    class="btn text-white bg-gunjou-5 dropdown-toggle dropdown-toggle-split"
                                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="sr-only">table format</span>
                                 </button>
@@ -150,13 +151,18 @@
                                 </div>
                             </div>
 
+                            <button type="button" class="btn text-white bg-gunjou-7"
+                                onclick="textEditorAddHyperlink(this, '#posteditfield')">
+                                <img src="/static/icons/link-24px.svg">
+                            </button>
                             <input type="file" name="file" id="photouploader" accept="image/*" style="display: none;"
                                 onchange="handlePhotoUpload(this, '#photoUploadBtn', '#posteditfield')">
-                            <button type="button" class="btn text-white bg-gunjou-9" id="photoUploadBtn"
+                            <button type="button" class="btn text-white bg-gunjou-7" id="photoUploadBtn"
                                 style="border-top-right-radius: 0;"
                                 onclick="textEditorUploadPhoto(this, '#photouploader')">
                                 <img src="/static/icons/add_photo_alternate-24px.svg">
                             </button>
+
 
                         </div>
 
@@ -181,22 +187,40 @@
                             <label class="form-check-label" for="newdraftcheckbox">save as new draft</label>
                         </div>
 
-                    </div>
-                    <div class="form-group">
-                        <div class="btn-group btn-group-sm w-100" role="group" aria-label="edting-button-group">
-                            <input id="preview-btn" type="button" value="Preview"
-                                class="btn text-white bg-gunjou-2 mb-2" />
-                            <input id="savetodraft-btn" onclick="saveToDraft(this)"
-                                class="btn text-white bg-gunjou-5 mb-2" type="button" value="Save to Drafts"
-                                formaction="/savetodraft" />
-                            <input class="btn text-white bg-gunjou-8 mb-2" type="submit" <% if (post) { %>
-                                value="Modify Post" <% } else { %> value="Add to Posts" <% } %>
-                                formaction="<%=formaction%>" />
 
+                    </div>
+                    <div class="form-group" style="text-align: right;">
+
+                        <div class="btn-group btn-group-sm">
+                            <input class="btn text-white bg-gunjou-8" type="submit" <% if (post) { %>
+                                value="Save Changes" <% } else { %> value="Add to Posts" <% } %>
+                                formaction="<%=formaction%>" />
+                            <button type="button"
+                                class="btn text-white bg-gunjou-8 dropdown-toggle dropdown-toggle-split"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="sr-only">publish menu/span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <input id="savetodraft-btn" class="dropdown-item" onclick="saveToDraft(this)"
+                                    type="button" value="Save to Drafts" formaction="/savetodraft" />
+                                <% if (post) { %>
+                                <div class="dropdown-divider"></div>
+                                <% if (!post.archived) {%>
+                                <input class="dropdown-item" type="submit" value="Archive Post"
+                                    formaction="archivepost" />
+                                <%} else {%>
+                                <input class="dropdown-item" type="submit" value="Move to Posts"
+                                    formaction="archivepost" />
+                                <% } %>
+
+                                <input class="dropdown-item" type="submit" value="Move to Recycle Bin"
+                                    formaction="archivepost" />
+                                <% } %>
+                            </div>
                         </div>
-                        <% if (post) { %>
-                        <input class="btn btn-warning mb-2" type="button" value="Move to Recycle Bin" />
-                        <% } %>
+
+
+
                     </div>
 
 
@@ -211,31 +235,10 @@
         <%- include('common/footer.ejs') %>
     </div>
 
-    <script>
-        var originalContent = $('#content').html();
-        var isPreviewed = false;
-        $("#preview-btn").click(function () {
-            $('#content').html('<hr>' + marked($('#posteditfield').val()));
-            if (!isPreviewed) {
-                let previewButtonClone = $('#preview-btn').clone();
-                previewButtonClone.val("Remove Preview");
-                previewButtonClone.click(function () {
-                    $('#content').html(originalContent)
-                    $('#preview-btn').text('Preview');
-                    $(this).remove();
-                    isPreviewed = false;
-                })
-                $('#content-display').append(previewButtonClone);
-            }
-            isPreviewed = true;
-        });
-
-    </script>
     <% if (post) { %>
     <script>
         $('#preview-btn').click();
         renewTempDraft();
-        console.log(tempDraft);
     </script>
     <% } %>
 </body>
