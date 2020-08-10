@@ -30,7 +30,7 @@ app.use(session({
   rolling: true
 }));
 
-var router = require('./routers/router')
+var router = require('./routers/router')(app);
 
 mongoose.connect("mongodb://localhost:27017/" + dbname).then(
   () => console.log('connected to MongoDB. db is', dbname)).catch(
