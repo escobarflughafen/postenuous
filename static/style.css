@@ -32,6 +32,8 @@ code, pre {
     letter-spacing: 0;
 }
 
+
+/* keep code-coherence by setting word-break word-warp and overflow */
 pre {
     overflow-y: hidden;
     overflow-x: auto;
